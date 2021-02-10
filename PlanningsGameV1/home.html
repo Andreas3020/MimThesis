@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="home.css">
+  <title>Planning Game - Home</title>
+</head>
+
+<body>
+  <h1>Planning game</h1>
+
+  <div class=container>
+    <h2>Rules</h2>
+    <p>Hier komt een paragraaf met alle spelregels uitgelegd en opgesomd. <br>
+      <ul>
+        <li>Rule 1</li>
+        <li>Rule 2</li>
+        <li>Rule 3</li>
+        <li>Rule 4</li>
+        <li>Rule 5</li>
+      </ul>
+      Met uiteindelijk onder de bulletpoints nog wat meer uitleg en regels.
+    </p>
+  </div>
+
+  <div class=container>
+    <h2>Settings</h2>
+    <form name="mySettings">
+      <p class="question">Setting 1 (bullet points)</p>
+      <label><input type="radio" name="s1" id="s1o1" value="male" checked="checked">Setting 1a</label><br>  
+      <label><input type="radio" name="s1" id="s1o2" value="female">Setting 1b</label><br>
+      <label><input type="radio" name="s1" id="s1o3" value="other">Setting 1c</label>
+
+      <p class="question">Setting 2 (dropdown)</p>
+      <select name="s2" id="s2">
+        <option value="answer1" selected="selected">answer1</option> 
+        <option value="answer2">answer2</option>
+        <option value="answer3">answer3</option>
+        <option value="answer4">answer4</option>
+      </select>
+      
+      <input type="submit" value="Start game">
+    </form>
+
+    <select name="diff" id="diff" onchange="changeDifficulty()">
+      <option selected hidden>Choose your difficulty</option>
+      <option value="Easy">Easy</option>
+      <option value="Medium">Medium</option>
+      <option value="Difficult">Difficult</option>
+    </select>
+  </div>
+ 
+  <script src="home.js"></script>
+</body>
+</html>

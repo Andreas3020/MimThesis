@@ -1,0 +1,17 @@
+body {
+  background-color: lightblue;
+}
+
+h1 {
+  font-size: 400%;
+  text-align: center;
+}
+
+h2 {
+  font-size: 300%;
+}
+
+.container {
+  background-color: aliceblue;
+  width: 100%;
+}
