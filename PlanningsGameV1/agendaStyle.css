@@ -1,0 +1,182 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
+html{
+  font-size:  62.5%;
+}
+
+.container{
+  width:100%;
+  height: 100vh;
+  background-color: rgb(241, 207, 138);
+  color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.agenda{
+  width: 70rem;
+  height: 48rem;
+  background-color: rgb(243, 190, 83);
+  box-shadow: 0 0.5rem 3rem rgba(0,0,0,0.4);
+  /*border: 0.15rem solid rgb(0, 0, 0,1)*/
+}
+
+.week{
+  width: 70rem;
+  height: 6rem;
+  background-color:rgb(180, 120, 29);
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  padding: 0 2 rem;
+  text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+  border-bottom: 0.2rem solid rgb(0, 0, 0,1)
+
+}
+.week i {
+  font-size: 2.5rem;
+  cursor: pointer;
+  
+}
+
+.week h1 {
+  font-size: 3rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  margin-bottom: 0rem;
+  margin-left: 10rem;
+}
+.weekNr {
+  font-size: 3rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  margin-bottom: 0rem;
+  margin-right: 2rem;
+}
+
+.legend{
+  width: 6.3rem;
+  height: 5rem;
+  background: 
+         linear-gradient(to top right,
+             rgba(0,0,0,0) 0%,
+             rgba(0,0,0,0) calc(50% - 0.8px),
+             rgba(0,0,0,1) 50%,
+             rgba(0,0,0,0) calc(50% + 0.8px),
+             rgba(0,0,0,0) 100%);
+  background-color:rgb(224, 151, 40);
+  border-right: 0.15rem solid rgb(0, 0, 0,1);
+  
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+  border-bottom: 0.15rem solid rgb(0, 0, 0,1)
+  
+}
+.legend p1{
+  align-self: left;
+  margin-top: 2.4rem;
+  margin-left: 1rem;
+}
+
+.legend p2{
+  align-self: right;
+  margin-top: 0.5rem;
+  margin-right: 1rem;
+}
+
+
+.weekDays{
+  width: 63.7rem;
+  height: 5rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.2rem;
+  margin-left: 6.3rem;
+  margin-top: -5rem;
+  background-color:rgb(224, 151, 40);
+  border-bottom: 0.15rem solid rgb(0, 0, 0,1)
+}
+
+.weekDays div {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.1rem;
+  width: calc(100%/7);
+  /*border: 0.15rem solid rgb(0, 0, 0,1);*/
+  /*border-right: 0.15rem solid rgb(0, 0, 0,1);*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+.hours{
+  width: 6.3rem;
+  height: 37rem;
+  background-color:rgb(224, 151, 40);
+  border-right: 0.15rem solid rgb(0, 0, 0,1);
+  
+  /*display: flex;
+  justify-content: space-between;*/
+  font-size: 1.5rem;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  
+  
+
+}
+.hours div{
+  height: calc(37rem / 6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  padding: 0.8rem;
+ 
+  border-bottom : 0.15rem solid rgb(0, 0, 0,1);
+}
+
+.days{
+  width: 63.7rem;
+  height: 37rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.2rem;
+  margin-left: 6.3rem;
+  margin-top: -37rem;
+  background-color:rgb(255, 153, 0);
+}
+.days div{
+  height: calc(100% / 6);
+  /*width: calc(63.3rem / 7);*/
+  width: calc(100%/7);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.1rem;
+  
+  /*border: 0.15rem solid rgb(0, 0, 0,1);*/
+  /*border-right: 0.15rem solid rgb(0, 0, 0,1);*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+  border-bottom : 0.15rem solid rgb(0, 0, 0,1);
+  border-right : 0.15rem solid rgb(0, 0, 0,1);
+}
+
+.days div:hover {
+  background-color: rgb(196, 90, 29);
+  border: 0.2rem solidsolid rgb(0, 0, 0,1);
+  cursor: pointer;
+}
