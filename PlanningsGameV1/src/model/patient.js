@@ -17,6 +17,7 @@ Patient.generate = function(){
     try {
         patientTableString = JSON.stringify( Patient.list);
         localStorage["patientTable"] = patientTableString;
+        console.log(patientTableString);
       } catch (e) {
         alert("Error when writing to Local Storage\n" + e);
         error = true;
