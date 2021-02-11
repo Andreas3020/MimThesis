@@ -1,11 +1,11 @@
-//Get Level & Settings
-let level = document.getElementById("diff").value;
-let setting1 = document.getElementsByName("s1") //Radio button (input)
-let setting2 = document.getElementById("s2");   //Dropdown (select)
-
-console.log(level);
+var level;
+var setting1 = document.getElementsByName("s1") //Radio button (input)
+var setting2 = document.getElementById("s2");   //Dropdown (select)
 
 function changeDifficulty() {
+
+  level = document.getElementById("diff").value;
+
   //Update settings to difficulty level
   if(level == "Easy") {
     setting1[0].checked = true;
