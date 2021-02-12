@@ -152,7 +152,7 @@ html{
   height: 37rem;
   display: flex;
   flex-wrap: wrap;
-  padding: 0.2rem;
+  
   margin-left: 6.3rem;
   margin-top: -37rem;
   background-color:rgb(255, 153, 0);
@@ -179,4 +179,8 @@ html{
   background-color: rgb(196, 90, 29);
   border: 0.2rem solidsolid rgb(0, 0, 0,1);
   cursor: pointer;
+}
+
+.selectedDay {
+  background-color: #b92e1c;
 }
