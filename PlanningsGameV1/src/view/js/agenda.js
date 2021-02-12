@@ -1,8 +1,16 @@
+//Init variables
 let days = "";
 
 let selectedDaysArray = [[]];
 let alreadySelectedId = -1;
 let currentPatient = "koekje";
+
+const htmlDays = document.querySelector(".days");
+
+//tableBody = document.getElementById('patientTable');
+//let currentPatient = tableBody.rows[1].cells[1].innerHTML;
+
+//Create initial DataArray
 for (let i=0; i<=41; i++)
 { 
   if(i != 5)
@@ -16,8 +24,8 @@ for (let i=0; i<=41; i++)
 } 
 //console.log(selectedDaysArray[0]);
 
-const htmlDays = document.querySelector(".days");
 
+//Display Agenda
 function renderAgenda() 
 {
   alreadySelectedId = -1;
@@ -64,6 +72,9 @@ document.querySelectorAll(".day").forEach
 
 function addSelectedDay()
 {
+  tableBody = document.getElementById('patientTable');
+  currentPatient = tableBody.rows[1].cells[1].innerHTML;
+
   document.getElementById(alreadySelectedId).innerHTML= currentPatient;
   let dayNr = alreadySelectedId.charAt(1)
   selectedDaysArray[0][dayNr] = currentPatient;
