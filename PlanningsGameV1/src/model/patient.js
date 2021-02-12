@@ -1,4 +1,5 @@
 function Patient(profile){
+    this.patientID = profile.patientID;
     this.firstName = profile.firstName;
     this.lastName = profile.lastName;
     this.availability = profile.availability;
@@ -9,11 +10,11 @@ Patient.list = {};
 Patient.generate = function(){
     var patientTableString="", error=false;
 
-    Patient.list[0] = new Patient({firstName: "Jef", lastName: "Stas", availability: "Monday"});
-    Patient.list[1] = new Patient({firstName: "Jos", lastName: "Vanherbergen", availability: "Friday"});
-    Patient.list[2] = new Patient({firstName: "Jan", lastName: "Jansens", availability: "Thursday"});
-    Patient.list[3] = new Patient({firstName: "Piet", lastName: "Dierickx", availability: "Tuesday"});
-    Patient.list[4] = new Patient({firstName: "Bart", lastName: "Van Riet", availability: "Monday"});
+    Patient.list[0] = new Patient({patientID: "00115",firstName: "Jef", lastName: "Stas", availability: "Monday"});
+    Patient.list[1] = new Patient({patientID: "00116",firstName: "Jos", lastName: "Vanherbergen", availability: "Friday"});
+    Patient.list[2] = new Patient({patientID: "00235",firstName: "Jan", lastName: "Janssens", availability: "Thursday"});
+    Patient.list[3] = new Patient({patientID: "00246",firstName: "Piet", lastName: "Dierickx", availability: "Tuesday"});
+    Patient.list[4] = new Patient({patientID: "00300",firstName: "Bart", lastName: "Van Riet", availability: "Monday"});
     try {
         patientTableString = JSON.stringify( Patient.list);
         localStorage["patientTable"] = patientTableString;
