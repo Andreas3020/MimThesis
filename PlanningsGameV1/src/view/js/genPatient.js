@@ -1,11 +1,13 @@
 pl.view.genPatient = {
     setupUserInterface: function () {
-        i = 0;
+        //Set clickListener on button 'next patient'
         tableBody = document.getElementById('patientTable');
         var nextButton = document.forms["Patient"].nextPatient;
         nextButton.addEventListener("click", 
-          pl.view.genPatient.handleNextButtonClickEvent);
+        pl.view.genPatient.handleNextButtonClickEvent);
 
+        //Retrieve & display patient[0]
+        i = 0;
         row = tableBody.insertRow();
         keys = Object.keys( Patient.list);
         key = keys[i];
@@ -15,6 +17,7 @@ pl.view.genPatient = {
         row.insertCell(3).textContent = Patient.list[key].availability;
     },
 
+    //Update patient to schedule
     handleNextButtonClickEvent: function() {
         i++;
         key = keys[i];
@@ -28,4 +31,4 @@ pl.view.genPatient = {
             window.alert("This was the last patient.");
         }
     }
-  };
+};

@@ -82,4 +82,3 @@ function addSelectedDay()
   alreadySelectedId = -1;
 
 }
-
