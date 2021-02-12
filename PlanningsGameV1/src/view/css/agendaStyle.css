@@ -181,6 +181,30 @@ html{
   cursor: pointer;
 }
 
+/* Patient generate style */
 .selectedDay {
   background-color: #b92e1c;
+}
+
+.div1{
+  position: absolute;
+  display: flex;
+}
+.table1 {
+  display: flexbox;
+  column-count: 4;
+  border: 2px solid rgb(108, 116, 226);
+  text-align: center;
+  border-spacing: 0px;
+}
+th, td {
+  border: 1px solid rgba(108, 116, 226, 0.5); 
+  padding: 5px;
+}
+th {
+  height: 40px;
+  background-color:  rgba(196, 189, 189, 0.5);
+}
+td {
+  background-color:  rgba(238, 231, 231, 0.5);
 }
