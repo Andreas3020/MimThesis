@@ -54,15 +54,15 @@ html{
   margin-bottom: 0rem;
   margin-left: 10rem;
 }
-.weekNr {
+
+.week h2 {
   font-size: 3rem;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
   margin-bottom: 0rem;
-  margin-right: 2rem;
+  margin-right: 10rem;
 }
-
 .legend{
   width: 6.3rem;
   height: 5rem;
@@ -175,17 +175,17 @@ html{
   border-right : 0.15rem solid rgb(0, 0, 0,1);
 }
 
-.days div:hover {
+.days div:hover:not(.selectedDay) {
   background-color: rgb(196, 90, 29);
   border: 0.2rem solidsolid rgb(0, 0, 0,1);
   cursor: pointer;
 }
 
-/* Patient generate style */
+
 .selectedDay {
   background-color: #b92e1c;
 }
-
+/* Patient generate style */
 .div1{
   position: absolute;
   display: flex;
