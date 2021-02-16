@@ -25,7 +25,7 @@ pl.view.genPatient = {
 function nextPatientEvent(){
 
     nrOfPatients = keys.length;
-    console.log(nrOfPatients);
+    //console.log(nrOfPatients);
     if(i < nrOfPatients) {
         i++;
         key = keys[i];
