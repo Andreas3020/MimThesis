@@ -1,12 +1,15 @@
 pl.view.genPatient = {
     setupUserInterface: function () {
-        i = 0;
         lastPatient = 0; // slecht oplossing voor probleem
+
+        //Set clickListener on button 'next patient'
         tableBody = document.getElementById('patientTable');
         var nextButton = document.forms["Patient"].nextPatient;
         /*nextButton.addEventListener("click", 
-          pl.view.genPatient.handleNextButtonClickEvent);*/
+        pl.view.genPatient.handleNextButtonClickEvent);*/
 
+        //Retrieve & display patient[0]
+        i = 0;
         row = tableBody.insertRow();
         keys = Object.keys( Patient.list);
         key = keys[i];
@@ -17,18 +20,22 @@ pl.view.genPatient = {
     }
 };
 
-    function nextPatientEvent(){
+
+//Update patient to schedule
+function nextPatientEvent(){
+
+    nrOfPatients = keys.length;
+    console.log(nrOfPatients);
+    if(i < nrOfPatients) {
         i++;
         key = keys[i];
-        try{
         tableBody.rows[1].cells[0].innerHTML = Patient.list[key].patientID;
         tableBody.rows[1].cells[1].innerHTML = Patient.list[key].firstName;
         tableBody.rows[1].cells[2].innerHTML = Patient.list[key].lastName;
         tableBody.rows[1].cells[3].innerHTML = Patient.list[key].availability;
-        }
-        catch(error){
-            window.alert("This was the last patient.");
-            lastPatient++;
-        }
-        return lastPatient;
+    } else {
+        window.alert("This was the last patient.");
+        lastPatient++;
     }
+    return lastPatient;
+}

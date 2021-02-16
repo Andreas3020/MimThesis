@@ -10,7 +10,7 @@
   />
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="src/ctrl/initialize.js"></script>
-  <script src="src/view/genPatient.js"></script>
+  <script src="src/view/js/genPatient.js"></script>
   <script src="src/model/patient.js"></script>
   <script> window.addEventListener("load", Patient.generate()); </script>
   <script> window.addEventListener( "load", pl.view.genPatient.setupUserInterface); </script>
@@ -22,9 +22,7 @@
       <div class="week">
         <i class="fas fa-angle-left prev"></i>
         <h1>Week</h1>
-        <div class="weekNr">
-          <h1>1</h1>
-        </div>
+        <h2 id=h2Weeknr> 1</h2>
         <i class="fas fa-angle-right next"></i>
       </div>
       <div class="legend">
@@ -70,6 +68,8 @@
     <button type="button" name="nextPatient" onClick="addSelectedDay()">Next</button>
     <!-- CREATE STOP FOR LAST NAME!-->
   </form> 
+
+  <a href="home.html"><button>Naar home pagina</button></a>
   </div>
 
   <script src="src/view/js/agenda.js"></script> 
