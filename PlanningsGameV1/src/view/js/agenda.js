@@ -12,6 +12,11 @@ let weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturda
 let addedWeeksToArrayNr = 0;
 let week = 0;
 
+let nrHSlotsOnco = 2;
+let nrHSlotsChemo1 = 2;
+let nrHSlotsChemo2 = 4;
+let nrHSlotsChemo3 = 6;
+
 //Create initial DataArray
 addWeekToArray();
 
@@ -46,13 +51,46 @@ function renderAgenda()
       for (let k=0; k<6; k++) //horizontaal
       { 
         if(selectedSlotsArray[week][6*i + 42*j+k] == false)
-        {                  
-          slots += `<div class="${weekday}, slot" id=D${i}_H${j}_OC${k}>${6*i + 42*j+k}</div>`;          
+        {  
+        
+          slots += `<div class=" ${weekday}, slot" id=D${i}_H${j}_OC${k}></div>`; 
+          
+              
         }
         else
         {                    
           slots += `<div class="${weekday}, slot, selectedSlot" id=D${i}_H${j}_OC${k}>${selectedSlotsArray[week][6*i + 42*j+k].charAt(0)}</div>`;          
         }
+
+        /*
+         if(k==1)
+          {
+            slots += `<div class=" ${weekday}, slot" id=D${i}_H${j}_OC${k}></div>`; 
+          }
+          else if(k == 5)
+          {
+            slots += `<div class="${weekday}, slot" id=D${i}_H${j}_OC${k}></div>`;  
+          }
+          else
+          {                
+            slots += `<div class="${weekday}, normalBorder, slot" id=D${i}_H${j}_OC${k}></div>`;  
+          }        
+        }
+        else
+        { 
+          if(k==1)
+          {
+            slots += `<div class="${weekday}, oncoBorder, slot,selectedSlot" id=D${i}_H${j}_OC${k}>${selectedSlotsArray[week][6*i + 42*j+k].charAt(0)}</div>`;
+          }
+          else if(k == 5)
+          {
+            slots += `<div class="${weekday}, chemoBorder, slot,selectedSlot" id=D${i}_H${j}_OC${k}>${selectedSlotsArray[week][6*i + 42*j+k].charAt(0)}</div>`;
+          }
+          else
+          {                
+            slots += `<div class="${weekday}, normalBorder, slot,selectedSlot" id=D${i}_H${j}_OC${k}>${selectedSlotsArray[week][6*i + 42*j+k].charAt(0)}</div>`;  
+          }                 
+        */
       }      
     }
   }      
@@ -70,6 +108,8 @@ function addSelectedSlot()
   tableBody = document.getElementById('patientTable');
   currentPatient = tableBody.rows[1].cells[1].innerHTML;
   let avDay = tableBody.rows[1].cells[3].innerHTML;
+  let nrOncoAppointments = tableBody.rows[1].cells[4].innerHTML;
+  let nrChemoAppointments = tableBody.rows[1].cells[5].innerHTML;
   
   //try: check if a slot is selected
   try{
@@ -78,8 +118,7 @@ function addSelectedSlot()
    let a = alreadySelectedId.match(/\d+/).input;
     
    //checking the day number and the slot number and type
-   /*let idArray = a.split("_")
-   let strArray = idArray[0].split("d");*/
+   
    let strArray = a.split("_");
    let dayStr = strArray[0];
    let hourSlotStr = strArray[1];
@@ -89,8 +128,23 @@ function addSelectedSlot()
    let oncoChemoNr = parseInt(oncoChemoStr.split("OC")[1],10);
    let slotNr = 6*dayNr + 42*hourSlot  + oncoChemoNr;
    
-   if(weekdays[dayNr] == avDay){
-      add(currentPatient, slotNr);
+   if(weekdays[dayNr] == avDay){    
+      if( nrOncoAppointments >= 1 && oncoChemoNr > 1 )
+      {
+        window.alert('The patient needs to be alloted an onco slot!');
+      }
+      else if(nrOncoAppointments>=1 && oncoChemoNr <= 1)
+      {
+        add(currentPatient, slotNr);
+      }
+      else if(nrChemoAppointments>=1 && oncoChemoNr <= 1)
+      {
+        window.alert('The patient needs to be alloted a chemo slot!');
+      }
+      else
+      {
+        add(currentPatient, slotNr);
+      }
     }
    else{
       window.alert('The patient has not been alloted a correct timeslot!');
