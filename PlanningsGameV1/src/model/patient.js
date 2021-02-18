@@ -21,6 +21,7 @@ var onco = [0,1];
 var chemo = [0,1];  //Fase 2: uitbreiden naar periodiciteit chemo = [0,1,2,3,4,5]
 
 
+
 // Generate and save (localStorage) Patient list
 Patient.generate = function(){
     var patientTableString="", error=false;
@@ -39,8 +40,20 @@ Patient.generate = function(){
       else { tempFname = firstNameMale[getRandomInt(0, firstNameMale.length)];}
       tempLname = lastName[getRandomInt(0, lastName.length)];
       tempAvailability = availability[getRandomInt(0, availability.length)];
-      tempOnco = onco[flipCoin()];
-      tempChemo = chemo[flipCoin()];
+
+      allocateTempOncoAndChemo()
+      // function to allocate tempOnco and tempChemo where both can't be 0
+      function allocateTempOncoAndChemo()
+      {
+        tempOnco = onco[flipCoin()];
+        tempChemo = chemo[flipCoin()];
+        if(tempOnco == 0 && tempChemo == 0)
+        {
+          allocateTempOncoAndChemo();
+        }
+
+      };
+
 
       //Create patient/Write to list
       Patient.list[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo});

@@ -192,6 +192,7 @@ html{
   margin-bottom: -1px;
   border-right: 1px  dotted white;
   margin-right: -1px;
+ 
   
 }
 
@@ -204,6 +205,25 @@ html{
 
 .selectedSlot {
   background-color: rgb(185, 27, 27);
+}
+
+.normalBorder
+{
+  border-bottom: 1px dotted white;
+  margin-bottom: -1px;
+  border-right: 1px  dotted white;
+  margin-right: -1px;
+}
+
+.oncoBorder
+{
+  border-right: 1px solid white;
+  margin-right: -1px;
+}
+.chemoBorder
+{
+  border-right: 2px solid white;
+  margin-right: -2px;
 }
 
 /* Patient generate style */
