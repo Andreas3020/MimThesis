@@ -17,15 +17,17 @@ pl.view.genPatient = {
         row.insertCell(1).textContent = Patient.list[key].firstName;
         row.insertCell(2).textContent = Patient.list[key].lastName;
         row.insertCell(3).textContent = Patient.list[key].availability;
+        row.insertCell(4).textContent = Patient.list[key].onco;
+        row.insertCell(5).textContent = Patient.list[key].chemo;
     }
 };
 
 
-//Update patient to schedule
+//Show new patient to be scheduled
 function nextPatientEvent(){
 
     nrOfPatients = keys.length;
-    console.log(nrOfPatients);
+    //console.log(nrOfPatients);
     if(i < nrOfPatients) {
         i++;
         key = keys[i];
@@ -33,6 +35,8 @@ function nextPatientEvent(){
         tableBody.rows[1].cells[1].innerHTML = Patient.list[key].firstName;
         tableBody.rows[1].cells[2].innerHTML = Patient.list[key].lastName;
         tableBody.rows[1].cells[3].innerHTML = Patient.list[key].availability;
+        tableBody.rows[1].cells[4].innerHTML = Patient.list[key].onco;
+        tableBody.rows[1].cells[5].innerHTML = Patient.list[key].chemo;
     } else {
         window.alert("This was the last patient.");
         lastPatient++;
