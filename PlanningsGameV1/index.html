@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agenda</title>
-  <link rel="stylesheet" href="src/view/css/agendaStyle.css"
-  />
+ <link rel="stylesheet" href="src/view/css/agenda.css"
+  /> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
   />
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,40 +19,110 @@
 <body>
   <div class="container">
     <div class="agenda">
-      <div class="week">
+      <div class="weekHeader">
         <i class="fas fa-angle-left prev"></i>
-        <h1>Week</h1>
-        <h2 id=h2Weeknr> 1</h2>
+        <h1 id="weekNr">Week 1</h1>
         <i class="fas fa-angle-right next"></i>
       </div>
-      <div class="legend">
-        <p1>h</p1>
-        
-        <p2>d</p2>
-      </div>
-      <div class="weekDays">
-        <div>Mon</div>
-        <div>Tue</div>
-        <div>Wed</div>
-        <div>Thu</div>
-        <div>Fri</div>
-        <div>Sat</div>
-        <div>Sun</div>
-      </div>
-      <div class="hours">
-        <div>8:00 - 9:30</div>
-        <div>9:30 - 11:00</div>
-        <div>11:00 - 12:30</div>
-        <div>13:30 - 15:00</div>
-        <div>15:00 - 16:30</div>
-        <div>16:30 - 18:00</div>
-      </div>
-      <div class="days">
+      <div class="legendHeader">
+        <div class="header1">
+          <p1>h</p1>
+          <p2>d</p2>
+        </div>
+        <div class="header2">
+          <div class="weekDays">
+            <div class="mon">Monday</div>
+            <div class="tue">Tuesday</div>
+            <div class="wed">Wednesday</div>
+            <div class="thu">Thursday</div>
+            <div class="fri">Friday</div>
+            <div class="sat">Saturday</div>
+            <div class="sun">Sunday</div>
+          </div>
 
+          <div class="ocHeader">
+            <div class="oncoChemo">
+              <div class="onco" >Onco</div>
+              <div class="chemo">Chemo</div>
+            </div>
+            <div class="oncoChemo">
+              <div class="onco" >Onco</div>
+              <div class="chemo">Chemo</div>
+            </div>
+            <div class="oncoChemo">
+              <div class="onco" >Onco</div>
+              <div class="chemo">Chemo</div>
+            </div>
+            <div class="oncoChemo">
+              <div class="onco" >Onco</div>
+              <div class="chemo">Chemo</div>
+            </div>
+            <div class="oncoChemo">
+              <div class="onco" >Onco</div>
+              <div class="chemo">Chemo</div>
+            </div>
+            <div class="oncoChemo">
+              <div class="onco" >Onco</div>
+              <div class="chemo">Chemo</div>
+            </div>
+            <div class="oncoChemo">
+              <div class="onco" >Onco</div>
+              <div class="chemo">Chemo</div>
+            </div>
+          </div>
+        </div>
       </div>
+      <div class="core">
+        <div class="hourHeader">
+          <div>8:00</div>
+          <div>8:30 </div>
+          <div>9:00</div>
+          <div>9:30 </div>
+          <div>10:00</div>
+          <div>10:30 </div>
+          <div>11:00</div>
+          <div>11:30 </div>
+          <div>12:00</div>
+          <div>12:30 </div>
+          <div>13:00</div>
+          <div>13:30 </div>
+          <div>14:00</div>
+          <div>14:30 </div>
+          <div>15:00</div>
+          <div>15:30 </div>
+          <div>16:00</div>
+          <div>16:30 </div>
+          <div>17:00</div>
+          <div>17:30 </div>
+          
+        </div>
+        <div class="slots">
+
+<!-- slots are rendered through js -->
+        </div>
+      </div> 
     </div>
   
   <!--patient table layout-->
+<<<<<<< HEAD
+  <div class="patientje">
+    <form id="Patient">
+      <table class= "table1", id="patientTable">
+          <thead>
+              <tr>
+                  <th>Patient ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Availability</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+      </table> 
+      <button type="button" name="nextPatient" onClick="addSelectedSlot()">Next</button>
+      <!-- CREATE STOP FOR LAST NAME!-->
+    </form> 
+  </div>
+=======
   <form id="Patient">
     <table class= "table1", id="patientTable">
         <thead>
@@ -70,11 +140,12 @@
     <button type="button" name="nextPatient" onClick="addSelectedDay()">Next</button>
     <!-- CREATE STOP FOR LAST NAME!-->
   </form> 
+>>>>>>> 945d27b70d12d51e91e7156b70107cc2a76b86a2
 
   <a href="home.html"><button>Naar home pagina</button></a>
   </div>
 
-  <script src="src/view/js/agenda.js"></script> 
+ <script src="src/view/js/agenda.js"></script> 
   
 </body>
 </html>
