@@ -1,0 +1,22 @@
+{
+  "name": "firebase.json",
+  "version": "1.0.0",
+  "description": "firebase package file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andreas3020/MimThesis.git"
+  },
+  "author": "Andreas Raf Laurens",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Andreas3020/MimThesis/issues"
+  },
+  "homepage": "https://github.com/Andreas3020/MimThesis#readme",
+  "dependencies": {
+    "firebase": "^8.2.7"
+  }
+}
