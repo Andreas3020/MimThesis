@@ -5,10 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rooms</title>
+    <link rel="stylesheet" href="src/view/css/agenda.css"/> 
+    <script src="src/ctrl/initialize.js"></script>
+    <script src="src/model/patient.js"></script>
     <script src="src/view/js/dataBase.js"></script>
+    <script src="src/view/js/genPatientCopy.js"></script>
+    <script> window.addEventListener("load", Patient.generate()); </script>    
 </head>
 <body>
-        
+    <button type="button" name="genPatienList" 
+    onClick="genRandomPatients()">Generate Patients</button>
+    
+    <form>
+        <table class= "table1", id="patientTableRoom">
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Availability</th>
+                    <th>Onco</th>
+                    <th>Chemo</th>
+                </tr>
+            </thead>
+            <tbody></tbody>    
+    </form>
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 
@@ -34,24 +56,11 @@
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-    
-    function sendToDatabase2(){
-            var database = firebase.database();
-            database.ref(fname.value).set({username: lname.value});
-    }
-    
+    firebase.analytics();   
+
+    // Get a reference to the database service
+    var database = firebase.database().ref(); 
     </script>
-
-<form>
-    <label for="fname">First name:</label><br>
-    <input type="text" id="fname" name="fname"><br>
-    <label for="lname">Last name:</label><br>
-    <input type="text" id="lname" name="lname"><br><br>
-    <button type="button" name="submit" 
-    onClick="sendToDatabase2()">Next</button>
-</form>
-
     
 </body>
 </html>

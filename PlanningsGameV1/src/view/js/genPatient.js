@@ -11,7 +11,7 @@ pl.view.genPatient = {
         //Retrieve & display patient[0]
         i = 0;
         row = tableBody.insertRow();
-        keys = Object.keys( Patient.list);
+        keys = Object.keys(Patient.list);
         key = keys[i];
         row.insertCell(0).textContent = Patient.list[key].patientID;
         row.insertCell(1).textContent = Patient.list[key].firstName;
