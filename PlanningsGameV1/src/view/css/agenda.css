@@ -191,12 +191,10 @@ html{
   border-bottom: 1px dotted white;
   margin-bottom: -1px;
   border-right: 1px  dotted white;
-  margin-right: -1px;
- 
-  
+  margin-right: -1px;  
 }
 
-.slots div:hover:not(.selectedSlot) {
+.slots div:hover:not(.selectedSlot):not(.greyedOutSlot) {
   background-color: rgb(0,64,122);
   cursor: pointer;
   border: 1px solid white;
@@ -207,6 +205,18 @@ html{
   background-color: rgb(185, 27, 27);
 }
 
+.greyedOutSlot
+{
+  background-color: rgb(173, 168, 168);
+  border-bottom: 1px dotted white;
+  margin-bottom: -1px;
+  border-right: 1px  dotted white;
+  margin-right: -1px;
+}
+.greyedOutHeader
+{
+  background-color: rgb(139, 136, 136);
+}
 .normalBorder
 {
   border-bottom: 1px dotted white;
