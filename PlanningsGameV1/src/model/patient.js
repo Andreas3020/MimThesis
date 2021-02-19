@@ -31,6 +31,7 @@ Patient.generate = function(){
     var tempLname = "";
     var tempAvailability = "";
     var tempOnco, tempChemo;
+    
 
     var nrOfPersons = 10;
 
