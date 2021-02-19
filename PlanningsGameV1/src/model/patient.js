@@ -33,7 +33,7 @@ Patient.generate = function(){
     var tempOnco, tempChemo;
     
 
-    var nrOfPersons = 40;
+    var nrOfPersons = 10;
 
     for (let i = 0; i < nrOfPersons; i++) {
       //Generate patient variables (random)...
