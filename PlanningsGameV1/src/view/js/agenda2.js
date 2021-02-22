@@ -76,10 +76,6 @@ function addWeekToArray() {
   //FILL WEEK SLOTS WITH FALSE (available)
   for (let i=0; i<=839; i++){    
     slotsTakenArray[weekNr].push(false);
-
-    if(i==5) {
-      slotsTakenArray[weekNr].push(1);
-    }
   } 
 }
 
