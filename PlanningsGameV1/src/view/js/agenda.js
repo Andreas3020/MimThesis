@@ -20,9 +20,9 @@ let nrHSlotsChemo3 = 6;
 
 let daysPassedArray = []
 
-//let nrOfPatiensDay = getRandomInt(4,8);
-let nrOfPatiensThisDay = 1;
+
 let todayNr = 0;
+
 
 
 //Create initial DataArray
@@ -185,7 +185,7 @@ function add(currentPatient, slotNr){
   }
 }
 
-//checks if the number of patients of that day has been reached and if so go to the next day (make the current day grey)
+//checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay()
 {
   if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true)
@@ -215,10 +215,10 @@ function checkPatientsPerDay()
       todayNr = 0;
       currentWeek += 1;
     }
-    //nrOfPatiensThisDay += 1;
-
   }
 }
+
+
 
 function addEventlistenerToSlots()
 {
@@ -258,6 +258,7 @@ document.querySelector(".prev").addEventListener("click", () => {
 
 document.querySelector(".next").addEventListener("click", () => {
   week += 1;
+  // add only a week to the array if the agenda has never got to that week yet
   if(week>addedWeeksToArrayNr)
   { 
     addedWeeksToArrayNr += 1;

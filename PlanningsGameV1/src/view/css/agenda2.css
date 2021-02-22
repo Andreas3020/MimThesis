@@ -88,6 +88,12 @@ i {
 #agendaTable .slotTaken {
   background-color: rgb(185, 27, 27);
 }
+#agendaTable .greyedOutSlot {
+  background-color: rgb(173, 168, 168);
+}
+#agendaTable .greyedOutHeader {
+  background-color: rgb(139, 136, 136);
+}
 
 /* PATIENT TABLE DESIGN */
 .box2 {

@@ -22,7 +22,7 @@ var onco = [0,1];
 var chemo = [0,1];  //Fase 2: uitbreiden naar periodiciteit chemo = [0,1,2,3,4,5]
 
 // represents the number of patients that still need to be assigned that day
-var nrPatientsCurrentDay = getRandomInt(2,5);
+var nrPatientsCurrentDay = getRandomInt(1,2);
 
 
 // Generate and save (localStorage) Patient list
@@ -108,7 +108,7 @@ function lastPatient()
   if(nrPatientsCurrentDay == 0)
   {
 
-    nrPatientsCurrentDay = getRandomInt(2,5);
+    nrPatientsCurrentDay = getRandomInt(1,2);
     
     return true;
   }
