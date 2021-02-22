@@ -5,6 +5,7 @@ function Patient(profile){
     this.availability = profile.availability;
     this.onco = profile.onco;
     this.chemo = profile.chemo;
+    this.lastPatientBool = profile.lastPatientBool;
 };
 
 Patient.genList = {};
@@ -21,6 +22,8 @@ var availability = ["Monday", "Tuesday","Wednesday","Friday","Saturday","Sunday"
 var onco = [0,1];
 var chemo = [0,1];  //Fase 2: uitbreiden naar periodiciteit chemo = [0,1,2,3,4,5]
 
+// represents the number of patients that still need to be assigned that day
+var nrPatientsCurrentDay = getRandomInt(1,2);
 
 
 // Generate and save (localStorage) Patient list
@@ -32,9 +35,9 @@ Patient.generate = function(){
     var tempLname = "";
     var tempAvailability = "";
     var tempOnco, tempChemo;
-    
+    var tempLastPatientBool;
 
-    var nrOfPersons = 10;
+    var nrOfPersons = 30;
 
     for (let i = 0; i < nrOfPersons; i++) {
       //Generate patient variables (random)...
@@ -55,10 +58,10 @@ Patient.generate = function(){
         }
 
       };
-
+      tempLastPatientBool = lastPatient();
 
       //Create patient/Write to list
-      Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo});
+      Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo , lastPatientBool: tempLastPatientBool});
     }
 
     //Save patient list (JSONstringify) to localStorage (patientTable)
@@ -100,7 +103,22 @@ Patient.convertRow2Obj = function (patientRow) {
     return patient;
 };
 
+// function that assigns a bool if that patient needs to be the last of the day
+function lastPatient()
+{
+  if(nrPatientsCurrentDay == 0)
+  {
 
+    nrPatientsCurrentDay = getRandomInt(1,2);
+    
+    return true;
+  }
+  else
+  {
+    nrPatientsCurrentDay -= 1;
+    return false;
+  }
+}
 
 // HELPER FUNCTIONS
 

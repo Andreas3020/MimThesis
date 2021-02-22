@@ -4,7 +4,6 @@ pl.view.genPatient = {
 
         //Set clickListener on button 'next patient'
         tableBody = document.getElementById('patientTable');
-        var nextButton = document.forms["Patient"].nextPatient;
 
         i = 0;
         row = tableBody.insertRow();

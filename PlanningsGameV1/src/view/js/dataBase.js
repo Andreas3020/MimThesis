@@ -87,6 +87,6 @@ function enterRoom(roomName){
     localStorage["patientTable"] = patientTableString;
 
     //go the the game
-    window.location.href = "index.html";
+    window.location.href = "agenda2.html";
   })
 }
