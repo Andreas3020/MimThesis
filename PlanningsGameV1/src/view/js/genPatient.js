@@ -5,12 +5,10 @@ pl.view.genPatient = {
         //Set clickListener on button 'next patient'
         tableBody = document.getElementById('patientTable');
         var nextButton = document.forms["Patient"].nextPatient;
-        /*nextButton.addEventListener("click", 
-        pl.view.genPatient.handleNextButtonClickEvent);*/
 
-        //Retrieve & display patient[0]
         i = 0;
         row = tableBody.insertRow();
+        Patient.loadAll();
         keys = Object.keys(Patient.list);
         key = keys[i];
         row.insertCell(0).textContent = Patient.list[key].patientID;

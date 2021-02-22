@@ -10,21 +10,39 @@
     <script src="src/ctrl/initialize.js"></script>
     <script src="src/model/patient.js"></script>
     <script src="src/view/js/dataBase.js"></script>
+    <script src="src/view/js/genPatient.js"></script>
+
 </head>
 <body>
-    <div style="margin-top: 20px">
-        <div id="rooms"></div>
-        <button type="button" id="addRoomButton" onClick="popUpWindow()">ADD ROOM</button>
+    <div >
+        <button class="adminDiv" type="button" id="adminButton" onClick="popUpPass()">admin mode</button>
     </div>
+    <div class="roomHeader">
+        <h1>PLANNING GAME</h1>
+    </div>
+    
+
+    
+    <div class="roomExpl">
+        <h3 style="color: rgb(102, 100, 100);">Choose a room</h2>
+        
+    </div>
+
+    <div id="rooms" style="margin-top: 5px;">
+        <div class="roomButtonDiv">
+            <button class="addButton" type="button" id="addRoomButton" onClick="nameRoom()">ADD ROOM</button>
+        </div> 
+    </div>
+
     <div id="roomPopUp" class="popUp">
 
         <!-- popUp content -->
         <div class="popUp-content">
             <div class="popUp-password" id="popUpPass">
-                <label for="pass">Admin use only<br />Confirm password</label><br>
+                <label for="pass">Admin acces password</label><br>
                 <input type="text" id="pass" name="pass"><br>
                 <p id="passErr" class="errorMessage"></p>
-                <button type="button" id="nextPassButton" onClick="confirmPassword()">Next</button>
+                <button type="button" id="confirmButton" onClick="confirmPassword()">Confirm</button>
             </div>
             <div class="popUp-text" id="popUpText">
                 <label for="rname">Room name:</label><br>
@@ -69,7 +87,7 @@
     var database = firebase.database().ref(); 
     </script>
     
-    <script>getDataOnce();
+    <script>loadRooms();
     </script>
 </body>
 </html>

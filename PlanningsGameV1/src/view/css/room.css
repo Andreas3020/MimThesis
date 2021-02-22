@@ -1,6 +1,29 @@
+h1{
+  font-size: 22pt;
+}
+
+.adminDiv{
+  right: 1.67%; 
+  position: absolute;
+  margin-top: 5px;
+}
+
+.roomHeader{
+  display: flex; 
+  width: 100%;
+  background-color: beige;
+  align-items: center;
+  justify-content: center;
+}
+
+.roomExpl{
+  margin-top: 15px; 
+  margin-left: 2%;
+}
+
 .roomButton{
     height: 150px; 
-    width: 95%; 
+    width: 100%; 
     background-color: powderblue;
 }
 
@@ -8,7 +31,15 @@
     height: 200px; 
     width: 30%; 
     display: inline-block; 
-    margin-left: 35px
+    margin-right: 1.6%;
+    margin-left: 1.6%;
+}
+
+.addButton{
+  display:none;
+  height: 150px; 
+  width: 100%; 
+  color: rgbrgb(102, 100, 100);
 }
 
  /* The Modal (background) */
