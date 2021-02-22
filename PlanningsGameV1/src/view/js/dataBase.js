@@ -1,8 +1,51 @@
-function genRandomPatients(){
-  pl.view.genPatientCopy.setupUserInterface();
-  keys = Object.keys(Patient.list);
+function popUpWindow(){
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "block";
+}
 
-  database.set({Patient_List: Patient.list});
+function confirmPassword(){
+  const password = document.getElementById("pass").value;
+  if(password == "123"){
+    const popUpPass = document.getElementById("popUpPass");
+    popUpPass.style.display = "none";
+
+    const popUpText = document.getElementById("popUpText");
+    popUpText.style.display = "block";
+    popUpText.style.display = "flexbox";
+
+    const popUpButton = document.getElementById("popUpButton");
+    popUpButton.style.display = "block";
+    popUpButton.style.display = "flex";
+  }
+  else{
+    const passErr = document.getElementById("passErr");
+    passErr.innerHTML = "The password was incorrect!";
+  }  
+}
+
+function addRoom(){
+  //hide the pop-up again
+  const popUpText = document.getElementById("popUpText");
+  popUpText.style.display = "none";
+
+  const popUpButton = document.getElementById("popUpButton");
+  popUpButton.style.display = "none";
+
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "none";
+
+  const popUpPass= document.getElementById("popUpPass");
+  popUpPass.style.display = "block";
+  popUpPass.style.display = "flexbox";
+
+  //Make the room button 
+  const htmlRooms = document.getElementById("rooms");
+  let roomName = document.getElementById("rname").value;
+  htmlRooms.innerHTML += '<div class ="roomButtonDiv"> <button class="roomButton" name="Room1">'+ roomName +'</button> </div>';
+
+  //Generate patient list and send them to the database
+  Patient.generate();
+  database.child("Patient lists").child("Room: " + roomName).set(Patient.list);
 }
 
 function writeData(){
@@ -13,9 +56,9 @@ function writeData(){
 }
 
 function getDataOnce(){
-  database.child(fname.value).once('value', function(snapshot) {
+  database.child("Patient lists").child("Room: Andreas").once('value', function(snapshot) {
     let data = snapshot.val();
-    document.getElementById("data1").innerHTML = data["firstname"] + " " + data["lastname"];
+    console.log(data);
   })
 
   //voorbeeld met gebruik van child

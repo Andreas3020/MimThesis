@@ -6,30 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rooms</title>
     <link rel="stylesheet" href="src/view/css/agenda.css"/> 
+    <link rel="stylesheet" href="src/view/css/room.css"/> 
     <script src="src/ctrl/initialize.js"></script>
     <script src="src/model/patient.js"></script>
     <script src="src/view/js/dataBase.js"></script>
-    <script src="src/view/js/genPatientCopy.js"></script>
-    <script> window.addEventListener("load", Patient.generate()); </script>    
 </head>
 <body>
-    <button type="button" name="genPatienList" 
-    onClick="genRandomPatients()">Generate Patients</button>
-    
-    <form>
-        <table class= "table1", id="patientTableRoom">
-            <thead>
-                <tr>
-                    <th>Patient ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Availability</th>
-                    <th>Onco</th>
-                    <th>Chemo</th>
-                </tr>
-            </thead>
-            <tbody></tbody>    
-    </form>
+    <div style="margin-top: 20px">
+        <div id="rooms"></div>
+        <button type="button" id="addRoomButton" onClick="popUpWindow()">ADD ROOM</button>
+    </div>
+    <div id="roomPopUp" class="popUp">
+
+        <!-- popUp content -->
+        <div class="popUp-content">
+            <div class="popUp-password" id="popUpPass">
+                <label for="pass">Admin use only<br />Confirm password</label><br>
+                <input type="text" id="pass" name="pass"><br>
+                <p id="passErr" class="errorMessage"></p>
+                <button type="button" id="nextPassButton" onClick="confirmPassword()">Next</button>
+            </div>
+            <div class="popUp-text" id="popUpText">
+                <label for="rname">Room name:</label><br>
+                <input type="text" id="rname" name="rname"><br>
+                <!--<label for="roomDescr">Description</label><br>
+                <input type="text" id="roomDescr" name="roomDescr"><br>-->
+            </div>
+            <div class="popUp-button" id="popUpButton">
+                <input type="submit" value="Submit" onClick="addRoom()">
+            </div>
+        </div>
+    </div>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
@@ -62,5 +69,7 @@
     var database = firebase.database().ref(); 
     </script>
     
+    <script>getDataOnce();
+    </script>
 </body>
 </html>
