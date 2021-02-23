@@ -5,9 +5,9 @@ pl.view.genPatient = {
         //Set clickListener on button 'next patient'
         tableBody = document.getElementById('patientTable');
 
-        //Retrieve & display patient[0]
         i = 0;
         row = tableBody.insertRow();
+        Patient.loadAll();
         keys = Object.keys(Patient.list);
         key = keys[i];
         row.insertCell(0).textContent = Patient.list[key].patientID;

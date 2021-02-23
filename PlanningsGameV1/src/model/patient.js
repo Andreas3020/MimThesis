@@ -8,6 +8,7 @@ function Patient(profile){
     this.lastPatientBool = profile.lastPatientBool;
 };
 
+Patient.genList = {};
 Patient.list = {};
 
 //Patient object - variables
@@ -60,14 +61,14 @@ Patient.generate = function(){
       tempLastPatientBool = lastPatient();
 
       //Create patient/Write to list
-      Patient.list[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo , lastPatientBool: tempLastPatientBool});
+      Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo , lastPatientBool: tempLastPatientBool});
     }
 
     //Save patient list (JSONstringify) to localStorage (patientTable)
     try {
-        patientTableString = JSON.stringify( Patient.list);
+        /*patientTableString = JSON.stringify( Patient.genList);
         localStorage["patientTable"] = patientTableString;
-        console.log(patientTableString);
+        console.log(patientTableString);*/
       } catch (e) {
         alert("Error when writing to Local Storage\n" + e);
         error = true;
@@ -89,7 +90,7 @@ Patient.loadAll = function(){
     if (patientTableString) {
       patientTable = JSON.parse( patientTableString);
       keys = Object.keys( patientTable);
-      console.log( keys.length +" patient loaded.");
+
       for (i=0; i < keys.length; i++) {
         key = keys[i];
         Patient.list[key] = Patient.convertRow2Obj( patientTable[key]);

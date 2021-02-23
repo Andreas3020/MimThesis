@@ -1,6 +1,10 @@
-function popUpWindow(){
+function popUpPass(){
   const popUp = document.getElementById("roomPopUp");
   popUp.style.display = "block";
+
+  const popUpPass= document.getElementById("popUpPass");
+  popUpPass.style.display = "block";
+  popUpPass.style.display = "flexbox";
 }
 
 function confirmPassword(){
@@ -9,18 +13,29 @@ function confirmPassword(){
     const popUpPass = document.getElementById("popUpPass");
     popUpPass.style.display = "none";
 
-    const popUpText = document.getElementById("popUpText");
-    popUpText.style.display = "block";
-    popUpText.style.display = "flexbox";
+    const popUp = document.getElementById("roomPopUp");
+    popUp.style.display = "none";
 
-    const popUpButton = document.getElementById("popUpButton");
-    popUpButton.style.display = "block";
-    popUpButton.style.display = "flex";
+    const addRoomButton = document.getElementById("addRoomButton");
+    addRoomButton.style.display = "block";
   }
   else{
     const passErr = document.getElementById("passErr");
     passErr.innerHTML = "The password was incorrect!";
   }  
+}
+
+function nameRoom(){
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "block";
+  
+  const popUpText = document.getElementById("popUpText");
+  popUpText.style.display = "block";
+  popUpText.style.display = "flexbox";
+
+  const popUpButton = document.getElementById("popUpButton");
+  popUpButton.style.display = "block";
+  popUpButton.style.display = "flex";
 }
 
 function addRoom(){
@@ -34,64 +49,44 @@ function addRoom(){
   const popUp = document.getElementById("roomPopUp");
   popUp.style.display = "none";
 
-  const popUpPass= document.getElementById("popUpPass");
-  popUpPass.style.display = "block";
-  popUpPass.style.display = "flexbox";
-
   //Make the room button 
   const htmlRooms = document.getElementById("rooms");
   let roomName = document.getElementById("rname").value;
-  htmlRooms.innerHTML += '<div class ="roomButtonDiv"> <button class="roomButton" name="Room1">'+ roomName +'</button> </div>';
+  htmlRooms.insertAdjacentHTML('afterbegin',`<div class ="roomButtonDiv"><button class="roomButton" id=${roomName}>Room: ${roomName}</button> </div>`);
 
   //Generate patient list and send them to the database
   Patient.generate();
-  database.child("Patient lists").child("Room: " + roomName).set(Patient.list);
+  database.child("Patient lists").child("Room: " + roomName).set(Patient.genList);
 }
 
-function writeData(){
-  database.child(fname.value).set({firstname: fname.value, lastname: lname.value});
-  database.child("id").set({onco: "no", chemo: "3"});
-  getDataOnce();
-  getData();
+function loadRooms(){
+  //retrieve the patient lists from the database
+  database.child("Patient lists").once('value', function(snapshot) {
+    let roomList = Object.keys(snapshot.val());
+    let nrOfRooms = roomList.length;
+    
+    //Load the already existing rooms into the app
+    for(let i =0; i<nrOfRooms; i++){
+      const htmlRooms = document.getElementById("rooms");
+      let roomName = roomList[i];
+    
+      htmlRooms.insertAdjacentHTML('afterbegin',`<div class ="roomButtonDiv"><button class="roomButton" id=${roomName} onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`);
+
+      // htmlRooms.insertAdjacentHTML('afterbegin',`<div class ="roomButtonDiv"><button class="roomButton" id=${roomName} onClick="enterRoom(\'${roomName}\')">${roomName}</button><div><button>Delete</button><button>Statistics</button></div></div>`);
+    }
+  });  
 }
 
-function getDataOnce(){
-  database.child("Patient lists").child("Room: Andreas").once('value', function(snapshot) {
-    let data = snapshot.val();
-    console.log(data);
+function enterRoom(roomName){
+  //get the data of the specific room and load them into the local storage
+  database.child("Patient lists").child(roomName).once('value', function(snapshot) {
+    let patients = Object.values(snapshot.val());
+    let keys = Object.keys(snapshot.val()); 
+
+    patientTableString = JSON.stringify(patients);
+    localStorage["patientTable"] = patientTableString;
+
+    //go the the game
+    window.location.href = "agenda2.html";
   })
-
-  //voorbeeld met gebruik van child
-  /*database.child(fname.value).once('value', function(snapshot) {
-    let data = snapshot.val();
-    console.log(data);
-  })*/
-}
-
-function getData(){
-  database.child(fname.value).get().then(function(snapshot) {
-    if (snapshot.exists()) {
-      let data = snapshot.val();
-      document.getElementById("data2").innerHTML = data["lastname"] + " " + data["firstname"];
-    }
-    else {
-      console.log("No data available");
-    }
-  }).catch(function(error) {
-    console.error(error);
-  });
-
-  //alternatief voor hierboven met dubbel child
-  /*database.child(fname.value).child("firstname").get().then(function(snapshot) {
-    if (snapshot.exists()) {
-      let data = snapshot.val();
-      document.getElementById("data2").innerHTML = data;
-    }
-    else {
-      console.log("No data available");
-    }
-  }).catch(function(error) {
-    console.error(error);
-  });*/
-  
 }
