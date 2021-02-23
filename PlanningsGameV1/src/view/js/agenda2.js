@@ -175,7 +175,7 @@ function addSelectedSlot()
       window.alert('The patient has not been alloted a correct timeslot!');
     }
   }
-  catch{
+  catch (error){
     window.alert('The patient has not been alloted a correct timeslot or no timeslot has been selected!\nClick on skip if you are not able to allot a correct timeslot to the patient.');
   }
 }
