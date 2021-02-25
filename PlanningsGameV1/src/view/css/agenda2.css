@@ -103,11 +103,11 @@ i {
   background-color: rgb(185, 27, 27);
 }
 #agendaTable .greyedOutSlotToday.slotTaken {
-  background-color: rgb(226, 123, 26);
+  background-color: rgb(221, 138, 46);
 }
 
 #agendaTable .greyedOutSlot.slotTaken {
-  background-color: rgb(226, 123, 26);
+  background-color: rgb(221, 138, 46);
 }
 /* PATIENT TABLE DESIGN */
 .box2 {

@@ -157,7 +157,9 @@ function checkDay(i, greyedOutString)
 
 function addSelectedSlot()
 {
-  tableBody = document.getElementById('patientTable');
+  let tableBody = document.getElementById('patientTableScheduler');
+  /*
+  tableBody = document.getElementById('patientTable');*/
   currentPatient = tableBody.rows[1].cells[1].innerHTML;
   let avDay = tableBody.rows[1].cells[3].innerHTML;
   let nrOncoAppointments = tableBody.rows[1].cells[4].innerHTML;
