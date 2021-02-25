@@ -3,7 +3,7 @@ pl.view.genPatient = {
         lastPatient = 0; // slecht oplossing voor probleem
 
         //Set clickListener on button 'next patient'
-        tableBody = document.getElementById('patientTable');
+        tableBody = document.getElementById('patientTableScheduler');
 
         i = 0;
         row = tableBody.insertRow();
