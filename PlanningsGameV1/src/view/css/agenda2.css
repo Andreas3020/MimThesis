@@ -28,6 +28,7 @@ rgb(221, 138, 46) //Orange
   table-layout: fixed;
   border-collapse: collapse;
   border: 3px solid rgb(0, 64, 122);
+  text-align: center;
   /*border-spacing: 0; ALternatief*/
 }
 
@@ -113,13 +114,13 @@ i {
   background-color: turquoise;
   width: 50%;
   height: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: start;
 }
 
-#patientTable {
+.patientTable {
   text-align: center;
   margin: 5px;
   border: 2px solid white;
@@ -128,14 +129,14 @@ i {
   /*Wordt overschreven bij td. Nodig indien vakje geen inhoud heeft en dus niet wordt gegenereerd door JS (niet bestaande).*/
 }
 
-#patientTable th {
+.patientTable th {
   font-size: 1.2rem;
   background-color: rgb(29, 141, 176);
   border: 2px solid white;
   padding: 5px;
 }
 
-#patientTable td {
+.patientTable td {
   font-size: 1.1rem;
   background-color: rgb(31, 171, 231);
   border: 2px solid white;
