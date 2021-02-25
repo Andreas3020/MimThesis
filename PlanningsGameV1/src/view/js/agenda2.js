@@ -12,13 +12,15 @@ let IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
 let slotsTakenArray = [];
 
 
+console.log(Patient.list);
+
 function renderAgenda()
 {
    /* tableCore = agenda body = hour legenda (left column) + slots (7days with each 6 slots (2 onco slots + 4 chemo slots). */
    const tableCore = document.getElementById("agendaBody");
    let core = "";
    IdSelectedSlot = -1; //RESET
-  let greyedOutString1 = checkWeek();
+  
   let greyedOutString="";
   //GENERATE AGENDA BODY (hour column + slots)
   for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS
@@ -26,8 +28,19 @@ function renderAgenda()
     core += `<th> ${hours[j]} </th>`;   //E.g. <th>8:00</th>
 
     for (let i=0; i<7; i++) {//7x DAYS
-      
-      greyedOutString = checkDay(i, greyedOutString1);
+      if ( currentWeek == weekNr)
+      {
+        greyedOutString = checkDay(i, "greyedOutSlot");
+      }
+        else if (currentWeek > weekNr)
+      {
+        greyedOutString = "greyedOutSlot";
+      } 
+      else
+      {
+        greyedOutString = "";
+      }
+     // greyedOutString = checkDay(i, greyedOutString1);
       for (let k=0; k<6; k++) { //6x ONCOCHEMO (2 onco + 4 chemo)
         
         //End of row => add </tr>
@@ -36,61 +49,74 @@ function renderAgenda()
           if(slotsTakenArray[weekNr][6*i + 42*j +k] == false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`;
           } else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken" id="D${i}_H${j}_OC${k}"></td> </tr>`; /* IMPLEMENT INFO PATIENT ON HOVER ?*/
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`; /* IMPLEMENT INFO PATIENT ON HOVER ?*/
           }     
         } 
         else { //Not end of row (no </tr> needed)
           if(slotsTakenArray[weekNr][6*i + 42*j+k] == false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
           } else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken" id="D${i}_H${j}_OC${k}"></td>`; /* IMPLEMENT INFO PATIENT ON HOVER ?*/
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`; /* IMPLEMENT INFO PATIENT ON HOVER ?*/
           }
         }
       }    
     }
+   
     for(let i=0; i<7; i++)
     {
-      let today = weekdaysShort[i];
+      let day = weekdaysShort[i];
       // in the current week
       if( currentWeek == weekNr)
       {   
-        if(i >=  todayNr)
+        if(i > todayNr)
         {
-          document.querySelectorAll("th." + today ).forEach(div =>{
+          document.querySelectorAll("th." + day ).forEach(div =>{
         
             div.classList.remove("greyedOutHeader");
             
           });
         }
+        else if (i == todayNr)
+        {
+          document.querySelectorAll("th." + day).forEach(div =>{
+            div.classList.remove("greyedOutHeader");
+            div.classList.add("greyedOutHeaderToday");
+          });
+        }
         else
         {
-          document.querySelectorAll("th." + today ).forEach(div =>{
-        
-            div.classList.add("greyedOutHeader");
-            
+          document.querySelectorAll("th." + day ).forEach(div =>{
+            if(div.classList[1] != "greyedOutHeader")
+            {
+              div.classList.add("greyedOutHeader");
+            }
+
           });
         }     
       }
       //in the past
       else if (weekNr < currentWeek)
       {
-        document.querySelectorAll("th." + today ).forEach(div =>{
-          
-          div.classList.add("greyedOutHeader");
+        document.querySelectorAll("th." + day ).forEach(div =>{
+          if(div.classList[1] != "greyedOutHeader")
+          {
+            div.classList.remove("greyedOutHeaderToday");
+            div.classList.add("greyedOutHeader");
+          }
           
         });
       }
       //in the future
       else
       {
-        document.querySelectorAll("th." + today ).forEach(div =>{
+        document.querySelectorAll("th." + day ).forEach(div =>{
           
           div.classList.remove("greyedOutHeader");
+          div.classList.remove("greyedOutHeaderToday");
           
         });    
       }
     }   
-
   }
 
    //WRITE AGENDA BODY TO HTML
@@ -115,9 +141,13 @@ function checkWeek() {
 
 function checkDay(i, greyedOutString)
 {
-  if(i >=  todayNr)
+  if(i >  todayNr )
   {
     return "";
+  }
+  else if (i == todayNr)
+  {
+    return greyedOutString + "Today";
   }
   else
   {
@@ -195,30 +225,10 @@ function add(currentPatient, slotNr){
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay()
 {
+  console.log(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool)
   if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true)
   {
-    let today = weekdaysShort[todayNr];
-    
-    
-    // Only show immediatly if de currentweek is also the week that is displayed in the agenda
-    if(weekNr == currentWeek)
-    {
-      document.querySelectorAll("td." + today).forEach(div =>{
-        div.classList.add("greyedOutSlot");
-      });
-      
-      document.querySelectorAll("th." + today ).forEach(div =>{
-        
-        div.classList.add("greyedOutHeader");
-        
-      });
-/*
-      document.querySelectorAll("." + today + "Header").forEach(div =>{
-        div.classList.add("greyedOutHeader");
-        
-      });*/
-    }
-    //go to the next day or if at the end of the week and the next week
+    //Go to the next day or if at the end of the week and the next week
     if(todayNr < 6)
     {
       todayNr += 1;
@@ -228,6 +238,37 @@ function checkPatientsPerDay()
       todayNr = 0;
       currentWeek += 1;
     }
+
+    let today = weekdaysShort[todayNr];
+    let yesterday = weekdaysShort[todayNr-1];
+    
+    
+    // Only show immediatly if de currentweek is also the week that is displayed in the agenda
+    if(weekNr == currentWeek)
+    {
+
+      document.querySelectorAll("td." + today).forEach(div =>{
+        div.classList.add("greyedOutSlotToday");
+      });
+      
+      document.querySelectorAll("th." + today ).forEach(div =>{
+        div.classList.add("greyedOutHeaderToday");
+        
+      });
+
+      document.querySelectorAll("td." + yesterday).forEach(div =>{
+        div.classList.remove("greyedOutSlotToday");
+        div.classList.add("greyedOutSlot");
+      });
+      
+      document.querySelectorAll("th." + yesterday ).forEach(div =>{
+        div.classList.remove("greyedOutHeaderToday");
+        div.classList.add("greyedOutHeader");
+        
+      });
+
+    }
+    
   }
 }
 
@@ -266,7 +307,7 @@ function addWeekToArray() {
 
 function addEventlistenerSlots() 
 {
-  document.querySelectorAll("#agendaBody > tr > td").forEach
+  document.querySelectorAll("#agendaBody > tr > td:not(.greyedOutSlotToday):not(.greyedOutSlot)").forEach
   ( slot => {
     slot.addEventListener("click", event => {
       //Marked slot IS NOT new clicked slot?
@@ -295,3 +336,12 @@ addWeekToArray();
 
 //RENDER AGENDA 1ST TIME
 renderAgenda();
+
+// Make first day of first week grey
+/*
+let today = weekdaysShort[todayNr];
+document.querySelectorAll("td." + today).forEach(div =>{
+  div.classList.add("greyedOutSlotToday");
+  
+});
+*/

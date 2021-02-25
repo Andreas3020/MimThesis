@@ -80,21 +80,35 @@ i {
   border-right: 2px solid rgb(0, 64, 122);
 }
 
-#agendaTable td:hover:not(.selectedSlot) {
+#agendaTable td:hover:not(.selectedSlot):not(.greyedOutSlot):not(.greyedOutSlotToday) {
   background-color: rgb(0, 64, 122);
   cursor: pointer;
 }
 
-#agendaTable .slotTaken {
-  background-color: rgb(185, 27, 27);
-}
+
 #agendaTable .greyedOutSlot {
   background-color: rgb(173, 168, 168);
 }
 #agendaTable .greyedOutHeader {
   background-color: rgb(139, 136, 136);
 }
+#agendaTable .greyedOutHeaderToday {
+  background-color: rgb(216, 211, 211);
+}
 
+#agendaTable .greyedOutSlotToday {
+  background-color: rgb(230, 224, 224);
+}
+#agendaTable .slotTaken {
+  background-color: rgb(185, 27, 27);
+}
+#agendaTable .greyedOutSlotToday.slotTaken {
+  background-color: rgb(226, 123, 26);
+}
+
+#agendaTable .greyedOutSlot.slotTaken {
+  background-color: rgb(226, 123, 26);
+}
 /* PATIENT TABLE DESIGN */
 .box2 {
   background-color: wheat;

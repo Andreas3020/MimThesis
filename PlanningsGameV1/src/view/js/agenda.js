@@ -84,7 +84,7 @@ function renderAgenda()
         }
         else
         {                    
-          slots += `<div class="${weekday} slot selectedSlot" id=D${i}_H${j}_OC${k}>${selectedSlotsArray[week][6*i + 42*j+k].charAt(0)}</div>`;          
+          slots += `<div class="${weekday} slot selectedSlot " id=D${i}_H${j}_OC${k}>${selectedSlotsArray[week][6*i + 42*j+k].charAt(0)}</div>`;          
         }        
       }      
     }
