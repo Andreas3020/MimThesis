@@ -17,7 +17,7 @@ function confirmPassword(){
 
     const delStatList = document.getElementsByClassName("delStatButton");
     for (let item of delStatList) {
-      item.style.display = "inline-block";
+      item.style.display = "block";
     }
   }
   else{
@@ -50,8 +50,10 @@ function addRoom(){
 
   //Make the room button 
   const htmlRooms = document.getElementById("rooms");
-  let roomName = document.getElementById("rname").value;
-  htmlRooms.innerHTML +=`<div class ="roomButtonDiv"  id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">Room: ${roomName}</button></div>`;
+  let roomName = "Room: ";
+  roomName += document.getElementById("rname").value;
+  console.log(roomName);
+  htmlRooms.innerHTML +=`<div class ="roomButtonDiv" id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
 
   const rButton = document.getElementById(roomName);
   rButton.innerHTML += `<div><button type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
@@ -59,7 +61,7 @@ function addRoom(){
  
   //Generate patient list and send them to the database
   Patient.generate();
-  database.child("Room: " + roomName).child("Patient lists").set(Patient.genList);
+  database.child(roomName).child("Patient lists").set(Patient.genList);
 }
 
 function clearNamePop(){
