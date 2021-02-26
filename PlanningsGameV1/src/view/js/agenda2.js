@@ -11,7 +11,7 @@ let todayNr = 0;
 let IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
 let slotsTakenArray = [];
 
-
+  
 console.log(Patient.list);
 
 function renderAgenda()
@@ -49,14 +49,14 @@ function renderAgenda()
           if(slotsTakenArray[weekNr][6*i + 42*j +k] == false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`;
           } else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`; /* IMPLEMENT INFO PATIENT ON HOVER ?*/
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 42*j +k].patientID}</td> </tr>`;
           }     
         } 
         else { //Not end of row (no </tr> needed)
           if(slotsTakenArray[weekNr][6*i + 42*j+k] == false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
           } else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`; /* IMPLEMENT INFO PATIENT ON HOVER ?*/
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 42*j +k].patientID}</td>`; 
           }
         }
       }    
@@ -158,66 +158,42 @@ function checkDay(i, greyedOutString)
 function addSelectedSlot()
 {
   let tableBody = document.getElementById('patientTableScheduler');
-  /*
-  tableBody = document.getElementById('patientTable');*/
-  currentPatient = tableBody.rows[1].cells[1].innerHTML;
-  let avDay = tableBody.rows[1].cells[3].innerHTML;
-  let nrOncoAppointments = tableBody.rows[1].cells[4].innerHTML;
-  let nrChemoAppointments = tableBody.rows[1].cells[5].innerHTML;
+  let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
+  let currentPatientObject = Patient.list[currentPatientId];
+
+  let avDay = currentPatientObject.availability;
+  let nrOncoAppointments = currentPatientObject.onco;
+  let nrChemoAppointments = currentPatientObject.chemo;
   
   //try: check if a slot is selected
   try{
    
-   //get the id from your agenda
-   let a = IdSelectedSlot.match(/\d+/).input;
-    
-   //checking the day number and the slot number and type
-   
-   let strArray = a.split("_");
-   let dayStr = strArray[0];
-   let hourSlotStr = strArray[1];
-   let oncoChemoStr = strArray[2];
-   let dayNr = parseInt(dayStr.split("D")[1],10);
-   let hourSlot = parseInt(hourSlotStr.split("H")[1],10);
-   let oncoChemoNr = parseInt(oncoChemoStr.split("OC")[1],10);
-   let slotNr = 6*dayNr + 42*hourSlot  + oncoChemoNr;
-   
+  [dayNr, hourSlot, oncoChemoNr, slotNr] = getSlotNrFromId(IdSelectedSlot.toString());
+   console.log(IdSelectedSlot);
    if(weekdays[dayNr] == avDay){ 
-      // checks if an patient needs an oncoAppointment and if the user presses on a chemo slot 
-      if( nrOncoAppointments >= 1 && oncoChemoNr > 1 )
-      {
-        window.alert('The patient needs to be alloted an onco slot!');
-      }
-      // does patient need an oncoAppointment and if the user presses on a onco slot 
-      else if(nrOncoAppointments>=1 && oncoChemoNr <= 1)
-      {
-        add(currentPatient, slotNr);
-      }
-      //does patient need a chemoAppointment and is an onco slot pressed?
-      else if(nrChemoAppointments>=1 && oncoChemoNr <= 1)
-      {
-        window.alert('The patient needs to be alloted a chemo slot!');
-      }
-      else
-      {
-        add(currentPatient, slotNr);
-      }
+      // ONCO NEEDED, CHEMO PRESSED (block/warn)
+      if( nrOncoAppointments >= 1 && oncoChemoNr > 1 ) { window.alert('The patient needs to be alloted an onco slot!'); }
+      // ONCO NEEDED, ONCE PRESSED (confirm/add)
+      else if(nrOncoAppointments>=1 && oncoChemoNr <= 1) { add(currentPatientObject, slotNr); }
+      // CHEMO NEEDED, ONCO PRESSED (block/warn)
+      else if(nrChemoAppointments>=1 && oncoChemoNr <= 1) { window.alert('The patient needs to be alloted a chemo slot!'); }
+      // CHEMO NEEDED, CHEMO PRESSED (confirm/add)
+      else { add(currentPatientObject, slotNr); }
     }
-   else{
-      window.alert('The patient has not been alloted a correct timeslot!');
-    }
+    else { window.alert('The patient has not been alloted a correct timeslot!'); }
   }
-  catch (error){
+  catch (error) {
+    console.log(error);
     window.alert('The patient has not been alloted a correct timeslot or no timeslot has been selected!\nClick on skip if you are not able to allot a correct timeslot to the patient.');
   }
 }
 
 
-function add(currentPatient, slotNr){
+function add(currentPatientObject, slotNr){
   let a = nextPatientEvent();
   if(a <= 1){
-    document.getElementById(IdSelectedSlot).innerHTML= currentPatient.charAt(0);
-    slotsTakenArray[weekNr][slotNr] = currentPatient;
+    document.getElementById(IdSelectedSlot).innerHTML= currentPatientObject.patientID;
+    slotsTakenArray[weekNr][slotNr] = currentPatientObject;
     IdSelectedSlot = -1;
     
     checkPatientsPerDay()
@@ -227,7 +203,6 @@ function add(currentPatient, slotNr){
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay()
 {
-  console.log(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool)
   if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true)
   {
     //Go to the next day or if at the end of the week and the next week
@@ -240,11 +215,9 @@ function checkPatientsPerDay()
       todayNr = 0;
       currentWeek += 1;
     }
-
     let today = weekdaysShort[todayNr];
     let yesterday = weekdaysShort[todayNr-1];
-    
-    
+
     // Only show immediatly if de currentweek is also the week that is displayed in the agenda
     if(weekNr == currentWeek)
     {
@@ -268,9 +241,7 @@ function checkPatientsPerDay()
         div.classList.add("greyedOutHeader");
         
       });
-
-    }
-    
+    }    
   }
 }
 
@@ -304,33 +275,73 @@ function addWeekToArray() {
   
 }
 
-
-
-
 function addEventlistenerSlots() 
 {
   document.querySelectorAll("#agendaBody > tr > td:not(.greyedOutSlotToday):not(.greyedOutSlot)").forEach
   ( slot => {
     slot.addEventListener("click", event => {
+
+      //Need to lookup slotId again, because IdSelectedSlot becomes -1 after clicking "next"
+      let slotNr = getSlotNrFromId(event.currentTarget.id.toString())[3];
+
+
+      //----------CSS SLOTTAKEN (RED)--------------//
       //Marked slot IS NOT new clicked slot?
       if(event.currentTarget.classList[1] != "slotTaken") {
-
-        //ANOTHER SLOT MARKED ATM (remove)
+        //ANOTHER SLOT IS MARKED AT CLICK (remove)
         if(IdSelectedSlot != -1) {
           document.getElementById(IdSelectedSlot).classList.remove("slotTaken");
         }
-
       //MARK NEW (clicked) slot
       IdSelectedSlot = event.currentTarget.id;
       event.currentTarget.classList.add("slotTaken");
       }
       else { 
-        if(IdSelectedSlot != -1) {
+        if(IdSelectedSlot != -1 && slotsTakenArray[weekNr][slotNr] == false) {
           event.currentTarget.classList.remove("slotTaken");
         }
       }
+
+      
+      //----------JS SLOTTAKEN (SHOW PATIENT INFO)--------------//
+      
+
+      if(slotsTakenArray[weekNr][slotNr] != false) {
+
+        let tableBody = document.getElementById('patientTableSlotinfo');
+        patientObj = slotsTakenArray[weekNr][slotNr];
+        console.log(slotsTakenArray[weekNr][slotNr]);
+        tableBody.rows[1].cells[0].innerHTML = patientObj.patientID;
+        tableBody.rows[1].cells[1].innerHTML = patientObj.firstName;
+        tableBody.rows[1].cells[2].innerHTML = patientObj.lastName;
+        tableBody.rows[1].cells[3].innerHTML = patientObj.availability;
+        tableBody.rows[1].cells[4].innerHTML = patientObj.onco;
+        tableBody.rows[1].cells[5].innerHTML = patientObj.chemo;
+        //tableBody.rows[1].cells[6].innerHTML = patientObj.chemoLength;
+
+        document.getElementById("box2Right").style.display = "flex";
+      }
+      else { //slotsTakenArray[weekNr][slotNr] == false (available slot)
+        document.getElementById("box2Right").style.display = "none";
+      }
+
     });
   });
+}
+
+
+function getSlotNrFromId(slotId) {
+  //Check day, row (hourslot) and slot based on id (Dx_Hy_OCz)
+  //Return [slot number, dayNr]
+  let strArray = slotId.split("_");
+  let dayStr = strArray[0];
+  let hourSlotStr = strArray[1];
+  let oncoChemoStr = strArray[2];
+  let dayNr = parseInt(dayStr.split("D")[1],10);
+  let hourSlot = parseInt(hourSlotStr.split("H")[1],10);
+  let oncoChemoNr = parseInt(oncoChemoStr.split("OC")[1],10);
+  let slotNr = 6*dayNr + 42*hourSlot  + oncoChemoNr;
+  return [dayNr, hourSlot, oncoChemoNr, slotNr];
 }
 
 //GENERATE 1ST WEEK ARRAY
@@ -338,12 +349,3 @@ addWeekToArray();
 
 //RENDER AGENDA 1ST TIME
 renderAgenda();
-
-// Make first day of first week grey
-/*
-let today = weekdaysShort[todayNr];
-document.querySelectorAll("td." + today).forEach(div =>{
-  div.classList.add("greyedOutSlotToday");
-  
-});
-*/

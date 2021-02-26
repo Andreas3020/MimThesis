@@ -239,7 +239,7 @@ function addEventlistenerSlots()
 
       if(slotsTakenArray[weekNr][slotNr] != false) {
 
-        tableBody = document.getElementById('patientTableSlotinfo');
+       let tableBody = document.getElementById('patientTableSlotinfo');
         patientObj = slotsTakenArray[weekNr][slotNr];
 
         tableBody.rows[1].cells[0].innerHTML = patientObj.patientID;

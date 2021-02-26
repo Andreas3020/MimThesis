@@ -16,6 +16,7 @@ pl.view.genPatient = {
         row.insertCell(3).textContent = Patient.list[key].availability;
         row.insertCell(4).textContent = Patient.list[key].onco;
         row.insertCell(5).textContent = Patient.list[key].chemo;
+        row.insertCell(6).textContent = Patient.list[key].chemoLength;
     }
 };
 
@@ -29,6 +30,7 @@ function nextPatientEvent(){
         i++;
         key = keys[i];
         tableBody.rows[1].cells[0].innerHTML = Patient.list[key].patientID;
+        console.log(Patient.list[key].patientID);
         tableBody.rows[1].cells[1].innerHTML = Patient.list[key].firstName;
         tableBody.rows[1].cells[2].innerHTML = Patient.list[key].lastName;
         tableBody.rows[1].cells[3].innerHTML = Patient.list[key].availability;

@@ -6,6 +6,7 @@ function Patient(profile){
     this.onco = profile.onco;
     this.chemo = profile.chemo;
     this.lastPatientBool = profile.lastPatientBool;
+    this.chemoLength = profile.chemoLength;
 };
 
 Patient.genList = {};
@@ -36,6 +37,7 @@ Patient.generate = function(){
     var tempLname = "";
     var tempAvailability = "";
     var tempOnco, tempChemo;
+    var tempChemoLength;
     var tempLastPatientBool;
 
     var nrOfPersons = 30;
@@ -59,10 +61,12 @@ Patient.generate = function(){
         }
 
       };
+      tempChemoLength = getRandomInt(1,7);
+
       tempLastPatientBool = lastPatient();
 
       //Create patient/Write to list
-      Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo , lastPatientBool: tempLastPatientBool});
+      Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool});
     }
 
     //Save patient list (JSONstringify) to localStorage (patientTable)
