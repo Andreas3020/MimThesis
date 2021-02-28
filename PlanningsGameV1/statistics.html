@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="src/view/css/statistics.css">
+    <script src="src/view/js/statistics.js"></script>
+
+
+    <script src="../highcharts/code/highcharts.js"></script>
+    <script src="../highcharts/code/modules/data.js"></script>
+    <script src="../highcharts/code/modules/drilldown.js"></script>
+    <script src="../highcharts/code/modules/exporting.js"></script>
+    <script src="../highcharts/code/modules/export-data.js"></script>
+    <script src="../highcharts/code/modules/accessibility.js"></script>
+
+    <title>Statistics</title>
+</head>
+<body>
+    <h1>STATISTICS</h1>
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+    </figure>
+
+    <button type="button" onClick="location.href='index.html'">Back to rooms</button>
+    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+
+    <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+        apiKey: "AIzaSyC3RuOplNd7JCfHmhp0ybN_IeTUljKrKCA",
+        authDomain: "planningsgame.firebaseapp.com",
+        databaseURL: "https://planningsgame-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "planningsgame",
+        storageBucket: "planningsgame.appspot.com",
+        messagingSenderId: "588370794085",
+        appId: "1:588370794085:web:f0f87b5daa9e5b775cd88c",
+        measurementId: "G-70Q9RTPJ00"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();   
+
+    // Get a reference to the database service
+    var database = firebase.database().ref(); 
+    </script>
+
+    <script>createChart()</script>
+</body>
+</html>
