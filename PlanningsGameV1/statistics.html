@@ -15,16 +15,19 @@
     <script src="../highcharts/code/modules/exporting.js"></script>
     <script src="../highcharts/code/modules/export-data.js"></script>
     <script src="../highcharts/code/modules/accessibility.js"></script>
+    <script src="../highcharts/code/modules/histogram-bellcurve.js"></script>
 
     <title>Statistics</title>
 </head>
 <body>
     <h1>STATISTICS</h1>
-    <figure class="highcharts-figure">
-        <div id="container"></div>
-    </figure>
+    <div class="highcharts-figure" style="display: flex; background-color: blue; width: 100%;">
+        <div id="skippedPatients" style="width: 40%;"></div>
+        <div id="variance" style="width: 40%;"></div>
+    </div>
 
     <button type="button" onClick="location.href='index.html'">Back to rooms</button>
+    <button type="button" onClick="addData()">Add data</button>
     
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
@@ -56,7 +59,7 @@
     // Get a reference to the database service
     var database = firebase.database().ref(); 
     </script>
-
-    <script>createChart()</script>
+    <script>getStat();</script>
+   
 </body>
 </html>

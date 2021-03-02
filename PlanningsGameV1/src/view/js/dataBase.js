@@ -131,11 +131,14 @@ function deleteRoom(roomName){
 
 function roomStats(roomName){
   let randomList = [];
-  for(let i =0; i<100; i++){
+  for(let i =0; i<120; i++){
     let a = Math.round(Math.random()*10);
     randomList[i]= a;
   }
   database.child(roomName).child("Statistics").set(randomList);
+
+  randListString = JSON.stringify(randomList);
+  localStorage["statistics"] = randListString;
   window.location.href = "statistics.html";
 }
 

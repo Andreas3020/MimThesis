@@ -85,15 +85,15 @@ Highcharts.chart('container', {
 
     plotOptions: {
         histogram: {
-            accessibility: {
-                pointDescriptionFormatter: function (point) {
-                    var ix = point.index + 1,
-                        x1 = point.x.toFixed(3),
-                        x2 = point.x2.toFixed(3),
-                        val = point.y;
-                    return ix + '. ' + x1 + ' to ' + x2 + ', ' + val + '.';
-                }
-            }
+            // accessibility: {
+            //     pointDescriptionFormatter: function (point) {
+            //         var ix = point.index + 1,
+            //             x1 = point.x.toFixed(3),
+            //             x2 = point.x2.toFixed(3),
+            //             val = point.y;
+            //         return ix + '. ' + x1 + ' to ' + x2 + ', ' + val + '.';
+            //     }
+            // }
         }
     },
 
