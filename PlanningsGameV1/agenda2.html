@@ -17,8 +17,8 @@
 
   <!-- PATIENT GENERATION-->
   <script src="src/ctrl/initialize.js"></script>
-  <script src="src/view/js/genPatient.js"></script>
-  <script src="src/model/patient.js"></script>
+  <script src="src/view/js/genPatientLaurens.js"></script>
+  <script src="src/model/patientLaurens.js"></script>
   <script> window.addEventListener("load", Patient.generate()); </script>
   <script> window.addEventListener( "load", pl.view.genPatient.setupUserInterface); </script>
 </head>
@@ -114,8 +114,8 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Availability</th>
-                <th>Onco</th>
-                <th>Chemo amount</th>
+                <th colspan="2">Onco</th>
+                <th colspan="2">Chemo amount</th>
                 <th>Chemo length</th>
               </tr>
             </thead>

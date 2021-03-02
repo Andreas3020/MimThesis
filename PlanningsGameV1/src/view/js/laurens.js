@@ -613,7 +613,7 @@ function getSlotNrFromId(slotId) {
   return [dayNr, hourSlot, oncoChemoNr, slotNr];
 }
 
-//FUNCTIE NOG TESTEN!!!!!!!
+
 function getSlotIdFromNr(slotNummer) {
   let day = 0;
   let hour = 0;
