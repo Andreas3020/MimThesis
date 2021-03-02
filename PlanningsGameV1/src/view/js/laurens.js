@@ -10,8 +10,8 @@ let currentWeek = 0; //Actual week
 let todayNr = 0;
 
 let IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
-let lengthSelectedSlot = -1;
-let weekNrFirstSelectedSlot = -1;
+let lengthSelectedSlot = -1;      //Length
+let weekNrFirstSelectedSlot = -1; //Periodiciteit
 let oncoSlotOC = -1;
 let slotsTakenArray = [];
 
@@ -613,7 +613,7 @@ function getSlotNrFromId(slotId) {
   return [dayNr, hourSlot, oncoChemoNr, slotNr];
 }
 
-//FUNCTIE NOG TESTEN!!!!!!!
+
 function getSlotIdFromNr(slotNummer) {
   let day = 0;
   let hour = 0;
