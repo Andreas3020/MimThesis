@@ -287,6 +287,8 @@ function addEventlistenerSlots()
 
       if(slotsTakenArray[weekNr][slotNr] == false)
       {
+        document.getElementById("box2Right").style.display = "none";
+
         //PATIENT NOT AVAILABLE
         if(weekdays[dayNr] != avDay) { alert("Patient is not available this weekday.") }
 
@@ -420,7 +422,6 @@ function addEventlistenerSlots()
       else
       {
         //----------SHOW PATIENT INFO--------------//
-        if(slotsTakenArray[weekNr][slotNr] != false) {
           const tableRight = document.getElementById('patientTableSlotinfo');
           let patientObj = slotsTakenArray[weekNr][slotNr];     //let toegevoegd!
           tableRight.rows[1].cells[0].innerHTML = patientObj.patientID;
@@ -429,13 +430,9 @@ function addEventlistenerSlots()
           tableRight.rows[1].cells[3].innerHTML = patientObj.availability;
           tableRight.rows[1].cells[4].innerHTML = patientObj.onco;
           tableRight.rows[1].cells[5].innerHTML = patientObj.chemo;
-          //tableBody.rows[1].cells[6].innerHTML = patientObj.chemoLength;
+          tableRight.rows[1].cells[6].innerHTML = patientObj.chemoLength;
         
           document.getElementById("box2Right").style.display = "flex";
-        }
-        else { //slotsTakenArray[weekNr][slotNr] == false (available slot)
-          document.getElementById("box2Right").style.display = "none";
-        }
       }
     });  
   });
