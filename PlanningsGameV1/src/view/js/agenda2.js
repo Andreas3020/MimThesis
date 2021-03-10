@@ -94,7 +94,6 @@ function renderAgenda()
             {
               div.classList.add("greyedOutHeader");
             }
-
           });
         }     
       }
@@ -220,6 +219,11 @@ function addWeekToArray() {
 }
 
 function addSelectedSlot() {
+  if(IdSelectedSlot == -1)
+  {
+    window.alert("You didn't select anything!");
+    return;
+  }
   const tableBody = document.getElementById('patientTableScheduler');
   let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
   let currentPatientObject = Patient.list[currentPatientId];
@@ -237,6 +241,7 @@ function addSelectedSlot() {
     console.log("no scenario");
   }
   if(tableBody.rows[1].cells[7].innerHTML == 0){
+    checkPatientsPerDay()
      a = nextPatientEvent();
      weekNrFirstSelectedSlotTemp = -1;
   }
@@ -261,7 +266,7 @@ function addSelectedSlot() {
   
   IdSelectedSlot = -1;
 
-  checkPatientsPerDay()
+  
 }
 
 function addEventlistenerSlots() 
