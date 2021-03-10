@@ -135,10 +135,48 @@ function roomStats(roomName){
     let a = Math.round(Math.random()*10);
     randomList[i]= a;
   }
-  database.child(roomName).child("Statistics").set(randomList);
+  database.child(roomName).child("statistics").child("skippedPatients").set(randomList);
 
   randListString = JSON.stringify(randomList);
-  localStorage["statistics"] = randListString;
+  localStorage["statisticsSkip"] = randListString;
+
+  for(let i =0; i<120; i++){
+    let a = Math.round(Math.random()*10);
+    randomList[i]= a;
+  }
+  database.child(roomName).child("statistics").child("variance").child("variance").set(randomList);
+
+  randListString = JSON.stringify(randomList);
+  localStorage["statisticsVar"] = randListString;
+
+  for(let i =0; i<120; i++){
+    let a = Math.round(Math.random()*10);
+    randomList[i]= a;
+  }
+  database.child(roomName).child("statistics").child("variance").child("avgDifference").set(randomList);
+
+  randListString = JSON.stringify(randomList);
+  localStorage["statisticsAvgDif"] = randListString;
+
+
+  for(let i =0; i<120; i++){
+    let a = Math.round(Math.random()*10);
+    randomList[i]= a;
+  }
+  database.child(roomName).child("statistics").child("appointmentSpeed").set(randomList);
+
+  randListString = JSON.stringify(randomList);
+  localStorage["statisticsAppTime"] = randListString;
+
+  for(let i =0; i<120; i++){
+    let a = Math.round(Math.random()*10);
+    randomList[i]= a;
+  }
+  database.child(roomName).child("statistics").child("time").set(randomList);
+
+  randListString = JSON.stringify(randomList);
+  localStorage["statisticsTime"] = randListString;
+
   window.location.href = "statistics.html";
 }
 
