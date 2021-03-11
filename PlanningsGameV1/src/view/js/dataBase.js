@@ -62,6 +62,8 @@ function addRoom(){
   //Generate patient list and send them to the database
   Patient.generate();
   database.child(roomName).child("Patient lists").set(Patient.genList);
+
+  generateStats(roomName);
 }
 
 function clearNamePop(){
@@ -75,18 +77,20 @@ function clearNamePop(){
 function loadRooms(){
   //retrieve the patient lists from the database
   database.once('value', function(snapshot) {
-    let roomList = Object.keys(snapshot.val());
-    let nrOfRooms = roomList.length;
-    
-    //Load the already existing rooms into the app
-    for(let i =0; i<nrOfRooms; i++){
-      const htmlRooms = document.getElementById("rooms");
-      let roomName = roomList[i];
-    
-      htmlRooms.innerHTML +=`<div class ="roomButtonDiv"  id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
+    if(snapshot.exists()){
+      let roomList = Object.keys(snapshot.val());
+      let nrOfRooms = roomList.length;
+      
+      //Load the already existing rooms into the app
+      for(let i =0; i<nrOfRooms; i++){
+        const htmlRooms = document.getElementById("rooms");
+        let roomName = roomList[i];
+      
+        htmlRooms.innerHTML +=`<div class ="roomButtonDiv"  id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
 
-      const rButton = document.getElementById(roomName);
-      rButton.innerHTML += `<div class="delStatButton"><button type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
+        const rButton = document.getElementById(roomName);
+        rButton.innerHTML += `<div class="delStatButton"><button type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
+      }
     }
   });  
 }
@@ -129,54 +133,94 @@ function deleteRoom(roomName){
   confirmDel.style.display ="none";
 }
 
-function roomStats(roomName){
-  let randomList = [];
+function generateStats(roomName){
+  let randomListE = [];
+  let randomListM = [];
+  let randomListH = [];
+  
+  //setting the data for the statistics
+  //setting the skipped patients statistics
   for(let i =0; i<120; i++){
-    let a = Math.round(Math.random()*10);
-    randomList[i]= a;
+    let e = Math.round(Math.random()*10);
+    let m = Math.round(Math.random()*10);
+    let h = Math.round(Math.random()*10);
+    randomListE[i]= e;
+    randomListM[i]= m;
+    randomListH[i]= h;
   }
-  database.child(roomName).child("statistics").child("skippedPatients").set(randomList);
 
-  randListString = JSON.stringify(randomList);
-  localStorage["statisticsSkip"] = randListString;
+  database.child(roomName).child("statistics").child("skippedPatients").child("easy").set(randomListE);
+  
+  database.child(roomName).child("statistics").child("skippedPatients").child("moderate").set(randomListM);
+ 
+  database.child(roomName).child("statistics").child("skippedPatients").child("hard").set(randomListH);
 
+  //setting the variance statistics
   for(let i =0; i<120; i++){
-    let a = Math.round(Math.random()*10);
-    randomList[i]= a;
+    let e = Math.round(Math.random()*100)/20;
+    let m = Math.round(Math.random()*100)/10;
+    let h = Math.round(Math.random()*100)/10;
+    randomListE[i]= e;
+    randomListM[i]= m;
+    randomListH[i]= h;
   }
-  database.child(roomName).child("statistics").child("variance").child("variance").set(randomList);
 
-  randListString = JSON.stringify(randomList);
-  localStorage["statisticsVar"] = randListString;
-
+  database.child(roomName).child("statistics").child("variance").child("easy").child("variance").set(randomListE);
+  
+  database.child(roomName).child("statistics").child("variance").child("moderate").child("variance").set(randomListM);
+  
+  database.child(roomName).child("statistics").child("variance").child("hard").child("variance").set(randomListH);
+ 
+  //setting the average difference statistics
   for(let i =0; i<120; i++){
-    let a = Math.round(Math.random()*10);
-    randomList[i]= a;
+    let e = Math.round(Math.random()*100)/10;
+    let m = Math.round(Math.random()*100)/20;
+    let h = Math.round(Math.random()*100)/10;
+    randomListE[i]= e;
+    randomListM[i]= m;
+    randomListH[i]= h;
   }
-  database.child(roomName).child("statistics").child("variance").child("avgDifference").set(randomList);
 
-  randListString = JSON.stringify(randomList);
-  localStorage["statisticsAvgDif"] = randListString;
-
-
+  database.child(roomName).child("statistics").child("variance").child("easy").child("avgDifference").set(randomListE);
+  
+  database.child(roomName).child("statistics").child("variance").child("moderate").child("avgDifference").set(randomListM);
+ 
+  database.child(roomName).child("statistics").child("variance").child("hard").child("avgDifference").set(randomListH);
+  
+  //setting the appointment speed statistics
   for(let i =0; i<120; i++){
-    let a = Math.round(Math.random()*10);
-    randomList[i]= a;
+    let e = Math.round(Math.random()*10);
+    let m = Math.round(Math.random()*10);
+    let h = Math.round(Math.random()*10);
+    randomListE[i]= e;
+    randomListM[i]= m;
+    randomListH[i]= h;
   }
-  database.child(roomName).child("statistics").child("appointmentSpeed").set(randomList);
+  
+  database.child(roomName).child("statistics").child("appointmentSpeed").child("easy").set(randomListE);
+  
+  database.child(roomName).child("statistics").child("appointmentSpeed").child("moderate").set(randomListM);
+  
+  database.child(roomName).child("statistics").child("appointmentSpeed").child("hard").set(randomListH);
 
-  randListString = JSON.stringify(randomList);
-  localStorage["statisticsAppTime"] = randListString;
-
+  //setting completion time statistics
   for(let i =0; i<120; i++){
-    let a = Math.round(Math.random()*10);
-    randomList[i]= a;
+    let e = Math.round(Math.random()*10);
+    let m = Math.round(Math.random()*10);
+    let h = Math.round(Math.random()*10);
+    randomListE[i]= e;
+    randomListM[i]= m;
+    randomListH[i]= h;
   }
-  database.child(roomName).child("statistics").child("time").set(randomList);
+  
+  database.child(roomName).child("statistics").child("time").child("easy").set(randomListE);
+  
+  database.child(roomName).child("statistics").child("time").child("moderate").set(randomListM);
+  
+  database.child(roomName).child("statistics").child("time").child("hard").set(randomListH);
+}
 
-  randListString = JSON.stringify(randomList);
-  localStorage["statisticsTime"] = randListString;
-
+function roomStats(){
   window.location.href = "statistics.html";
 }
 

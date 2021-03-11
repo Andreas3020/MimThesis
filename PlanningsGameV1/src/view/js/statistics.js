@@ -1,9 +1,9 @@
 var chart; 
-var skippedPatientsList;
-var varianceList;
-var avgDifferenceList;
-var appointementSpeedList;
-var timeList;
+var skippedPatientsListE, skippedPatientsListLM, skippedPatientsListH;
+var varianceListE, varianceListM, varianceListH;
+var avgDifferenceListE, avgDifferenceListM, avgDifferenceListH;
+var appointementSpeedListE, appointementSpeedListM, appointementSpeedListH;
+var timeListE, timeListM, timeListH;
 
 
 function getStat(){
@@ -13,21 +13,62 @@ function getStat(){
 
         if(nrOfRooms>0){
             roomName = roomList[0];
-            database.child(roomName).child("statistics").child("skippedPatients").on('value', function(snapshot){
-                skippedPatientsList = Object.values(snapshot.val());
+            //skipped patients lists
+            database.child(roomName).child("statistics").child("skippedPatients").child("easy").on('value', function(snapshot){
+              skippedPatientsListE = Object.values(snapshot.val());
             });
-            database.child(roomName).child("statistics").child("variance").child("variance").on('value', function(snapshot){
-                varianceList = Object.values(snapshot.val());
+
+            database.child(roomName).child("statistics").child("skippedPatients").child("moderate").on('value', function(snapshot){
+              skippedPatientsListM = Object.values(snapshot.val());
             });
-            database.child(roomName).child("statistics").child("variance").child("avgDifference").on('value', function(snapshot){
-                avgDifferenceList = Object.values(snapshot.val());
+
+            database.child(roomName).child("statistics").child("skippedPatients").child("hard").on('value', function(snapshot){
+              skippedPatientsListH = Object.values(snapshot.val());
             });
-            database.child(roomName).child("statistics").child("appointmentSpeed").on('value', function(snapshot){
-                appointementSpeedList = Object.values(snapshot.val());
+
+            //variance lists
+            database.child(roomName).child("statistics").child("variance").child("easy").child("variance").on('value', function(snapshot){
+                varianceListE = Object.values(snapshot.val());
             });
-            database.child(roomName).child("statistics").child("time").on('value', function(snapshot){
-                timeList = Object.values(snapshot.val());
-                createChart();
+            database.child(roomName).child("statistics").child("variance").child("easy").child("avgDifference").on('value', function(snapshot){
+                avgDifferenceListE = Object.values(snapshot.val());
+            });
+
+            database.child(roomName).child("statistics").child("variance").child("moderate").child("variance").on('value', function(snapshot){
+              varianceListM = Object.values(snapshot.val());
+            });
+            database.child(roomName).child("statistics").child("variance").child("moderate").child("avgDifference").on('value', function(snapshot){
+              avgDifferenceListM = Object.values(snapshot.val());
+            });
+
+            database.child(roomName).child("statistics").child("variance").child("hard").child("variance").on('value', function(snapshot){
+              varianceListH = Object.values(snapshot.val());
+            });
+            database.child(roomName).child("statistics").child("variance").child("hard").child("avgDifference").on('value', function(snapshot){
+              avgDifferenceListH = Object.values(snapshot.val());
+            });
+
+            //appointment speed lists
+            database.child(roomName).child("statistics").child("appointmentSpeed").child("easy").on('value', function(snapshot){
+                appointementSpeedListE = Object.values(snapshot.val());
+            });
+            database.child(roomName).child("statistics").child("appointmentSpeed").child("moderate").on('value', function(snapshot){
+              appointementSpeedListM = Object.values(snapshot.val());
+            });
+            database.child(roomName).child("statistics").child("appointmentSpeed").child("hard").on('value', function(snapshot){
+              appointementSpeedListH = Object.values(snapshot.val());
+            });
+
+            //completion time lists
+            database.child(roomName).child("statistics").child("time").child("easy").on('value', function(snapshot){
+              timeListE = Object.values(snapshot.val());
+            });
+            database.child(roomName).child("statistics").child("time").child("moderate").on('value', function(snapshot){
+              timeListM = Object.values(snapshot.val());
+            });
+            database.child(roomName).child("statistics").child("time").child("hard").on('value', function(snapshot){
+              timeListH = Object.values(snapshot.val());
+              createChart();
             });
 
         }
@@ -36,17 +77,60 @@ function getStat(){
 
 // Create the chart
 function createChart(){
-    // var randArrString, randArr;
-    // try {
-    //     if (localStorage["statistics"]) {
-    //         randArrString = localStorage["statistics"];
-    //     }
-    //   } catch (e) {
-    //     alert("Error when reading from Local Storage\n" + e);
-    //   }
-    // if(randArrString){
-    //     randArr = JSON.parse(randArrString);
-    // }
+  //so only 3 times a '9' and 4 times a '10'
+  let testArray = [0,0,0,1,1,1,1,1,2,2,3,3,4,4,4,4,5,5,6,6,6,6,7,7,7,8,8,8,8,8,9,9,9,10,10,10,10]
+
+  Highcharts.chart('test', {
+    title: {
+        text: 'test'
+    },
+
+    xAxis: [{
+        visible: false,
+    }, {
+        title: { text: 'test x' },
+        showLastLabel: true,
+    }],
+
+    yAxis: [{
+        visible: false
+    }, {
+        title: { text: 'test y' },
+    }],
+
+    plotOptions: {
+      series: {
+        borderWidth: 0,
+        pointPlacement: 'between',
+        dataLabels: {
+          enabled: true
+        },
+      },
+      histogram: {
+            binWidth: 1
+        }
+        
+    },
+
+    series: [{
+      name: 'Test',
+      type: 'histogram',
+      yaxis: 1,
+      xAxis: 1,
+      baseSeries: 'testSeries'
+    },
+    {
+      id: 'testSeries',
+      visible: false,
+      data: testArray
+    }]
+    });
+
+
+    let avgSkippedEasy = Math.round(100*skippedPatientsListE.reduce((a, b) => a + b, 0)/skippedPatientsListE.length)/100;
+    let avgSkippedModerate = Math.round(100*skippedPatientsListM.reduce((a, b) => a + b, 0)/skippedPatientsListM.length)/100;
+    let avgSkippedHard = Math.round(100*skippedPatientsListH.reduce((a, b) => a + b, 0)/skippedPatientsListH.length)/100;
+
     var initialOptionsSkipped = {
 
         chart: {
@@ -86,8 +170,7 @@ function createChart(){
                     'Easy': {
                       id: 'avgSkippedEasy',
                       visible: false,
-                      type: 'column',
-                      data: skippedPatientsList
+                      data: skippedPatientsListE
                     },
                     'Histogram: Moderate': {
                         name: 'Moderate',
@@ -97,8 +180,7 @@ function createChart(){
                       'Moderate': {
                         id: 'avgSkippedModerate',
                         visible: false,
-                        type: 'column',
-                        data: skippedPatientsList
+                        data: skippedPatientsListM
                       },
                       'Histogram: Hard': {
                         name: 'Hard',
@@ -108,8 +190,7 @@ function createChart(){
                       'Hard': {
                         id: 'avgSkippedHard',
                         visible: false,
-                        type: 'column',
-                        data: skippedPatientsList
+                        data: skippedPatientsListH
                       }
                   },
                   series = [drilldowns['Histogram: ' + e.point.name], drilldowns[e.point.name]];
@@ -162,25 +243,28 @@ function createChart(){
             },
           },
           histogram: {
-            binWidth: 1
+            binWidth: 1,
           }
         },
 
         series: [{
           name: 'Averages per difficulty',
-          colorByPoint: true,
+          //colorByPoint: true,
           type: 'column',
           data: [{
             name: 'Easy',
-            y: 5,
+            y: avgSkippedEasy,
+            color: '#003f7a',
             drilldown: true
           }, {
             name: 'Moderate',
-            y: 2,
+            y: avgSkippedModerate,
+            color: '#1fabe7',
             drilldown: true
           }, {
             name: 'Hard',
-            y: 4,
+            y: avgSkippedHard,
+            color: '#c0e9fa',
             drilldown: true
           }]
         }],
@@ -195,9 +279,14 @@ function createChart(){
       });
 
 
-    var variance2D = [];
-    for(let i = 0; i<varianceList.length; i++){
-        variance2D[i] = [varianceList[i], avgDifferenceList[i]];
+    var variance2DE = [];
+    var variance2DM = [];
+    var variance2DH = [];
+    
+    for(let i = 0; i<varianceListE.length; i++){
+        variance2DE[i] = [varianceListE[i], avgDifferenceListE[i]];
+        variance2DM[i] = [varianceListM[i], avgDifferenceListM[i]];
+        variance2DH[i] = [varianceListH[i], avgDifferenceListH[i]];
     }
 
     Highcharts.chart('variance', {
@@ -224,20 +313,32 @@ function createChart(){
             }
             
         },
-
-        legend:{
-            enabled: false
-        },
     
         series: [{
             name: "Easy",
             type: "scatter",
-            data: variance2D,
+            data: variance2DE,
             xAxis: 1,
             yAxis: 1
+        },{
+          name: "Moderate",
+          type: "scatter",
+          data: variance2DM,
+          xAxis: 1,
+          yAxis: 1
+        },{
+          name: "Hard",
+          type: "scatter",
+          data: variance2DH,
+          xAxis: 1,
+          yAxis: 1
         }]
-    });
+        });
 
+    let avgAppSpeedEasy = Math.round(100*appointementSpeedListE.reduce((a, b) => a + b, 0)/skippedPatientsListE.length)/100;
+    let avgAppSpeedModerate = Math.round(100*appointementSpeedListM.reduce((a, b) => a + b, 0)/skippedPatientsListM.length)/100;
+    let avgAppSpeedHard = Math.round(100*appointementSpeedListH.reduce((a, b) => a + b, 0)/skippedPatientsListH.length)/100;
+    
     var initialOptionsAppSpeed = {
 
         chart: {
@@ -245,7 +346,7 @@ function createChart(){
             drilldown: function(e) {
               this.update({
                 title: {
-                  text: "Appointment speed patient: " + e.point.name
+                  text: "Appointment speed patients: " + e.point.name
                 },
                 xAxis: {
                   title: {
@@ -278,7 +379,7 @@ function createChart(){
                       id: 'avgAppSpeedEasy',
                       visible: false,
                       type: 'column',
-                      data: appointementSpeedList
+                      data: appointementSpeedListE
                     },
                     'Histogram: Moderate': {
                         name: 'Moderate',
@@ -289,7 +390,7 @@ function createChart(){
                         id: 'avgAppSpeedModerate',
                         visible: false,
                         type: 'column',
-                        data: appointementSpeedList
+                        data: appointementSpeedListM
                       },
                       'Histogram: Hard': {
                         name: 'Hard',
@@ -300,7 +401,7 @@ function createChart(){
                         id: 'avgAppSpeedHard',
                         visible: false,
                         type: 'column',
-                        data: appointementSpeedList
+                        data: appointementSpeedListH
                       }
                   },
                   series = [drilldowns['Histogram: ' + e.point.name], drilldowns[e.point.name]];
@@ -335,7 +436,7 @@ function createChart(){
           },
         },
         title: {
-          text: 'Average appointment patients'
+          text: 'Average appointment speed patients'
         },
         xAxis: {
           type: 'category',
@@ -363,15 +464,18 @@ function createChart(){
           type: 'column',
           data: [{
             name: 'Easy',
-            y: 6,
+            y: avgAppSpeedEasy,
+            color: '#003f7a',
             drilldown: true
           }, {
             name: 'Moderate',
-            y: 1,
+            y: avgAppSpeedModerate,
+            color: '#1fabe7',
             drilldown: true
           }, {
             name: 'Hard',
-            y: 5,
+            y: avgAppSpeedHard,
+            color: '#c0e9fa',
             drilldown: true
           }]
         }],
@@ -384,6 +488,10 @@ function createChart(){
       Highcharts.chart('appSpeed', {
         ...initialOptionsAppSpeed
       });
+
+      let avgTimeEasy = Math.round(100*timeListE.reduce((a, b) => a + b, 0)/skippedPatientsListE.length)/100;
+      let avgTimeModerate = Math.round(100*timeListM.reduce((a, b) => a + b, 0)/skippedPatientsListM.length)/100;
+      let avgTimeHard = Math.round(100*timeListH.reduce((a, b) => a + b, 0)/skippedPatientsListH.length)/100;
 
       var initialOptionsTime = {
 
@@ -425,7 +533,7 @@ function createChart(){
                       id: 'completionTimeEasy',
                       visible: false,
                       type: 'column',
-                      data: timeList
+                      data: timeListE
                     },
                     'Histogram: Moderate': {
                         name: 'Moderate',
@@ -436,7 +544,7 @@ function createChart(){
                         id: 'completionTimeModerate',
                         visible: false,
                         type: 'column',
-                        data: timeList
+                        data: timeListM
                       },
                       'Histogram: Hard': {
                         name: 'Hard',
@@ -447,7 +555,7 @@ function createChart(){
                         id: 'completionTimeHard',
                         visible: false,
                         type: 'column',
-                        data: timeList
+                        data: timeListH
                       }
                   },
                   series = [drilldowns['Histogram: ' + e.point.name], drilldowns[e.point.name]];
@@ -510,15 +618,18 @@ function createChart(){
           type: 'column',
           data: [{
             name: 'Easy',
-            y: 3,
+            y: avgTimeEasy,
+            color: '#003f7a',
             drilldown: true
           }, {
             name: 'Moderate',
-            y: 7,
+            y: avgTimeModerate,
+            color: '#1fabe7',
             drilldown: true
           }, {
             name: 'Hard',
-            y: 4,
+            y: avgTimeHard,
+            color: '#c0e9fa',
             drilldown: true
           }]
         }],
