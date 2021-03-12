@@ -1,0 +1,174 @@
+/*
+KLEURCODES KU LEUVEN:
+
+rgb(82,189,236) 
+rgb(0,64,122) 
+rgb(31,171,231) 
+rgb(29,141,176) 
+rgb(17,110,138)
+
+rgb(221, 138, 46) //Orange
+*/
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Quicksand", sans-serif;
+  color: white;
+}
+
+.container {
+  height: 100vh;
+}
+
+/* AGENDA TABLE DESIGN */
+#agendaTable {
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 3px solid rgb(0, 64, 122);
+  text-align: center;
+  /*border-spacing: 0; ALternatief*/
+}
+
+#leftColumn {
+  width: 5%;
+  background-color: rgb(29, 141, 176);
+  border-right: 4px solid rgb(0, 64, 122);
+}
+
+#weekHeader {
+  text-transform: uppercase;
+  height: 8%;
+  background-color: rgb(17, 110, 138);
+  border-bottom: 4px solid rgb(0, 64, 122);
+}
+
+#weekdaysHeader {
+  background-color: rgb(29, 141, 176);
+}
+
+#weekdaysHeader > th:nth-child(n) {
+  border-right: 2px solid rgb(0, 64, 122);
+}
+
+#oncoChemoHeader {
+  background-color: rgb(29, 141, 176);
+  border-bottom: 4px solid rgb(0, 64, 122);
+}
+
+#oncoChemoHeader > th:nth-child(2n) {
+  border-right: 2px solid rgb(0, 64, 122);
+}
+
+i {
+  /*Size of week arrows*/
+  font-size: 2em;
+  cursor: pointer;
+}
+
+#agendaTable td {
+  background-color: rgb(31, 171, 231);
+  border: 0.5px dashed rgb(0, 64, 122);
+}
+
+#agendaTable td:nth-child(6n + 1) {
+  border-right: 2px solid rgb(0, 64, 122);
+}
+
+#agendaTable td:nth-child(6n + 3) {
+  border-right: 2px solid rgb(0, 64, 122);
+}
+
+#agendaTable
+  td:hover:not(.slotTaken):not(.greyedOutSlot):not(.greyedOutSlotToday) {
+  background-color: rgb(0, 64, 122);
+  cursor: pointer;
+}
+
+#agendaTable .greyedOutSlot {
+  background-color: rgb(173, 168, 168);
+}
+#agendaTable .greyedOutHeader {
+  background-color: rgb(139, 136, 136);
+}
+#agendaTable .greyedOutHeaderToday {
+  background-color: rgb(216, 211, 211);
+}
+
+#agendaTable .greyedOutSlotToday {
+  background-color: rgb(230, 224, 224);
+}
+#agendaTable .slotTaken {
+  background-color: rgb(185, 27, 27);
+  cursor: pointer;
+}
+
+#agendaTable .slotsCurrent {
+  background-color: yellow;
+  color: black;
+}
+
+#agendaTable .greyedOutSlotToday.slotTaken {
+  background-color: rgb(221, 138, 46);
+}
+
+#agendaTable .greyedOutSlot.slotTaken {
+  background-color: rgb(221, 138, 46);
+}
+/* PATIENT TABLE DESIGN */
+.box2 {
+  background-color: wheat;
+  display: flex;
+}
+
+#box2Left {
+  background-color: thistle;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#box2Right {
+  background-color: turquoise;
+  width: 50%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.patientTable {
+  text-align: center;
+  margin: 5px;
+  border: 2px solid white;
+  border-collapse: collapse;
+  background-color: rgb(31, 171, 231);
+  /*Wordt overschreven bij td. Nodig indien vakje geen inhoud heeft en dus niet wordt gegenereerd door JS (niet bestaande).*/
+}
+
+.patientTable th {
+  font-size: 1.2rem;
+  background-color: rgb(29, 141, 176);
+  border: 2px solid white;
+  padding: 5px;
+}
+
+.patientTable td {
+  font-size: 1.1rem;
+  background-color: rgb(31, 171, 231);
+  border: 2px solid white;
+  padding: 5px;
+}
+
+button {
+  background: rgb(29, 141, 176);
+  font-size: 1rem;
+  border: 1px solid white;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+}
