@@ -7,6 +7,8 @@ function Patient(profile){
   this.chemo = profile.chemo;
   this.lastPatientBool = profile.lastPatientBool;
   this.chemoLength = profile.chemoLength;
+  this.probBloodFail = profile.probBloodFail;
+  this.weekNrFirstSelectedSlot = profile.weekNrFirstSelectedSlot;
 };
 
 Patient.genList = {};
@@ -24,7 +26,7 @@ var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(3,7);
+var nrPatientsCurrentDay = getRandomInt(0,1);
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
@@ -37,6 +39,7 @@ Patient.generate = function() {
   var tempOnco, tempChemo;    //tempChemo = periodicity (# weeks)
   var tempChemoLength;        //tempChemoLength = length of chemosession (type of chemo)
   var tempLastPatientBool;
+  var tempProbBloodFail;
 
   //TOTAL AMOUNT OF PERSONS TO BE SCHEDULED DURING THE GAME
   var nrOfPersons = 30;
@@ -52,8 +55,12 @@ Patient.generate = function() {
     tempChemoLength = getRandomInt(1,7);
     tempLastPatientBool = lastPatient();
 
+    
+    tempProbBloodFail = getRandomFloat(0,0.99).toFixed(3);
+    
+    tempWeekNrFirstSelectedSlot = 0;
     //Create patient/Write to list
-    Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool});
+    Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot});
   }
 
   //Save patient list (JSONstringify) to localStorage (patientTable)
@@ -106,6 +113,11 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 };
+//CREATE RANDOM FLOAT BETWEEN MIN AND MAX
+function getRandomFloat(min, max)
+{
+  return min + Math.random() * (max - min);
+}
 
 //RETURN 0 OR 1 (50% chance)
 function flipCoin() {
@@ -127,10 +139,10 @@ function lastPatient() {
 //ALLOCATE TEMPONCO + TEMPCHEMO
 function allocateTempOncoAndChemo() {
   let tempO = onco[flipCoin()];
-  let tempC = chemo[getRandomInt(0,6)]; //chemo=[0,2,3,4,5,6] => length 6, indexes until 5.
+  let tempC = chemo[getRandomInt(0,3)]; //chemo=[0,2,3,4,5,6] => length 6, indexes until 5.
   
   //Onco = chemo = 0 may not happen
-  if(tempO == 0 && tempC == 0) { allocateTempOncoAndChemo(); }
+  if(tempO == 0 && tempC == 0) { return allocateTempOncoAndChemo(); }
   //O&C appointment => update onco (1) to #onco = #chemo
   else if(tempO == 1 && tempC >= 2) { tempO = tempC; }
 

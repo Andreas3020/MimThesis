@@ -25,7 +25,7 @@ var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(3,7);
+var nrPatientsCurrentDay = getRandomInt(0,1);
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
@@ -118,7 +118,7 @@ function flipCoin() {
 //ASSIGN BOOL IF PATIENT NEEDS TO BE LAST PATIENT OF THE DAY
 function lastPatient() {
   if(nrPatientsCurrentDay == 0) {
-    nrPatientsCurrentDay = getRandomInt(3,7);   //Determine # patients per day (between x & y)
+    nrPatientsCurrentDay = getRandomInt(2,3);   //Determine # patients per day (between x & y)
     return true;
   } else {
     nrPatientsCurrentDay -= 1;
@@ -132,7 +132,7 @@ function allocateTempOncoAndChemo() {
   let tempC = chemo[getRandomInt(0,6)]; //chemo=[0,2,3,4,5,6] => length 6, indexes until 5.
   
   //Onco = chemo = 0 may not happen
-  if(tempO == 0 && tempC == 0) { allocateTempOncoAndChemo(); }
+  if(tempO == 0 && tempC == 0) { return allocateTempOncoAndChemo(); }
   //O&C appointment => update onco (1) to #onco = #chemo
   else if(tempO == 1 && tempC >= 2) { tempO = tempC; }
 

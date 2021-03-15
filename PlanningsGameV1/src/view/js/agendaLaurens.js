@@ -243,13 +243,14 @@ function addSelectedSlot() {
     }
     
     //1e patiënt ooit => uit tabel links halen
-    if( currentPatientObject = -1) { 
+    if( currentPatientObject == -1) { 
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
       currentPatientObject = Patient.list[currentPatientId];
     }
 
     //NEW PATIENT?
     if(tableBody.rows[1].cells[7].innerHTML == 0) {
+      checkPatientsPerDay();
       lastPatient = nextPatientEvent();
       weekNrFirstSelectedSlotTemp = -1;
 
@@ -271,7 +272,7 @@ function addSelectedSlot() {
 
   weekNrFirstSelectedSlot= weekNrFirstSelectedSlotTemp;   //Wat gebeurt hier? Niet gewoon op -1 zetten?
   IdSelectedSlot = -1;
-  checkPatientsPerDay()
+  
   }
   
 }
@@ -342,7 +343,7 @@ function addEventlistenerSlots()
               //2 SLOTS AVAILABLE?
               if (checkSlotsAvailable(slotNr)) {
                 //2 SLOTS AANDUIDEN
-                updateSlotsSelected(event, slotNr);
+                updateSlotsSelected(event);
               }
             } 
           }
@@ -364,7 +365,7 @@ function addEventlistenerSlots()
                 if(checkSlotsAvailable(slotNr) == 1) {
                   //SLOT(S) AANDUIDEN
                   weekNrFirstSelectedSlotTemp = weekNr;
-                  updateSlotsSelected(event, slotNr);
+                  updateSlotsSelected(event);
                 }
               }
               else { // 2e tot Xe chemo inplannen (weekNrFirstSelectedSlot != -1)
@@ -376,7 +377,7 @@ function addEventlistenerSlots()
                   //SLOT(S) AVAILABLE?
                   if(checkSlotsAvailable(slotNr) == 1) {
                     //SLOT(S) AANDUIDEN
-                    updateSlotsSelected(event, slotNr);
+                    updateSlotsSelected(event);
                   }
                 }
               }
@@ -401,7 +402,7 @@ function addEventlistenerSlots()
                   if(checkSlotsAvailable(slotNr) == 1) {
                     //SLOT(S) AANDUIDEN
                     weekNrFirstSelectedSlotTemp = weekNr;
-                    updateSlotsSelected(event, slotNr);
+                    updateSlotsSelected(event);
                   }
                 }
                 else { //2nd or more appointment of O&C periodicity
@@ -413,7 +414,7 @@ function addEventlistenerSlots()
                     //SLOT(S) AVAILABLE?
                     if(checkSlotsAvailable(slotNr) == 1) {
                       //SLOT(S) AANDUIDEN
-                      updateSlotsSelected(event, slotNr);
+                      updateSlotsSelected(event);
                     }
                   }
                 }
@@ -439,7 +440,7 @@ function addEventlistenerSlots()
                     //MINIMUM 4 BLOCKS AFTER ONCO?
                     if(slotNr >= oncoSlotOC+5*42  ) {
                       //SLOT(S) AANDUIDEN
-                      updateSlotsSelected(event, slotNr);
+                      updateSlotsSelected(event);
                     }
                     else {window.alert("There must be at least 2 hours of time between the onco & chemo appointment.");}
                   }
@@ -509,7 +510,7 @@ function checkSlotsAvailable(slotNr) {
 }
 
 //MARK SELECTED SLOTRANGE (CSS UPDATE)
-function updateSlotsSelected(event, slotNr) {
+function updateSlotsSelected(event) {
 /*All slots are available (due to checkSlotsAvailable() !!  Just need to check current selection (orange). */
 // 0) Niets ervoor aangeduid => PRINT
 // 1) Ergens anders => VERWIJDER => PRINT
@@ -538,19 +539,23 @@ function updateSlotsSelected(event, slotNr) {
 
 
 function removeOldRange() {
+  let tempSlotNr = ""; let tempSlotId = "";
   let NrSelectedSlot = getSlotNrFromId(IdSelectedSlot.toString())[3];
+
   for(let range = lengthSelectedSlot; range > 0; range--) {
-    let tempSlotNr = NrSelectedSlot + (range-1)*42;
-    let tempSlotId = getSlotIdFromNr(tempSlotNr);
+    tempSlotNr = NrSelectedSlot + (range-1)*42;
+    tempSlotId = getSlotIdFromNr(tempSlotNr);
     document.getElementById(tempSlotId).classList.remove("slotsCurrent");
   }
   slotsToAddArray = [];
 }
 
 function printNewRange() {
+  let tempSlotNr = ""; let tempSlotId = "";
+  
   for(let range = lengthSelectedSlot; range > 0; range--) {
-    let tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + (range-1)*42;
-    let tempSlotId = getSlotIdFromNr(tempSlotNr);
+    tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + (range-1)*42;
+    tempSlotId = getSlotIdFromNr(tempSlotNr);
     slotsToAddArray.push(tempSlotId); //add ids to array that have to be added to slotstakenArray after pressing next
     document.getElementById(tempSlotId).classList.add("slotsCurrent");
   }
@@ -558,16 +563,19 @@ function printNewRange() {
 
 function resetPatient() {
   slotsCurrentArray.forEach(function([week,slotId]) {
-    slotNr = getSlotNrFromId(slotId)[3];
+    let tempSlotNr = getSlotNrFromId(slotId)[3];
     //RESET SLOTSTAKENARRAY (no slotsCurrent)
-    slotsTakenArray[week][slotNr] = false;
+    slotsTakenArray[week][tempSlotNr] = false;
     //UPDATE CSS current week
     if(week === weekNr) {
       document.getElementById(slotId).classList.remove("slotsCurrent");
       document.getElementById(slotId).innerHTML = "";
-    }    
+    } 
   });
-
+    slotsToAddArray.forEach(function(slotId) {
+      document.getElementById(slotId).classList.remove("slotsCurrent");
+  });
+  
   //RESET VARIABLES
   IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
   weekNrFirstSelectedSlot = -1;

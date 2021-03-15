@@ -14,29 +14,25 @@ let lengthSelectedSlot = -1;
 let weekNrFirstSelectedSlot = -1;
 let weekNrFirstSelectedSlotTemp = -1;
 let oncoSlotOC = -1;
-let slotsTakenArray = [];
-
-let slotsToAddArray = [];
+let slotsTakenArray = [];     //De agenda met gereserveerde slots (alle weken)
+let slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
+let slotsToAddArray = [];     //Huidige selectie eventListener
 
 let goToNextPatient = false;
+let currentPatientObject = -1;
 
-let scenario;
+let skippedPatientsCounter = 0;
 
-todayPatientsArray = [];
-
-// with this we can acces patient.list
-Patient.loadAll();
+let scenario; 
 
 function renderAgenda()
 {
-  console.log(Patient.list[3].weekNrFirstSelectedSlot);
   /* tableCore = agenda body = hour legenda (left column) + slots (7days with each 6 slots (2 onco slots + 4 chemo slots). */
   const tableCore = document.getElementById("agendaBody");
   let core = "";
   //DIT IS NIET NODIG? OF WEL?
   IdSelectedSlot = -1; //RESET
   lengthSelectedSlot = -1; //RESET
-  
   let greyedOutString="";
 
   //GENERATE AGENDA BODY (hour column + slots)
@@ -54,28 +50,35 @@ function renderAgenda()
           //Slot is AVAILABLE
           if(slotsTakenArray[weekNr][6*i + 42*j +k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`;
-          } //Slot is TAKEN/UNAVAILABLE
+          }  //Slot is CURRENTLY SELECTED   
+          else if( slotsTakenArray[weekNr][6*i + 42*j +k].length === 12) {
+            core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td> </tr>`;
+          }  //SLot is TAKEN/UNAVAILABLE
           else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 42*j +k]}</td> </tr>`;
-          }     
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 42*j +k].patientID}</td> </tr>`;
+          }  
         } 
         else { //Not end of row, so no </tr> needed)
           //Slot is AVAILABLE
           if(slotsTakenArray[weekNr][6*i + 42*j+k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
+          } //Slot is CURRENTLY SELECTED   
+          else if( slotsTakenArray[weekNr][6*i + 42*j +k].length === 12) {
+            core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td>`;
           } //Slot is TAKEN/UNAVAILABLE
           else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 42*j +k]}</td>`; 
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 42*j +k].patientID}</td>`; 
           }
         }
       }    
     }
+  
     //GREYEDOUT LOGIC FOR PAST DATES
     for(let i=0; i<7; i++)
     {
       let day = weekdaysShort[i];
       // in the current week
-      if(currentWeek == weekNr)
+      if( currentWeek == weekNr)
       {   
         if(i > todayNr)
         {
@@ -99,6 +102,7 @@ function renderAgenda()
             {
               div.classList.add("greyedOutHeader");
             }
+
           });
         }     
       }
@@ -111,6 +115,7 @@ function renderAgenda()
             div.classList.remove("greyedOutHeaderToday");
             div.classList.add("greyedOutHeader");
           }
+          
         });
       }
       //in the future
@@ -155,224 +160,9 @@ function checkDay(i, greyedOutString)
   }
 }
 
-
-//CHANGE WEEK - EVENTLISTENERS (previous + next)
-document.querySelector(".prev").addEventListener("click", () => {
-  if(weekNr > 0) {
-    weekNr -= 1;
-    renderAgenda();
-  } //else {console.log("Can't move further back than week 1!");"}
-});
-
-document.querySelector(".next").addEventListener("click", () => {
-  weekNr += 1;
-  if(weekNr+1 > slotsTakenArray.length){
-    addWeekToArray();
-  }
-  renderAgenda();
-});
-
-
-
-function addWeekToArray() {
-  //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
-  slotsTakenArray.push([]);
-
-  //FILL WEEK SLOTS WITH FALSE (available)
-  for (let i=0; i<=839; i++){    
-    
-    if ( i == 49)
-    {
-      Patient.list[3].weekNrFirstSelectedSlot = 0;
-      slotsTakenArray[weekNr].push(Patient.list[3].patientID);
-      
-    }
-    else if (i == 91)
-    {
-      slotsTakenArray[weekNr].push(Patient.list[3].patientID);
-    }
-    else if (i == 176)
-    {
-      Patient.list[4].weekNrFirstSelectedSlot = 0;
-      slotsTakenArray[weekNr].push(Patient.list[4].patientID);
-    }
-    else
-    {
-      slotsTakenArray[weekNr].push(false);
-    }
-  } 
-  console.log(Patient.list[3].weekNrFirstSelectedSlot);
-}
-
-function addSelectedSlot() {
-  if(IdSelectedSlot == -1)
-  {
-    window.alert("You didn't select anything!");
-    return;
-  }
-  const tableBody = document.getElementById('patientTableScheduler');
-  let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
-  let currentPatientObject = Patient.list[currentPatientId];
-  let slotNr;
-  let a;
-
-  // check the scenario (onco or chemo) that has been done and change the nr of times still needed
-  if(scenario == "onco"){
-    tableBody.rows[1].cells[5].innerHTML -=1;
-  }
-  else if(scenario == "chemo"){
-    tableBody.rows[1].cells[7].innerHTML -=1
-  }
-  else{
-    console.log("no scenario");
-  }
-  if(tableBody.rows[1].cells[7].innerHTML == 0){
-    
-    /*checkPatientsPerDay()
-     a = nextPatientEvent();
-     */
-    console.log("heya")
-    a = checkPatientsPerDay();
-    weekNrFirstSelectedSlotTemp = -1;
-  }
-  else{
-    a = 1;
-  }
-  if(a <= 1 ) {
-    
-    console.log("blablalba");
-    slotsToAddArray.forEach(function(slotId)
-    {
-      [dayNr, hourSlot, oncoChemoNr, slotNr] = getSlotNrFromId(slotId); 
-      document.getElementById(slotId).innerHTML = currentPatientObject.patientID;
-      //slotsTakenArray[weekNr][slotNr] = currentPatientObject;
-      slotsTakenArray[weekNr][slotNr] = currentPatientObject.patientID;
-    });
-    slotsToAddArray = [];
-    if(weekNrFirstSelectedSlotTemp != -1)
-    {
-      Patient.list[currentPatientId].weekNrFirstSelectedSlot = weekNrFirstSelectedSlotTemp;
-      weekNrFirstSelectedSlot= weekNrFirstSelectedSlotTemp;
-    }
-
-  }
-  else if (a == 3)
-  { 
-    slotsToAddArray.forEach(function(slotId)
-    {
-      [dayNr, hourSlot, oncoChemoNr, slotNr] = getSlotNrFromId(slotId); 
-      document.getElementById(slotId).innerHTML = currentPatientObject.patientID;
-      //slotsTakenArray[weekNr][slotNr] = currentPatientObject;
-      slotsTakenArray[weekNr][slotNr] = currentPatientObject.patientID;
-    });
-    slotsToAddArray = [];
-    /*
-    // empty todayPatientsArray because new day
-    todayPatientsArray = [];
-    */
-    let todaySlot;
-    console.log("todaynr " + todayNr);
-    //put all patients of today in an array so they can be checked for 
-    for(let j=0; j<20; j++) 
-    {
-      for (let k=0; k<6; k++) 
-      {
-        todaySlot = slotsTakenArray[currentWeek][6*todayNr +42*j +k]
-        if (todaySlot !== false)
-        {
-          todayPatientsArray.push(todaySlot);
-        }
-      }
-    }
-    // only keep the unique patients in the array
-    todayPatientsArray = todayPatientsArray.filter(onlyUnique);
-    console.log("4 " + weekNrFirstSelectedSlot);
-    testBloodPatients();
-    
-    // a will be 4 if there are patients where bloodtest failed
-    a = checkPatientsPerDay();
-  }
- if (a == 4)
-  {
-  
-    id = todayPatientsArray[0];
-    
-    tableBody.rows[1].cells[0].innerHTML = Patient.list[id].patientID;
-    tableBody.rows[1].cells[1].innerHTML = Patient.list[id].firstName;
-    tableBody.rows[1].cells[2].innerHTML = Patient.list[id].lastName;
-    tableBody.rows[1].cells[3].innerHTML = Patient.list[id].availability;
-    tableBody.rows[1].cells[4].innerHTML = Patient.list[id].onco;
-    if (Patient.list[id].onco>0)
-    {
-      tableBody.rows[1].cells[5].innerHTML = 1;
-    }
-    tableBody.rows[1].cells[6].innerHTML = Patient.list[id].chemo;
-    if (Patient.list[id].chemo>0)
-    {
-      tableBody.rows[1].cells[7].innerHTML = 1;
-    }
-    tableBody.rows[1].cells[8].innerHTML = Patient.list[id].chemoLength;
-    window.alert('Patient with ID: ' + Patient.list[id].patientID + ' failed their bloodtest!');
-    
-    todayPatientsArray.splice(0, 1);
-
-
-    Patient.list[id].weekNrFirstSelectedSlot +=  1;
-    console.log(Patient.list[id]);
-    weekNrFirstSelectedSlot= Patient.list[id].weekNrFirstSelectedSlot;
-    console.log("addselected...");
-
-    console.log("3 " + weekNrFirstSelectedSlot);
-
-  }
-
-  
-
-  
-  IdSelectedSlot = -1
-}
-//returns array of patients where bloodtest failed
-function testBloodPatients()
-{
-  for( var i = 0; i < todayPatientsArray.length; i++){ 
-       
-    // check and remove patient if bloodtest does not fail
-    let probBloodFail = Patient.list[todayPatientsArray[i]].probBloodFail;
-    if ( probBloodFail < 0){     
-        //change propability that bloodtest fails next time
-        let num = getRandomFloat(0.3,0.9).toFixed(3);   
-        Patient.list[todayPatientsArray[i]].probBloodFail = num;    
-        todayPatientsArray.splice(i, 1); 
-        i--; 
-    }
-    else{
-
-      //change propability that bloodtest fails next time
-      Patient.list[todayPatientsArray[i]].probBloodFail = getRandomFloat(0.3,0.9).toFixed(3);   
-    }  
-  }
-}
-/*
-//CREATE RANDOM FLOAT BETWEEN MIN AND MAX
-function getRandomFloat(min, max)
-{
-  return min + Math.random() * (max - min);
-}
-*/
-//checks for duplicates. === gives true if equal value and equal type
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
-
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
-function checkPatientsPerDay()
-{ 
-  if(todayPatientsArray.length > 0)
-  { 
-    return 4;
-  }
-
-  else if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true)
+function checkPatientsPerDay() {
+  if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true)
   {
     //Go to the next day or if at the end of the week and the next week
     if(todayNr < 6) {
@@ -403,30 +193,124 @@ function checkPatientsPerDay()
         div.classList.remove("greyedOutHeaderToday");
         div.classList.add("greyedOutHeader");
       });
-
-      
-    }   
-    return 3; 
+    }    
   }
-  else{
-    return nextPatientEvent();
+}
+
+
+//CHANGE WEEK - EVENTLISTENERS (previous + next)
+document.querySelector(".prev").addEventListener("click", () => {
+  if(weekNr > 0) {
+    weekNr -= 1;
+    renderAgenda();
+  } else { console.log("Can't move further back than week 1!");}
+});
+
+document.querySelector(".next").addEventListener("click", () => {
+  weekNr += 1;
+  if(weekNr+1 > slotsTakenArray.length){
+    addWeekToArray();
+  }
+  renderAgenda();
+});
+
+function addWeekToArray() {
+  //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
+  slotsTakenArray.push([]);
+
+  //FILL WEEK SLOTS WITH FALSE (available)
+  for (let i=0; i<=839; i++){    
+    slotsTakenArray[weekNr].push(false);
+  } 
+}
+
+
+function addSelectedSlot() {
+  const tableBody = document.getElementById('patientTableScheduler');
+  let lastPatient;
+
+  if(IdSelectedSlot === -1) { alert("Must select a time slot!"); }
+  else {
+    // check the scenario (onco or chemo) that has been done and change the nr of times still needed
+    if(scenario == "onco"){
+      tableBody.rows[1].cells[5].innerHTML -=1;
+      //console.log("onco scenario");
+    } else if(scenario == "chemo"){
+      tableBody.rows[1].cells[7].innerHTML -=1
+      //console.log("chemo scenario");
+    } else{
+      //console.log("no scenario");
+    }
+    
+    //1e patiënt ooit => uit tabel links halen
+    if( currentPatientObject == -1) { 
+      let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
+      currentPatientObject = Patient.list[currentPatientId];
+    }
+
+    //NEW PATIENT?
+    if(tableBody.rows[1].cells[7].innerHTML == 0) {
+      lastPatient = nextPatientEvent();
+      weekNrFirstSelectedSlotTemp = -1;
+
+      //LAST PATIENT 1x TIME PROCESS / NEW PATIENT PROCESSING
+      if(lastPatient <= 1) {
+        yellow();
+        red();
+        let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
+        currentPatientObject = Patient.list[currentPatientId];
+      }
+      else { //lastPatient  > 1 
+        alert("You already scheduled this last patient. Game ended."); 
+      }
+  }
+  //NOT NEW PATIENT?
+  else {
+    yellow();
+  }
+
+  weekNrFirstSelectedSlot= weekNrFirstSelectedSlotTemp;   //Wat gebeurt hier? Niet gewoon op -1 zetten?
+  IdSelectedSlot = -1;
+  checkPatientsPerDay()
   }
   
 }
+
+function yellow() {
+  //SAVE SLOTS from slotsToAddArray
+  slotsToAddArray.forEach(function(slotId) {
+    slotNr = getSlotNrFromId(slotId)[3];
+    slotsTakenArray[weekNr][slotNr] = "slotsCurrent";
+    slotsCurrentArray.push([weekNr,slotId]); //Bijhouden alle slots (id) van huidige patiënt die volledig ingepland wordt
+    document.getElementById(slotId).innerHTML = currentPatientObject.patientID;
+  });
+  slotsToAddArray = [];
+}
+
+function red() {
+  slotsCurrentArray.forEach(function([week,slotId]) {
+    slotNr = getSlotNrFromId(slotId)[3];
+    slotsTakenArray[week][slotNr] = currentPatientObject;
+    if(week === weekNr) {
+      document.getElementById(slotId).classList.remove("slotsCurrent");
+      document.getElementById(slotId).classList.add("slotTaken");
+    }    
+  });
+  slotsCurrentArray = [];
+}
+//TOOOOOOOOO DOOOOOOOOOOO => end game verbeteren (lastPatient++ van genPAtient + algemene meldingen, statistieken etc)
+
 
 function addEventlistenerSlots() 
 {
   document.querySelectorAll("#agendaBody > tr > td:not(.greyedOutSlotToday):not(.greyedOutSlot)").forEach
   ( slot => {
     slot.addEventListener("click", event => {
-      
       //Need to lookup slotId again, because IdSelectedSlot becomes -1 after clicking "next".
       let dayNr; let hourSlot; let oncoChemoNr; let slotNr;
       let slotId = event.currentTarget.id;                 
       [dayNr, hourSlot, oncoChemoNr, slotNr] = getSlotNrFromId(slotId.toString());
-      //slotId & slotNr are the clicked slot!!
 
-      console.log(Patient.list[3].weekNrFirstSelectedSlot);
       const tableBody = document.getElementById('patientTableScheduler');
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;
       let currentPatientObject = Patient.list[currentPatientId];
@@ -435,8 +319,10 @@ function addEventlistenerSlots()
       let nrChemoAppointments = currentPatientObject.chemo;
       let cLength = currentPatientObject.chemoLength;
 
-      if(slotsTakenArray[weekNr][slotNr] === false)
+      if(slotsTakenArray[weekNr][slotNr] == false)
       {
+        document.getElementById("box2Right").style.display = "none";
+
         //PATIENT NOT AVAILABLE
         if(weekdays[dayNr] != avDay) { alert("Patient is not available this weekday.") }
 
@@ -456,7 +342,7 @@ function addEventlistenerSlots()
               //2 SLOTS AVAILABLE?
               if (checkSlotsAvailable(slotNr)) {
                 //2 SLOTS AANDUIDEN
-                updateSlotsSelected(event, slotNr);
+                updateSlotsSelected(event);
               }
             } 
           }
@@ -478,14 +364,11 @@ function addEventlistenerSlots()
                 if(checkSlotsAvailable(slotNr) == 1) {
                   //SLOT(S) AANDUIDEN
                   weekNrFirstSelectedSlotTemp = weekNr;
-                  updateSlotsSelected(event, slotNr);
+                  updateSlotsSelected(event);
                 }
               }
               else { // 2e tot Xe chemo inplannen (weekNrFirstSelectedSlot != -1)
                 let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
-
-                console.log("only chemo");
-                console.log(weekNrFirstSelectedSlot); 
                 if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
                   alert("You are scheduling the next chemo appointment in the wrong week!");
                 }
@@ -493,8 +376,7 @@ function addEventlistenerSlots()
                   //SLOT(S) AVAILABLE?
                   if(checkSlotsAvailable(slotNr) == 1) {
                     //SLOT(S) AANDUIDEN
-                    updateSlotsSelected(event, slotNr);
-                    
+                    updateSlotsSelected(event);
                   }
                 }
               }
@@ -503,7 +385,6 @@ function addEventlistenerSlots()
           //O&C APPOINTMENTS
           //Schedule chemo WITH bloodtests in advance
           else if(nrOncoAppointments >= 1 && nrChemoAppointments >= 2) {
-
             
             //SCHEDULE ONCO
             if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML) {
@@ -513,33 +394,26 @@ function addEventlistenerSlots()
               if(oncoChemoNr > 1) { window.alert('The patient needs to be alloted an onco slot!'); }
               //ONCO SELECTED (ONCO NEEDED) (oncoChemoNr <= 1)
               else {
+                oncoSlotOC = slotNr;
                 //1st time O&C
                 if(weekNrFirstSelectedSlot == -1) {
                   //SLOT(S) AVAILABLE?
                   if(checkSlotsAvailable(slotNr) == 1) {
-                    //needs to be remembered because chemo needs to be 2h after onco
-                    oncoSlotOC = slotNr;
                     //SLOT(S) AANDUIDEN
                     weekNrFirstSelectedSlotTemp = weekNr;
-                    updateSlotsSelected(event, slotNr);
+                    updateSlotsSelected(event);
                   }
                 }
                 else { //2nd or more appointment of O&C periodicity
                   let amountAlreadyPlanned = nrOncoAppointments - tableBody.rows[1].cells[5].innerHTML;
-                  console.log("onco and chemo onco");
-                  console.log(weekNrFirstSelectedSlot);
                   if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
                     alert("You are scheduling the next onco appointment in the wrong week!");
                   }
                   else {
                     //SLOT(S) AVAILABLE?
                     if(checkSlotsAvailable(slotNr) == 1) {
-                      //needs to be remembered because chemo needs to be 2h after onco
-                      oncoSlotOC = slotNr;
                       //SLOT(S) AANDUIDEN
-                      updateSlotsSelected(event, slotNr);
-                      console.log("1 " + weekNrFirstSelectedSlot);
-                      
+                      updateSlotsSelected(event);
                     }
                   }
                 }
@@ -555,9 +429,6 @@ function addEventlistenerSlots()
               else {
                 let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
                 //WRONG WEEK
-                console.log("2 " + weekNrFirstSelectedSlot);
-                console.log("onco and chemo chemo");
-                console.log(weekNrFirstSelectedSlot);
                 if((weekNrFirstSelectedSlot + amountAlreadyPlanned) != weekNr) {
                   alert("You are scheduling the next chemo appointment in the wrong week!");
                 }
@@ -568,12 +439,12 @@ function addEventlistenerSlots()
                     //MINIMUM 4 BLOCKS AFTER ONCO?
                     if(slotNr >= oncoSlotOC+5*42  ) {
                       //SLOT(S) AANDUIDEN
-                      console.log(oncoSlotOC);
-                      updateSlotsSelected(event, slotNr);
+                      updateSlotsSelected(event);
                     }
                     else {window.alert("There must be at least 2 hours of time between the onco & chemo appointment.");}
                   }
                 }
+                oncoSlotOC = -1;
               }
             }
             else { console.log("Not planning onco, nor planning chemo, inside the O&C appointment eventListener. CODE PROBLEM."); }
@@ -582,31 +453,38 @@ function addEventlistenerSlots()
           else {console.log("Both nrOncoAppointments & nrChemoAppointments are zero. Not possible! CODE PROBLEM!!");}
         }
       }
-      else
-      {
-        //----------SHOW PATIENT INFO--------------//
-        if(slotsTakenArray[weekNr][slotNr] !== false) {
-          const tableRight = document.getElementById('patientTableSlotinfo');
-          let patientObj = Patient.list[slotsTakenArray[weekNr][slotNr]];     //let toegevoegd!
-          tableRight.rows[1].cells[0].innerHTML = patientObj.patientID;
-          tableRight.rows[1].cells[1].innerHTML = patientObj.firstName;
-          tableRight.rows[1].cells[2].innerHTML = patientObj.lastName;
-          tableRight.rows[1].cells[3].innerHTML = patientObj.availability;
-          tableRight.rows[1].cells[4].innerHTML = patientObj.onco;
-          tableRight.rows[1].cells[5].innerHTML = patientObj.chemo;
-          tableRight.rows[1].cells[6].innerHTML = patientObj.chemoLength;
-        
-          document.getElementById("box2Right").style.display = "flex";
-        }
-        else { //slotsTakenArray[weekNr][slotNr] == false (available slot)
-          document.getElementById("box2Right").style.display = "none";
-        }
+      else if(slotsTakenArray[weekNr][slotNr].length === 12) {
+        //----------SHOW CURRENT PATIENT INFO--------------//
+        const tableRight = document.getElementById('patientTableSlotinfo');
+        tableRight.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
+        tableRight.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
+        tableRight.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
+        tableRight.rows[1].cells[3].innerHTML = currentPatientObject.availability;
+        tableRight.rows[1].cells[4].innerHTML = currentPatientObject.onco;
+        tableRight.rows[1].cells[5].innerHTML = currentPatientObject.chemo;
+        tableRight.rows[1].cells[6].innerHTML = currentPatientObject.chemoLength;
+      
+        document.getElementById("box2Right").style.display = "flex";
+      }
+      else {
+        //----------SHOW SLOT PATIENT INFO--------------//
+        const tableRight = document.getElementById('patientTableSlotinfo');
+        let patientObj = slotsTakenArray[weekNr][slotNr];     //let toegevoegd!
+        tableRight.rows[1].cells[0].innerHTML = patientObj.patientID;
+        tableRight.rows[1].cells[1].innerHTML = patientObj.firstName;
+        tableRight.rows[1].cells[2].innerHTML = patientObj.lastName;
+        tableRight.rows[1].cells[3].innerHTML = patientObj.availability;
+        tableRight.rows[1].cells[4].innerHTML = patientObj.onco;
+        tableRight.rows[1].cells[5].innerHTML = patientObj.chemo;
+        tableRight.rows[1].cells[6].innerHTML = patientObj.chemoLength;
+      
+        document.getElementById("box2Right").style.display = "flex";
       }
     });  
   });
 }
 
-//RETURN AVAILABILITY.
+//CHECK AVAILABIlITY (ARRAY CHECK)
 function checkSlotsAvailable(slotNr) {
   let slotsAvailableBool = 1;
 
@@ -619,7 +497,7 @@ function checkSlotsAvailable(slotNr) {
       slotsAvailableBool = 0;
       break;
     }
-    else if(slotsTakenArray[weekNr][tempSlotNr] !== false) {
+    else if(slotsTakenArray[weekNr][tempSlotNr] != false) {
       window.alert("Selection of slot(s) not available. Remember the range of slots you need is " + lengthSelectedSlot);
       slotsAvailableBool = 0;
       break;
@@ -630,79 +508,114 @@ function checkSlotsAvailable(slotNr) {
   return slotsAvailableBool; 
 }
 
-//MARK SELECTED SLOT (RANGE)
-function updateSlotsSelected(event, slotNr) {
+//MARK SELECTED SLOTRANGE (CSS UPDATE)
+function updateSlotsSelected(event) {
+/*All slots are available (due to checkSlotsAvailable() !!  Just need to check current selection (orange). */
+// 0) Niets ervoor aangeduid => PRINT
+// 1) Ergens anders => VERWIJDER => PRINT
+// 2) Overlapt      => VERWIJDER => PRINT
+// 3) identiek hetzelfde  => NIETS
 
-  //----------CSS SLOTTAKEN (RED)--------------//
-  //SLOT AVAILABLE (Not reserved & not the currently selected slot)
-  if(event.currentTarget.classList[1] != "slotTaken") {
-
-    //Remove previous selected slots (if any)
-    if(IdSelectedSlot != -1) { 
-      //Previously selected slot
-      let NrSelectedSlot = getSlotNrFromId(IdSelectedSlot.toString())[3];
-      //Remove (range) previous selected slot
-      for(let range = lengthSelectedSlot; range > 0; range--) {
-        let tempSlotNr = NrSelectedSlot + (range-1)*42;
-        let tempSlotId = getSlotIdFromNr(tempSlotNr);
-        //empty array where slotids are that have to be added to slotsTakenArray
-    
-        document.getElementById(tempSlotId).classList.remove("slotTaken");
-      }
-      slotsToAddArray = [];
-    }
-
-    //Update new selected slots (Update IdSelectSlot + CSS)
+  //No previously selected slotrange
+  if(IdSelectedSlot == -1) {
     IdSelectedSlot = event.currentTarget.id;
-    for(let range = lengthSelectedSlot; range > 0; range--) {
-      let tempSlotNr = slotNr + (range-1)*42;
-      let tempSlotId = getSlotIdFromNr(tempSlotNr);
-      //add ids to array that have to be added to slotstakenArray after pressing next
-      slotsToAddArray.push(tempSlotId);
-      document.getElementById(tempSlotId).classList.add("slotTaken");
-    }
+    printNewRange();
   }
-  
-  //CLICKED SLOT UNAVAILABLE
-  else { 
-    //CURRENTLY SELECTED RANGE was clicked
-    if(IdSelectedSlot != -1 && slotsTakenArray[weekNr][slotNr] === false) {
-      //(Exact) SAME RANGE CLICKED => REMOVE selection
-      if(IdSelectedSlot == event.currentTarget.id) {
-        for(let range = lengthSelectedSlot; range > 0; range--) {
-          let tempSlotNr = slotNr + (range-1)*42;
-          let tempSlotId = getSlotIdFromNr(tempSlotNr);
-          document.getElementById(tempSlotId).classList.remove("slotTaken");
-        }
-        slotsToAddArray = [];
-        IdSelectedSlot = -1;   //DIT WORDT NIET GEDAAN IN OUDE CODE RAF? !!!!
-      }
-      //Clicked the range, but not the start of range => Update/Shift selection range
-      else {
-        //Remove old range
-        let NrSelectedSlot = getSlotNrFromId(IdSelectedSlot.toString())[3];
-        for(let range = lengthSelectedSlot; range > 0; range--) {
-          let tempSlotNr = NrSelectedSlot + (range-1)*42;
-          let tempSlotId = getSlotIdFromNr(tempSlotNr);
-          slotsToAddArray = [];
-          document.getElementById(tempSlotId).classList.remove("slotTaken");
-        }
-        //Update new range/IdSelectedSlot
-        IdSelectedSlot = event.currentTarget.id;                
-        for(let range = lengthSelectedSlot; range > 0; range--) {
-          let tempSlotNr = slotNr + (range-1)*42;
-          let tempSlotId = getSlotIdFromNr(tempSlotNr);
-          //add ids to array that have to be added to slotstakenArray after pressing next
-          slotsToAddArray.push(tempSlotId);
-          document.getElementById(tempSlotId).classList.add("slotTaken");
-        }
-      }
-    }
+
+  //(Exact) SAME RANGE CLICKED => REMOVE selection
+  else if(IdSelectedSlot == event.currentTarget.id) {
+    removeOldRange();
+    IdSelectedSlot = -1;
+  }
+
+  //There is a current selected slotrange
+  else {
+    removeOldRange();
+    IdSelectedSlot = event.currentTarget.id;
+    printNewRange();
   }
 }
 
+
+function removeOldRange() {
+  let tempSlotNr = ""; let tempSlotId = "";
+  let NrSelectedSlot = getSlotNrFromId(IdSelectedSlot.toString())[3];
+
+  for(let range = lengthSelectedSlot; range > 0; range--) {
+    tempSlotNr = NrSelectedSlot + (range-1)*42;
+    tempSlotId = getSlotIdFromNr(tempSlotNr);
+    document.getElementById(tempSlotId).classList.remove("slotsCurrent");
+  }
+  slotsToAddArray = [];
+}
+
+function printNewRange() {
+  let tempSlotNr = ""; let tempSlotId = "";
+  
+  for(let range = lengthSelectedSlot; range > 0; range--) {
+    tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + (range-1)*42;
+    tempSlotId = getSlotIdFromNr(tempSlotNr);
+    slotsToAddArray.push(tempSlotId); //add ids to array that have to be added to slotstakenArray after pressing next
+    document.getElementById(tempSlotId).classList.add("slotsCurrent");
+  }
+}
+
+function resetPatient() {
+  slotsCurrentArray.forEach(function([week,slotId]) {
+    let tempSlotNr = getSlotNrFromId(slotId)[3];
+    //RESET SLOTSTAKENARRAY (no slotsCurrent)
+    slotsTakenArray[week][tempSlotNr] = false;
+    //UPDATE CSS current week
+    if(week === weekNr) {
+      document.getElementById(slotId).classList.remove("slotsCurrent");
+      document.getElementById(slotId).innerHTML = "";
+    } 
+  });
+    slotsToAddArray.forEach(function(slotId) {
+      document.getElementById(slotId).classList.remove("slotsCurrent");
+  });
+  
+  //RESET VARIABLES
+  IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
+  weekNrFirstSelectedSlot = -1;
+  slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
+  slotsToAddArray = [];     //Huidige selectie eventListener
+  weekNrFirstSelectedSlotTemp = -1;
+  //oncoSlotOC = -1;
+  //lengthSelectedSlot = -1;
+  //scenario = ""; 
+
+  //Reset HTML used for counting scheduled moments
+  const tableLeft = document.getElementById('patientTableScheduler');
+  tableLeft.rows[1].cells[5].innerHTML = tableLeft.rows[1].cells[4].innerHTML
+  tableLeft.rows[1].cells[7].innerHTML = tableLeft.rows[1].cells[6].innerHTML
+}
+
+function skipPatient() {
+  resetPatient();
+
+  lastPatient = nextPatientEvent();
+
+  //NOT LAST PATIENT
+  if(lastPatient < 1) {
+    skippedPatientsCounter += 1;
+
+    //SAVE NEW PATIENT TO CURRENTPATIENTOBJECT
+    let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
+    currentPatientObject = Patient.list[currentPatientId];
+
+    weekNrFirstSelectedSlotTemp = -1;
+    weekNrFirstSelectedSlot = -1;
+    IdSelectedSlot = -1;
+    checkPatientsPerDay();
+  }
+  else { //lastPatient  >= 1 
+    alert("Last patient was reached. Game ended."); 
+  }
+  console.log("Atm " + skippedPatientsCounter + " patients are skipped and hence, not scheduled.");
+}
+
 //Check day, row (hourslot) and slot based on id (Dx_Hy_OCz)
-//Return [slot number, dayNr]
 function getSlotNrFromId(slotId) {
   let strArray = slotId.split("_");
   let dayStr = strArray[0];
@@ -714,7 +627,6 @@ function getSlotNrFromId(slotId) {
   let slotNr = 6*dayNr + 42*hourSlot  + oncoChemoNr;
   return [dayNr, hourSlot, oncoChemoNr, slotNr];
 }
-
 
 function getSlotIdFromNr(slotNummer) {
   let day = 0;
