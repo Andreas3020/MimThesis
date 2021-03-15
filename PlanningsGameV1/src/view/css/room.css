@@ -1,30 +1,54 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Quicksand", sans-serif;
+  background-color: rgb(234, 240, 250);
+}
+
 h1{
   font-size: 22pt;
+  color: white;
+  background-color: transparent;
 }
 
 .adminDiv{
   right: 1.67%; 
   position: absolute;
   margin-top: 5px;
+  font-size: 14pt;
+  background-color: rgb(212, 208, 208);
 }
 
 .roomHeader{
   display: flex; 
   width: 100%;
-  background-color: beige;
+  background-color: rgb(29, 141, 176);
+  color: white;
   align-items: center;
   justify-content: center;
+  padding: 8px;
+  position: fixed;
+  z-index: 1;
 }
 
 .chooseRoom{
-  margin-top: 15px; 
   margin-left: 2%;
+  font-size: 16pt;
+  padding: 15px;
+  padding-top: 5%;
+}
+
+.roomDiv{
+  display: block;   
 }
 
 .roomButton{
     height: 75%; 
-    width: 75%; 
-    background-color: powderblue;
+    width: 90%; 
+    background-color: rgb(30, 157, 211);
+    font-size: 16pt;
+    color: white;
+    opacity: 80%;
 }
 
 .roomButtonDiv{
@@ -33,19 +57,30 @@ h1{
     display:inline-block;
     margin-right: 1.6%;
     margin-left: 1.6%;
+    padding-bottom: 30px;
 }
 
 .addButton{
   display:none;
   height: 75%; 
   width: 75%; 
-  color: rgbrgb(102, 100, 100);
+  color: rgb(102, 100, 100);
+  font-size: 14pt;
+  background-color: rgb(212, 208, 208);
 }
 
 .delStatButton{
   display:none;
 }
 
+.addDelStatButton{
+  display: block;
+}
+
+.delStat{
+  font-size: 14pt;
+  background-color: rgb(212, 208, 208);
+}
  /* The Modal (background) */
  .popUp {
     display: none; /* Hidden by default */
@@ -56,14 +91,13 @@ h1{
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
   
   /* pop-up Content/Box */
-  .popUp-content {
+  .popUpContent {
     display: flexbox;
-    background-color: #fefefe;
+    background-color: white;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     padding-bottom: 10px;
@@ -71,14 +105,21 @@ h1{
     width:max-content;
   }
 
-  .popUp-password{
-    display: flexbox;
+  .popUpPassword{
+    display: none;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
   }
 
-  .popUp-text{
-    display:none;
+  .popUpText{
+    font-size: 14pt;
+    background-color: transparent;
+  }
+
+  .popUpButton{
+    font-size: 14pt;
+    background-color: rgb(212, 208, 208);
   }
 
   label{
@@ -94,5 +135,7 @@ h1{
   .errorMessage{
       font-size: 8pt;
       color: red;
+      display: none;
+      background-color: transparent;
   }
   

@@ -14,11 +14,8 @@
 
 </head>
 <body>
-    <div >
-        <button class="adminDiv" type="button" id="adminButton" onClick="popUpPass()">admin mode</button>
-    </div>
-
     <div class="roomHeader">
+        <button class="adminDiv" type="button" id="adminButton" onClick="popUpPass()">admin mode</button>
         <h1>PLANNING GAME</h1>
     </div>
     
@@ -26,7 +23,7 @@
         <h3 style="color: rgb(102, 100, 100);">Choose a room</h2>
     </div>
 
-    <div style="display: block;">
+    <div class="roomDiv">
         <div id="rooms" style="margin-top: 5px;"></div>
     
         <div class="roomButtonDiv">
@@ -36,25 +33,27 @@
 
     <div id="roomPopUp" class="popUp">
         <!-- popUp content -->
-        <div class="popUp-content">
-            <div class="popUp-password" id="popUpPass">
-                <label for="pass">Admin acces password</label><br>
-                <input type="text" id="pass" name="pass"><br>
-                <p id="passErr" class="errorMessage"></p>
-                <button type="button" id="confirmButton" onClick="confirmPassword()">Confirm</button>
-                <button type="button" id="cancelPassButton" onClick="clearPassPop()">Cancel</button>
+        <div class="popUpContent">
+            <div class="popUpPassword" id="popUpPass">
+                <label class="popUpText" for="pass">Admin acces password</label><br>
+                <input class="popUpText" type="text" id="pass" name="pass"><br>
+                <p id="passErr" class="errorMessage">"The password was incorrect!"</p>
+                <button class="popUpButton" type="button" id="confirmButton" onClick="confirmPassword()">Confirm</button>
+                <button class="popUpButton" type="button" id="cancelPassButton" onClick="clearPassPop()">Cancel</button>
             </div>
-            <div class="popUp-text" id="popUpText">
-                <label for="rname">Room name:</label><br>
-                <input type="text" id="rname" name="rname"><br>
-                <button type="button" id="submitButton" onClick="addRoom()">Submit</button>
-                <button type="button" id="cancelNameButton" onClick="clearNamePop()">Cancel</button>
+            <div class="popUpPassword" id="popUpText">
+                <label class="popUpText" for="rname">Room name:</label><br>
+                <input class="popUpText" type="text" id="rname" name="rname"><br>
+                <p id="roomErr1" class="errorMessage">"This room already exists!"</p>
+                <p id="roomErr2" class="errorMessage">"Fill in a room name!"</p>
+                <button class="popUpButton" type="button" id="submitButton" onClick="addRoom()">Submit</button>
+                <button class="popUpButton" type="button" id="cancelNameButton" onClick="clearNamePop()">Cancel</button>
             </div>
 
-            <div id="confirmDel" style="display: none;">
-                <h3>Are you sure you want to delete this room?<h3><br>
-                <button type="button" id="confirmDelButton">Confirm</button>
-                <button type="button" id="cancelDelButton">Cancel</button>
+            <div class="popUpPassword" id="confirmDel">
+                <p class="popUpText" style="padding-bottom: 20px;">Are you sure you want to delete this room?</p>
+                <button class="popUpButton" type="button" id="confirmDelButton">Confirm</button>
+                <button class="popUpButton" type="button" id="cancelDelButton">Cancel</button>
             </div>
         </div>
     </div>

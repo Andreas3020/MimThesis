@@ -22,7 +22,7 @@ function confirmPassword(){
   }
   else{
     const passErr = document.getElementById("passErr");
-    passErr.innerHTML = "The password was incorrect!";
+    passErr.style.display = "block";
   }  
 }
 
@@ -33,6 +33,8 @@ function clearPassPop(){
   const popUp = document.getElementById("roomPopUp");
   popUp.style.display = "none";
 
+  const passErr = document.getElementById("passErr");
+    passErr.style.display = "none";
 }
 
 function nameRoom(){
@@ -45,25 +47,42 @@ function nameRoom(){
 }
 
 function addRoom(){
-  //hide the pop-up again
-  clearNamePop();
-
-  //Make the room button 
-  const htmlRooms = document.getElementById("rooms");
+  const roomErr2 = document.getElementById("roomErr2");
+  const roomErr1 = document.getElementById("roomErr1");
+  let name = document.getElementById("rname").value;
   let roomName = "Room: ";
-  roomName += document.getElementById("rname").value;
-  console.log(roomName);
-  htmlRooms.innerHTML +=`<div class ="roomButtonDiv" id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
+  roomName += name;
 
-  const rButton = document.getElementById(roomName);
-  rButton.innerHTML += `<div><button type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
-
- 
-  //Generate patient list and send them to the database
-  Patient.generate();
-  database.child(roomName).child("Patient lists").set(Patient.genList);
-
-  generateStats(roomName);
+  if(name == ""){
+    roomErr2.style.display = "none";
+    roomErr1.style.display = "block";
+  }
+  else{
+    database.once('value', function(snapshot) {
+      if(snapshot.hasChild(roomName)){
+        //const roomErr1 = document.getElementById("roomErr1");
+        roomErr1.style.display = "none";
+        roomErr2.style.display = "block";
+      }
+      else{
+          //hide the pop-up again
+          clearNamePop();
+        
+          //Make the room button 
+          const htmlRooms = document.getElementById("rooms");
+          htmlRooms.innerHTML +=`<div class ="roomButtonDiv" id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
+        
+          const rButton = document.getElementById(roomName);
+          rButton.innerHTML += `<div class="addDelStatButton"><button class="delStat" type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button class="delStat" type="button" onClick="roomStats(\'${roomName}\')">Statistics</button></div>`;
+          
+          //Generate patient list and send them to the database
+          Patient.generate();
+          database.child(roomName).child("Patient lists").set(Patient.genList);
+        
+          generateStats(roomName);
+      }        
+    });
+  }
 }
 
 function clearNamePop(){
@@ -72,6 +91,12 @@ function clearNamePop(){
   
   const popUpText = document.getElementById("popUpText");
   popUpText.style.display = "none";
+
+  const roomErr1 = document.getElementById("roomErr1");
+  roomErr1.style.display = "none";
+
+  const roomErr2 = document.getElementById("roomErr2");
+  roomErr2.style.display = "none";
 }
 
 function loadRooms(){
@@ -89,7 +114,7 @@ function loadRooms(){
         htmlRooms.innerHTML +=`<div class ="roomButtonDiv"  id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
 
         const rButton = document.getElementById(roomName);
-        rButton.innerHTML += `<div class="delStatButton"><button type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
+        rButton.innerHTML += `<div class="delStatButton"><button class="delStat" type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button class="delStat" type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
       }
     }
   });  
@@ -125,7 +150,7 @@ function confirmDel(roomName){
 function deleteRoom(roomName){
   database.child(roomName).remove();
   const delRoom = document.getElementById(roomName);
-  delRoom.style.display = "none";
+  delRoom.remove();
 
   let roomPopUp = document.getElementById("roomPopUp");
   roomPopUp.style.display ="none";
