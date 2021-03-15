@@ -1,4 +1,5 @@
-var chart; 
+var chart;
+var chartSkipped; 
 var skippedPatientsListE, skippedPatientsListLM, skippedPatientsListH;
 var varianceListE, varianceListM, varianceListH;
 var avgDifferenceListE, avgDifferenceListM, avgDifferenceListH;
@@ -274,7 +275,7 @@ function createChart(){
         }
       }
 
-      Highcharts.chart('skippedPatients', {
+      chartSkipped = Highcharts.chart('skippedPatients', {
         ...initialOptionsSkipped
       });
 
@@ -644,3 +645,17 @@ function createChart(){
       });
 }
 
+function addData(){
+  database.child("Room: Andreas").child("statistics").child("skippedPatients").child("easy").once('value', function(snapshot) {
+    let skippedEasyList = Object.keys(snapshot.val());
+    let nrOfPatients = skippedEasyList.length;
+    let lastPatient = nrOfPatients.toString();
+    console.log(lastPatient);
+    database.child("Room: Andreas").child("statistics").child("skippedPatients").child("easy").update({[lastPatient]: 5});
+    console.log(skippedPatientsListE);
+  });
+}
+
+function updateChart(){
+  createChart();
+}
