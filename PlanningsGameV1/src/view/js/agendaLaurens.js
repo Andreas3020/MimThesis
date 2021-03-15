@@ -250,6 +250,7 @@ function addSelectedSlot() {
 
     //NEW PATIENT?
     if(tableBody.rows[1].cells[7].innerHTML == 0) {
+      checkPatientsPerDay();
       lastPatient = nextPatientEvent();
       weekNrFirstSelectedSlotTemp = -1;
 
@@ -271,7 +272,7 @@ function addSelectedSlot() {
 
   weekNrFirstSelectedSlot= weekNrFirstSelectedSlotTemp;   //Wat gebeurt hier? Niet gewoon op -1 zetten?
   IdSelectedSlot = -1;
-  checkPatientsPerDay()
+  
   }
   
 }
