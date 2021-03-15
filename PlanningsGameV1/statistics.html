@@ -21,14 +21,17 @@
 </head>
 <body>
     <h1>STATISTICS</h1>
-    <div class="highcharts-figure" style="display: flex; background-color: blue; width: 100%;">
-        <div id="skippedPatients" style="width: 40%;"></div>
-        <div id="variance" style="width: 40%;"></div>
+    <div class="chartsFigure">
+            <div class="charts" id="test"></div>
+            <div class="charts" id="skippedPatients"></div>
+            <div class="charts" id="variance"></div>
+            <div class="charts" id="appSpeed"></div>
+            <div class="charts" id="time"></div>
     </div>
 
     <button type="button" onClick="location.href='index.html'">Back to rooms</button>
-    <button type="button" onClick="addData()">Add data</button>
-    
+    <button type="button" onClick="createChart()">Update</button>
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 
