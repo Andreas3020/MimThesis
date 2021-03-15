@@ -81,11 +81,11 @@ i {
   border-right: 2px solid rgb(0, 64, 122);
 }
 
-#agendaTable td:hover:not(.slotTaken):not(.greyedOutSlot):not(.greyedOutSlotToday) {
+#agendaTable
+  td:hover:not(.slotTaken):not(.greyedOutSlot):not(.greyedOutSlotToday) {
   background-color: rgb(0, 64, 122);
   cursor: pointer;
 }
-
 
 #agendaTable .greyedOutSlot {
   background-color: rgb(173, 168, 168);
@@ -104,6 +104,12 @@ i {
   background-color: rgb(185, 27, 27);
   cursor: pointer;
 }
+
+#agendaTable .slotsCurrent {
+  background-color: yellow;
+  color: black;
+}
+
 #agendaTable .greyedOutSlotToday.slotTaken {
   background-color: rgb(221, 138, 46);
 }
