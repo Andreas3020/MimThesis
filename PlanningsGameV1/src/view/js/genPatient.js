@@ -43,13 +43,8 @@ pl.view.genPatient = {
         
     } else {
         window.alert("This was the last patient.");
-        lastPatient++;
+        lastPatient = 2;
     }
     return lastPatient;
   }
   
-  // make array of number of days you want to play elements where each element is a number that represents the number of patients that need to be sheduled that day
-  function nrPatientsDayGenerator()
-  {
-    
-  }

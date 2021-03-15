@@ -439,6 +439,7 @@ function addEventlistenerSlots()
                 if(checkSlotsAvailable(slotNr) == 1) {
                   //SLOT(S) AANDUIDEN
                   updateSlotsSelected(event, slotNr);
+                  oncoSlotOC = slotNr;
                 }
               }
               else { //2nd or more appointment of O&C periodicity
