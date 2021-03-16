@@ -17,6 +17,7 @@ h1{
   margin-top: 5px;
   font-size: 14pt;
   background-color: rgb(212, 208, 208);
+  color: black;
 }
 
 .roomHeader{
@@ -53,17 +54,17 @@ h1{
 
 .roomButtonDiv{
     height: 200px; 
-    width: 30%; 
+    width: 20%; 
     display:inline-block;
     margin-right: 1.6%;
-    margin-left: 1.6%;
+    margin-left: 3.2%;
     padding-bottom: 30px;
 }
 
 .addButton{
   display:none;
   height: 75%; 
-  width: 75%; 
+  width: 90%; 
   color: rgb(102, 100, 100);
   font-size: 14pt;
   background-color: rgb(212, 208, 208);
@@ -73,13 +74,13 @@ h1{
   display:none;
 }
 
-.addDelStatButton{
-  display: block;
-}
-
 .delStat{
   font-size: 14pt;
   background-color: rgb(212, 208, 208);
+  color: rgb(102, 100, 100);
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
  /* The Modal (background) */
  .popUp {
@@ -95,7 +96,7 @@ h1{
   }
   
   /* pop-up Content/Box */
-  .popUpContent {
+  .popUpSquare {
     display: flexbox;
     background-color: white;
     margin: 15% auto; /* 15% from the top and centered */
@@ -105,21 +106,24 @@ h1{
     width:max-content;
   }
 
-  .popUpPassword{
+  .popUpContent{
     display: none;
     align-items: center;
     justify-content: center;
     background-color: transparent;
+    color: black;
   }
 
   .popUpText{
     font-size: 14pt;
     background-color: transparent;
+    color: black;
   }
 
   .popUpButton{
     font-size: 14pt;
     background-color: rgb(212, 208, 208);
+    color: black;
   }
 
   label{
