@@ -51,6 +51,9 @@ Patient.generate = function() {
     tempLname = lastName[getRandomInt(0, lastName.length)];
     tempAvailability = availability[getRandomInt(0, availability.length)];
 
+    //for testing purposes
+    tempAvailability = "Tuesday";
+
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
     tempChemoLength = getRandomInt(1,7);
     tempLastPatientBool = lastPatient();
@@ -58,7 +61,7 @@ Patient.generate = function() {
     
     tempProbBloodFail = getRandomFloat(0,0.99).toFixed(3);
     
-    tempWeekNrFirstSelectedSlot = 0;
+    tempWeekNrFirstSelectedSlot = -1;
     //Create patient/Write to list
     Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot});
   }
@@ -128,7 +131,7 @@ function flipCoin() {
 //ASSIGN BOOL IF PATIENT NEEDS TO BE LAST PATIENT OF THE DAY
 function lastPatient() {
   if(nrPatientsCurrentDay == 0) {
-    nrPatientsCurrentDay = getRandomInt(3,7);   //Determine # patients per day (between x & y)
+    nrPatientsCurrentDay = getRandomInt(0,1);   //Determine # patients per day (between x & y)
     return true;
   } else {
     nrPatientsCurrentDay -= 1;

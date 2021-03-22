@@ -25,7 +25,7 @@ pl.view.genPatient = {
   
   //Show new patient to be scheduled
   function nextPatientEvent(){
-  
+
     nrOfPatients = keys.length;
   
     if(i < nrOfPatients) {
@@ -43,7 +43,9 @@ pl.view.genPatient = {
         
     } else {
         window.alert("This was the last patient.");
-        lastPatient = 2;
+        if(lastPatient === 0) 
+        { lastPatient = 1;}
+        else{lastPatient = 2; } 
     }
     return lastPatient;
   }

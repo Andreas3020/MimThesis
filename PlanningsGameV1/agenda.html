@@ -8,7 +8,7 @@
   <title>Agenda planner</title>
 
   <!-- CSS STYLE SHEET-->
-  <link rel="stylesheet" href="src/view/css/agenda2.css" />
+  <link rel="stylesheet" href="src/view/css/agenda.css" />
   <!-- FONT QUICKSAND-->
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
@@ -126,7 +126,9 @@
         </div>
         <div class="buttonsBox">
           <button type="button" name="nextPatient" id="btnNextPatient" onClick="addSelectedSlot()">Next</button>
-        <a href="home.html"><button>Naar home pagina</button></a>
+          <a href="home.html"><button>Naar home pagina</button></a>
+          <button type="button" name="resetPatient" id="btnResetPatient" onClick="resetPatient()">Reset Patient</button>
+          <button type="button" name="skipPatient" id="btnSkipPatient" onClick="skipPatient()">Skip Patient</button>
         </div>
       </div>
       <div id="box2Right">

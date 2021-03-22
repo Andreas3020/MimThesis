@@ -22,7 +22,7 @@ let goToNextPatient = false;
 
 let scenario;
 
-todayPatientsArray = [];
+let todayPatientsArray = [];
 
 // with this we can acces patient.list
 Patient.loadAll();
@@ -280,13 +280,17 @@ function addSelectedSlot() {
         todaySlot = slotsTakenArray[currentWeek][6*todayNr +42*j +k]
         if (todaySlot !== false)
         {
-          todayPatientsArray.push(todaySlot);
+          //onco's blood can't fail
+          if (Patient.list[todaySlot].chemo > 0)
+          {
+            todayPatientsArray.push(todaySlot);
+          }
         }
       }
     }
     // only keep the unique patients in the array
     todayPatientsArray = todayPatientsArray.filter(onlyUnique);
-    console.log("4 " + weekNrFirstSelectedSlot);
+
     testBloodPatients();
     
     // a will be 4 if there are patients where bloodtest failed
@@ -296,41 +300,40 @@ function addSelectedSlot() {
   {
   
     id = todayPatientsArray[0];
-    
-    tableBody.rows[1].cells[0].innerHTML = Patient.list[id].patientID;
-    tableBody.rows[1].cells[1].innerHTML = Patient.list[id].firstName;
-    tableBody.rows[1].cells[2].innerHTML = Patient.list[id].lastName;
-    tableBody.rows[1].cells[3].innerHTML = Patient.list[id].availability;
-    tableBody.rows[1].cells[4].innerHTML = Patient.list[id].onco;
-    if (Patient.list[id].onco>0)
+    currentPatientObject = Patient.list[id];
+    tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
+    tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
+    tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
+    tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
+    tableBody.rows[1].cells[4].innerHTML = currentPatientObject.onco;
+    if (currentPatientObject.onco>0)
     {
       tableBody.rows[1].cells[5].innerHTML = 1;
     }
     tableBody.rows[1].cells[6].innerHTML = Patient.list[id].chemo;
-    if (Patient.list[id].chemo>0)
+    if (currentPatientObject.chemo>0)
     {
       tableBody.rows[1].cells[7].innerHTML = 1;
     }
-    tableBody.rows[1].cells[8].innerHTML = Patient.list[id].chemoLength;
-    window.alert('Patient with ID: ' + Patient.list[id].patientID + ' failed their bloodtest!');
+    tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
+    window.alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
     
     todayPatientsArray.splice(0, 1);
 
-
     Patient.list[id].weekNrFirstSelectedSlot +=  1;
-    console.log(Patient.list[id]);
-    weekNrFirstSelectedSlot= Patient.list[id].weekNrFirstSelectedSlot;
-    console.log("addselected...");
+    currentPatientObject.weekNrFirstSelectedSlot +=  1;
 
-    console.log("3 " + weekNrFirstSelectedSlot);
+    // Maybe don't use global variable but use currentPatientObject.weekNrFirstSelectedSlot
+    weekNrFirstSelectedSlot= currentPatientObject.weekNrFirstSelectedSlot;
 
   }
-
-  
-
   
   IdSelectedSlot = -1
 }
+
+
+
+
 //returns array of patients where bloodtest failed
 function testBloodPatients()
 {
