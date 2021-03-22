@@ -140,10 +140,9 @@ function enterRoom(roomName){
   for(let i = 1; i < rnumberArr.length; i++){
     numberString += rnumberArr[i];
   }
-  let number = parseInt(numberString);
 
   //check if the the first value is a correct letter and if the rest is a correct number
-  if(rnumberArr.length == 8 && (rnumberArr[0]== "r" || rnumberArr[0]== "u" || rnumberArr[0]== "s" ) && isNaN(number) == false){
+  if(rnumberArr.length == 8 && (rnumberArr[0]== "r" || rnumberArr[0]== "u" || rnumberArr[0]== "s" ) && isNaN(numberString) == false){
     clearUserPop()
     
     //check if username already exists
@@ -169,7 +168,7 @@ function enterRoom(roomName){
 
   
       //go the the game
-      window.location.href = "agenda.html";
+      window.location.href = "home.html";
     })
   }
   else{
