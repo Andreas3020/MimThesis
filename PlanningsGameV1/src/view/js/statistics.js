@@ -83,20 +83,34 @@ function createChart(){
 
   Highcharts.chart('test', {
     title: {
-        text: 'test'
+        text: 'test',
+        margin: 50,
+        style:{
+          fontWeight: "bold",
+        },
     },
 
     xAxis: [{
         visible: false,
     }, {
-        title: { text: 'test x' },
+        title: { 
+          text: 'test x',
+          style:{
+            fontWeight: "bold",
+          },
+        },
         showLastLabel: true,
     }],
 
     yAxis: [{
         visible: false
     }, {
-        title: { text: 'test y' },
+      title: { 
+        text: 'test x',
+        style:{
+          fontWeight: "bold",
+        },
+      },
     }],
 
     plotOptions: {
@@ -205,7 +219,7 @@ function createChart(){
             drillup: function(e) {
                 this.update({
                     title: {
-                        text: "Average skipped patients"
+                        text: "Average skipped patients",
                       },
                       xAxis: {
                         title: "off",
@@ -226,10 +240,28 @@ function createChart(){
           },
         },
         title: {
-          text: 'Average skipped patients'
+          text: 'Average skipped patients',
+          margin: 50,
+          style: {
+            fontWeight: 'bold',
+          },
         },
         xAxis: {
           type: 'category',
+          title: {
+            style: {
+              fontWeight: 'bold',
+            },
+          },
+        },
+
+        yAxis: {
+          title: {
+            text: undefined,
+            style: {
+              fontWeight: 'bold',
+            },
+          },
         },
 
         legend: {
@@ -292,20 +324,34 @@ function createChart(){
 
     Highcharts.chart('variance', {
         title: {
-            text: 'Variance'
+            text: 'Variance',
+            margin: 50,
+            style:{
+              fontWeight: 'bold',
+            },
         },
     
         xAxis: [{
             visible: false,
         }, {
-            title: { text: 'variance (Nr of half hour blocks)' },
+            title: { 
+              text: 'variance (Nr of half hour blocks)' ,
+              style: {
+                fontWeight: 'bold',
+              },
+            },
             showLastLabel: true,
         }],
     
         yAxis: [{
             visible: false
         }, {
-            title: { text: 'average difference (Nr of half hour blocks)' },
+            title: { 
+              text: 'average difference (Nr of half hour blocks)', 
+              style:{
+                fontWeight: 'bold',
+              },
+            },
         }],
     
         plotOptions: {
@@ -437,10 +483,28 @@ function createChart(){
           },
         },
         title: {
-          text: 'Average appointment speed patients'
+          text: 'Average appointment speed patients',
+          margin: 50,
+          style: {
+            fontWeight: 'bold',
+          },
         },
         xAxis: {
           type: 'category',
+          title: {
+            style: {
+              fontWeight: 'bold',
+            },
+          },
+        },
+
+        yAxis: {
+          title: {
+            text: undefined,
+            style: {
+              fontWeight: 'bold',
+            },
+          },
         },
 
         legend: {
@@ -591,10 +655,28 @@ function createChart(){
           },
         },
         title: {
-          text: 'Average completion time'
+          text: 'Average completion time',
+          margin: 50,
+          style: {
+            fontWeight: 'bold',
+          },
         },
         xAxis: {
           type: 'category',
+          title: {
+            style: {
+              fontWeight: 'bold',
+            },
+          },
+        },
+
+        yAxis: {
+          title: {
+            text: undefined,
+            style: {
+              fontWeight: 'bold',
+            },
+          },
         },
 
         legend: {

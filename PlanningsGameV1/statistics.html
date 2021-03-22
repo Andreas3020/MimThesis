@@ -20,7 +20,13 @@
     <title>Statistics</title>
 </head>
 <body>
-    <h1>STATISTICS</h1>
+    <div class="roomHeader">
+        <h1>STATISTICS</h1>
+        <div class="upBackDiv" >
+            <button class="upBackButton" type="button" onClick="location.href='index.html'">Back to rooms</button>
+            <button class="upBackButton" type="button" onClick="createChart()">Update</button>
+        </div>
+    </div>
     <div class="chartsFigure">
             <div class="charts" id="test"></div>
             <div class="charts" id="skippedPatients"></div>
@@ -28,9 +34,6 @@
             <div class="charts" id="appSpeed"></div>
             <div class="charts" id="time"></div>
     </div>
-
-    <button type="button" onClick="location.href='index.html'">Back to rooms</button>
-    <button type="button" onClick="createChart()">Update</button>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>

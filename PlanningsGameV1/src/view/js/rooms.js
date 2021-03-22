@@ -22,7 +22,7 @@ function confirmPassword(){
   }
   else{
     const passErr = document.getElementById("passErr");
-    passErr.innerHTML = "The password was incorrect!";
+    passErr.style.display = "block";
   }  
 }
 
@@ -33,6 +33,8 @@ function clearPassPop(){
   const popUp = document.getElementById("roomPopUp");
   popUp.style.display = "none";
 
+  const passErr = document.getElementById("passErr");
+    passErr.style.display = "none";
 }
 
 function nameRoom(){
@@ -45,25 +47,42 @@ function nameRoom(){
 }
 
 function addRoom(){
-  //hide the pop-up again
-  clearNamePop();
-
-  //Make the room button 
-  const htmlRooms = document.getElementById("rooms");
+  const roomErr2 = document.getElementById("roomErr2");
+  const roomErr1 = document.getElementById("roomErr1");
+  let name = document.getElementById("rname").value;
   let roomName = "Room: ";
-  roomName += document.getElementById("rname").value;
-  console.log(roomName);
-  htmlRooms.innerHTML +=`<div class ="roomButtonDiv" id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
+  roomName += name;
 
-  const rButton = document.getElementById(roomName);
-  rButton.innerHTML += `<div><button type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
-
- 
-  //Generate patient list and send them to the database
-  Patient.generate();
-  database.child(roomName).child("Patient lists").set(Patient.genList);
-
-  generateStats(roomName);
+  if(name == ""){
+    roomErr2.style.display = "none";
+    roomErr1.style.display = "block";
+  }
+  else{
+    database.once('value', function(snapshot) {
+      if(snapshot.hasChild(roomName)){
+        //const roomErr1 = document.getElementById("roomErr1");
+        roomErr1.style.display = "none";
+        roomErr2.style.display = "block";
+      }
+      else{
+          //hide the pop-up again
+          clearNamePop();
+        
+          //Make the room button 
+          const htmlRooms = document.getElementById("rooms");
+          htmlRooms.innerHTML +=`<div class ="roomButtonDiv" id="${roomName}"><button class="roomButton" onClick="rnumberPop(\'${roomName}\')">${roomName}</button></div>`;
+        
+          const rButton = document.getElementById(roomName);
+          rButton.innerHTML += `<div class="addDelStatButton"><button class="delStat" type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button class="delStat" type="button" onClick="roomStats(\'${roomName}\')">Statistics</button></div>`;
+          
+          //Generate patient list and send them to the database
+          Patient.generate();
+          database.child(roomName).child("Patient lists").set(Patient.genList);
+          //database.child(users).child('r0679809').set('Game 1', '');
+          generateStats(roomName);
+      }        
+    });
+  }
 }
 
 function clearNamePop(){
@@ -72,6 +91,12 @@ function clearNamePop(){
   
   const popUpText = document.getElementById("popUpText");
   popUpText.style.display = "none";
+
+  const roomErr1 = document.getElementById("roomErr1");
+  roomErr1.style.display = "none";
+
+  const roomErr2 = document.getElementById("roomErr2");
+  roomErr2.style.display = "none";
 }
 
 function loadRooms(){
@@ -86,27 +111,82 @@ function loadRooms(){
         const htmlRooms = document.getElementById("rooms");
         let roomName = roomList[i];
       
-        htmlRooms.innerHTML +=`<div class ="roomButtonDiv"  id="${roomName}"><button class="roomButton" onClick="enterRoom(\'${roomName}\')">${roomName}</button></div>`;
+        htmlRooms.innerHTML +=`<div class ="roomButtonDiv"  id="${roomName}"><button class="roomButton" onClick="rnumberPop(\'${roomName}\')">${roomName}</button></div>`;
 
         const rButton = document.getElementById(roomName);
-        rButton.innerHTML += `<div class="delStatButton"><button type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
+        rButton.innerHTML += `<div class="delStatButton"><button class="delStat" type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button class="delStat" type="button" onClick="roomStats(\'${roomName}\')">Statistics</button>`;
       }
     }
   });  
 }
 
+function rnumberPop(roomName){
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "block";
+  
+  let userPop = document.getElementById("popUpUser");
+  userPop.style.display = "block";
+  userPop.style.display = "flexbox";
+
+  document.getElementById("enterRoomButton").onclick = function() {enterRoom(roomName)};
+}
+
 function enterRoom(roomName){
-  //get the data of the specific room and load them into the local storage
-  database.child(roomName).child("Patient lists").once('value', function(snapshot) {
-    let patients = Object.values(snapshot.val());
-    let keys = Object.keys(snapshot.val()); 
+  let rnumber = document.getElementById("rnumber").value;
+  let rnumberArr = rnumber.split("");
+  let numberString ="";
 
-    patientTableString = JSON.stringify(patients);
-    localStorage["patientTable"] = patientTableString;
+  //make the numerical value of the rnumber an Int
+  for(let i = 1; i < rnumberArr.length; i++){
+    numberString += rnumberArr[i];
+  }
+  let number = parseInt(numberString);
 
-    //go the the game
-    window.location.href = "agenda2.html";
-  })
+  //check if the the first value is a correct letter and if the rest is a correct number
+  if(rnumberArr.length == 8 && (rnumberArr[0]== "r" || rnumberArr[0]== "u" || rnumberArr[0]== "s" ) && isNaN(number) == false){
+    clearUserPop()
+    
+    //check if username already exists
+    database.once('value', function(snapshot) {
+      if(snapshot.hasChild(rnumber)){
+        // write previous results to local storage
+      }
+      // save the username in the database
+      else{
+        database.child(roomName).child("users").child(rnumber).set("0");
+      }
+
+    });
+
+    //get the data of the specific room and load them into the local storage
+    database.child(roomName).child("Patient lists").once('value', function(snapshot) {
+      let patients = Object.values(snapshot.val());
+      let keys = Object.keys(snapshot.val()); 
+  
+      patientTableString = JSON.stringify(patients);
+      localStorage["patientTable"] = patientTableString;
+
+
+  
+      //go the the game
+      window.location.href = "agenda.html";
+    })
+  }
+  else{
+    let userErr = document.getElementById("userErr")
+    userErr.style.display = "block"; 
+  }  
+}
+
+function clearUserPop(){
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "none";
+  
+  let userPop = document.getElementById("popUpUser");
+  userPop.style.display = "none";
+
+  let userErr = document.getElementById("userErr");
+  userErr.style.display = "none";
 }
 
 function confirmDel(roomName){
@@ -125,7 +205,7 @@ function confirmDel(roomName){
 function deleteRoom(roomName){
   database.child(roomName).remove();
   const delRoom = document.getElementById(roomName);
-  delRoom.style.display = "none";
+  delRoom.remove();
 
   let roomPopUp = document.getElementById("roomPopUp");
   roomPopUp.style.display ="none";
