@@ -36,9 +36,6 @@ function renderAgenda()
   /* tableCore = agenda body = hour legenda (left column) + slots (7days with each 6 slots (2 onco slots + 4 chemo slots). */
   const tableCore = document.getElementById("agendaBody");
   let core = "";
-  //DIT IS NIET NODIG? OF WEL?
-  IdSelectedSlot = -1; //RESET
-  lengthSelectedSlot = -1; //RESET
   let greyedOutString="";
 
   //GENERATE AGENDA BODY (hour column + slots)
@@ -148,13 +145,15 @@ function renderAgenda()
   
 }
 
+
 function checkWeek() { 
-  if ( currentWeek == weekNr){
+  if (currentWeek == weekNr){
     return  "greyedOutSlot";
   } else {
     return "";
   } 
 }
+
 function checkDay(i, greyedOutString)
 {
   if(i >  todayNr ) {
@@ -185,7 +184,6 @@ document.querySelector(".next").addEventListener("click", () => {
   }
   renderAgenda();
 });
-
 function addWeekToArray() {
   //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
   slotsTakenArray.push([]);
@@ -197,12 +195,38 @@ function addWeekToArray() {
 }
 
 
+function endGame() {
+  let endTime = performance.now();
+  //Performance returns uSec! /1000 gives Seconds.
+  let gameTime = (endTime - startTime)/1000;
+  let gametimeMinutes = Math.floor(gameTime / 60);
+  let gameTimeSeconds = Math.ceil(gameTime % 60);
+
+  const timeParagraph = document.getElementById("showGameTime");
+  timeParagraph.innerHTML = "You completed the game in " + gametimeMinutes + "min " + gameTimeSeconds + " seconds!";
+
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "block";
+
+  const popUpText= document.getElementById("popUpContentText");
+  popUpText.style.display = "flex";
+}
+
+function resetEndPopup() {
+  const popUpText = document.getElementById("popUpContentText");
+  popUpText.style.display = "none";
+
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "none";
+
+  window.location.href = "home.html";
+}
+
 function addSelectedSlot() {
   
   if(IdSelectedSlot === -1) { alert("Must select a time slot!"); return; }
 
   const tableBody = document.getElementById('patientTableScheduler');
-  
   
   // check the scenario (onco or chemo) that has been done and change the nr of times still needed
   if(scenario == "onco"){
@@ -215,23 +239,30 @@ function addSelectedSlot() {
     
   }
 
- 
+
   currentPatientObject.weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
   Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
   
- 
+
   //NEW PATIENT?
   if(tableBody.rows[1].cells[7].innerHTML == 0) {
     addSelectVar = checkPatientsPerDay();
     
 
-    //LAST PATIENT 1x TIME PROCESS / NEW PATIENT PROCESSING
+    console.log("addSelectVar: " + addSelectVar);
+
+    //NEW PATIENT PROCESSING
     if(addSelectVar <= 1) {
       yellow();
       red();
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
       currentPatientObject = Patient.list[currentPatientId];
       
+      
+      //LAST PATIENT - END GAME
+      if(addSelectVar === 1) {
+        endGame();
+      }
 
     }
     else if (addSelectVar === 3)
@@ -434,16 +465,18 @@ function addEventlistenerSlots()
       const tableBody = document.getElementById('patientTableScheduler');
       
       let avDay = currentPatientObject.availability;
-      
       let nrOncoAppointments = currentPatientObject.onco;
       let nrChemoAppointments = currentPatientObject.chemo;
       let cLength = currentPatientObject.chemoLength;
       
       weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
 
-      if(slotsTakenArray[weekNr][slotNr] == false)
+      console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
+
+      //SLOT NOT UNAVAILABLE
+      if(slotsTakenArray[weekNr][slotNr] === false)
       {
-        document.getElementById("box2Right").style.display = "none";
+        document.getElementById("patientTableSlotinfo").style.visibility = "hidden";
 
         //PATIENT NOT AVAILABLE
         if(weekdays[dayNr] != avDay) { alert("Patient is not available this weekday.") }
@@ -587,11 +620,12 @@ function addEventlistenerSlots()
         tableRight.rows[1].cells[5].innerHTML = currentPatientObject.chemo;
         tableRight.rows[1].cells[6].innerHTML = currentPatientObject.chemoLength;
       
-        document.getElementById("box2Right").style.display = "flex";
+        document.getElementById("patientTableSlotinfo").style.visibility = "visible";
       }
       else {
         //----------SHOW SLOT PATIENT INFO--------------//
         const tableRight = document.getElementById('patientTableSlotinfo');
+        console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
         let patientObj = Patient.list[slotsTakenArray[weekNr][slotNr]];     //let toegevoegd!
         tableRight.rows[1].cells[0].innerHTML = patientObj.patientID;
         tableRight.rows[1].cells[1].innerHTML = patientObj.firstName;
@@ -601,7 +635,7 @@ function addEventlistenerSlots()
         tableRight.rows[1].cells[5].innerHTML = patientObj.chemo;
         tableRight.rows[1].cells[6].innerHTML = patientObj.chemoLength;
       
-        document.getElementById("box2Right").style.display = "flex";
+        document.getElementById("patientTableSlotinfo").style.visibility = "visible";
       }
     });  
   });
@@ -736,7 +770,7 @@ function skipPatient() {
     
   }
   else { //addSelectVar  >= 1 
-    alert("Last patient was reached. Game ended."); 
+    endGame();
   }
   console.log("Atm " + skippedPatientsCounter + " patients are skipped and hence, not scheduled.");
 }
@@ -793,3 +827,5 @@ Patient.loadAll();
 currentPatientObject = Patient.list[0];
 console.log(currentPatientObject = Patient.list[0]);
 
+var startTime = performance.now();
+console.log("StartTime: " + startTime);

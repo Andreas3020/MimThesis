@@ -125,42 +125,56 @@
           </table> 
         </div>
         <div class="buttonsBox">
-          <button type="button" name="nextPatient" id="btnNextPatient" onClick="addSelectedSlot()">Next</button>
-          <a href="home.html"><button>Back to home</button></a>
+          <button type="button" name="skipPatient" id="btnSkipPatient" onClick="skipPatient()"" style="background-color: darkred;">Skip Patient</button>
           <button type="button" name="resetPatient" id="btnResetPatient" onClick="resetPatient()">Reset Patient</button>
-          <button type="button" name="skipPatient" id="btnSkipPatient" onClick="skipPatient()">Skip Patient</button>
+          <button type="button" name="nextPatient" id="btnNextPatient" onClick="addSelectedSlot()" style="background-color: green;">Confirm</button>
         </div>
       </div>
       <div id="box2Right">
-        <table class="patientTable" id="patientTableSlotinfo">
-          <thead>
-            <tr>
-              <th>Patient ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Availability</th>
-              <th>Onco</th>
-              <th>Chemo amount</th>
-              <th>Chemo length</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table> 
+        <div class="patientTableBox">
+          <table class="patientTable" id="patientTableSlotinfo">
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Availability</th>
+                <th>Onco</th>
+                <th>Chemo amount</th>
+                <th>Chemo length</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table> 
+        </div>
+        <div class="buttonsBox" id="buttonsBoxRight">
+          <a href="home.html"><button id="homeButton">Naar home pagina</button></a>
+        </div>
         <!-- Add second table with slots already linked to the person? -->
       </div>
     </div>
   </div>
 
+  <div id="roomPopUp" class="popUp">
+    <!-- popUp content -->
+    <!--<div class="popUpSquare">-->
+      <div class="popUpContent" id="popUpContentText">
+          <p class="popUpText">Last patient has been processed. You finished the game!</p>
+          <p class="popUpText" id="showGameTime"></p>
+          <button class="popUpButton" type="button" id="okButton" onclick="resetEndPopup()">Back to homepage</button></a>
+      </div>
+    <!--</div>-->
+  </div>
   
   <script src="src/view/js/agenda.js"></script> 
 </body>
