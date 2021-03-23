@@ -42,7 +42,7 @@ Patient.generate = function() {
   var tempProbBloodFail;
 
   //TOTAL AMOUNT OF PERSONS TO BE SCHEDULED DURING THE GAME
-  var nrOfPersons = 30;
+  var nrOfPersons = 1;
 
   for (let i = 0; i < nrOfPersons; i++) {
     //Generate patient variables (random)...
@@ -56,7 +56,8 @@ Patient.generate = function() {
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
     tempChemoLength = getRandomInt(1,7);
-    tempLastPatientBool = lastPatient();
+
+    if( i === nrOfPersons-1) { tempLastPatientBool = false; }
 
     
     tempProbBloodFail = getRandomFloat(0,0.99).toFixed(3);
