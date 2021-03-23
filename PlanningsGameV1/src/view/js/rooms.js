@@ -77,7 +77,11 @@ function addRoom(){
           
           //Generate patient list and send them to the database
           Patient.generate();
-          database.child(roomName).child("Patient lists").set(Patient.genList);
+          database.child(roomName).child("Patient lists").child("Easy").set(Patient.genList);
+          Patient.generate();
+          database.child(roomName).child("Patient lists").child("Moderate").set(Patient.genList);
+          Patient.generate();
+          database.child(roomName).child("Patient lists").child("Hard").set(Patient.genList);
           //database.child(users).child('r0679809').set('Game 1', '');
           generateStats(roomName);
       }        
@@ -155,21 +159,13 @@ function enterRoom(roomName){
         database.child(roomName).child("users").child(rnumber).set("0");
       }
 
+      patientTableString = JSON.stringify(roomName);
+      localStorage["roomName"] = patientTableString;
+
+      window.location.href = "home.html";
     });
 
-    //get the data of the specific room and load them into the local storage
-    database.child(roomName).child("Patient lists").once('value', function(snapshot) {
-      let patients = Object.values(snapshot.val());
-      let keys = Object.keys(snapshot.val()); 
-  
-      patientTableString = JSON.stringify(patients);
-      localStorage["patientTable"] = patientTableString;
-
-
-  
-      //go the the game
-      window.location.href = "home.html";
-    })
+    
   }
   else{
     let userErr = document.getElementById("userErr")
