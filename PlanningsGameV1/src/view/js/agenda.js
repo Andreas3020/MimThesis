@@ -29,7 +29,7 @@ let scenario;
 
 let addSelectVar;
 
-let probBloodFailEasy = 0.9;
+let probBloodFailEasy = 0.8;
 
 function renderAgenda()
 {

@@ -11,6 +11,16 @@ function Patient(profile){
   this.weekNrFirstSelectedSlot = profile.weekNrFirstSelectedSlot;
 };
 
+var minNrDay = 3;
+var maxNrDay = 5;
+var minLength = 3;
+var maxLength = 7;
+var oncoProb = 0.5;
+var nrOfPersons = 70;
+var minPatDay = 3;
+var maxPatDay = 6;
+var maxChemoLength = 3;
+
 Patient.genList = {};
 Patient.list = {};
 
@@ -26,7 +36,7 @@ var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(3,7);
+var nrPatientsCurrentDay = getRandomInt(minNrDay,maxNrDay);
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
@@ -42,7 +52,6 @@ Patient.generate = function() {
   var tempProbBloodFail;
 
   //TOTAL AMOUNT OF PERSONS TO BE SCHEDULED DURING THE GAME
-  var nrOfPersons = 1;
 
   for (let i = 0; i < nrOfPersons; i++) {
     //Generate patient variables (random)...
@@ -52,12 +61,12 @@ Patient.generate = function() {
     tempAvailability = availability[getRandomInt(0, availability.length)];
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
-    tempChemoLength = getRandomInt(1,7);
+    tempChemoLength = getRandomInt(minLength,maxLength);
 
     if( i === nrOfPersons-1) { tempLastPatientBool = false; }
 
     
-    tempProbBloodFail = getRandomFloat(0,0.99).toFixed(3);
+    tempProbBloodFail = getRandomFloat(0,0.99).toFixed(2);
     
     tempWeekNrFirstSelectedSlot = -1;
     //Create patient/Write to list
@@ -122,14 +131,19 @@ function getRandomFloat(min, max)
 
 //RETURN 0 OR 1 (50% chance)
 function flipCoin() {
-  let zeroOrOne = Math.round(Math.random());
-  return zeroOrOne;
+  let onlyOnco = Math.random();
+  if(onlyOnco < oncoProb){
+    return 1;
+  }
+  else{
+    return 0;
+  }
 };
 
 //ASSIGN BOOL IF PATIENT NEEDS TO BE LAST PATIENT OF THE DAY
 function lastPatient() {
   if(nrPatientsCurrentDay == 0) {
-    nrPatientsCurrentDay = getRandomInt(3,7);   //Determine # patients per day (between x & y)
+    nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);   //Determine # patients per day (between x & y)
     return true;
   } else {
     nrPatientsCurrentDay -= 1;
@@ -140,7 +154,7 @@ function lastPatient() {
 //ALLOCATE TEMPONCO + TEMPCHEMO
 function allocateTempOncoAndChemo() {
   let tempO = onco[flipCoin()];
-  let tempC = chemo[getRandomInt(0,3)]; //chemo=[0,2,3,4,5,6] => length 6, indexes until 5.
+  let tempC = chemo[getRandomInt(0,maxChemoLength)]; //chemo=[0,2,3,4,5,6] => length 6, indexes until 5.
   
   //Onco = chemo = 0 may not happen
   if(tempO == 0 && tempC == 0) { return allocateTempOncoAndChemo(); }
