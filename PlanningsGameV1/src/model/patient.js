@@ -9,6 +9,7 @@ function Patient(profile){
   this.chemoLength = profile.chemoLength;
   this.probBloodFail = profile.probBloodFail;
   this.weekNrFirstSelectedSlot = profile.weekNrFirstSelectedSlot;
+  this.lastSelectedSlotId = profile.lastSelectedSlotId;
 };
 
 Patient.genList = {};
@@ -21,12 +22,12 @@ var firstNameFemale =
 ["Fien", "Annalies", "Femke", "Mariska", "Iemke", "Madelien", "Linde", "Carolien", "Liene", "Loes", "Floortje", "Josje", "Jolien", "Willemieke", "Karlijn", "Eline", "Petra", "Madelief", "Riet", "Marie", "Merel", "Renske"];
 var lastName =
 ["Stas", "Kappers", "Schulenburg", "Vanherbergen", "Janssens", "Davenschot", "Dierickx", "Van Riet", "Herms", "Feijtzes", "Kinds", "ter Welle", "Dreteler", "Kortstee", "Haaks", "Kompagnie", "Sietzen", "Velner", "Nevenzel", "van Beulingen", "Boekholt", "Grootehaar", "Soepenberg", "Schulting", "Mulhof", "Posthuma", "Klein Jan","Onnes", "Ganzeboom", "Verbomen", "Mets", "van 't Hag", "Hendrix", "Mourik", "Velderman", "van Lente", "Kroon", "Pongers", "Berkenvelder", "Groothuis", "Lugtenbeld", "Middelwijk", "Vorring", "Heijsman", "Aalders", "Kamp", "Kleinjans", "van het Vriesendijks", "Vermeer", "Pakhuis"];
-var availability = ["Monday", "Tuesday","Wednesday","Friday","Saturday","Sunday"];
+var availability = ["Monday", "Tuesday","Wednesday", "Thursday","Friday","Saturday","Sunday"];
 var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(0,1);
+var nrPatientsCurrentDay = getRandomInt(1,2);
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
@@ -52,7 +53,7 @@ Patient.generate = function() {
     tempAvailability = availability[getRandomInt(0, availability.length)];
 
     //for testing purposes
-    tempAvailability = "Tuesday";
+    tempAvailability = "Wednesday";
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
     tempChemoLength = getRandomInt(1,7);
