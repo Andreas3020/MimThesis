@@ -554,7 +554,7 @@ function addEventlistenerSlots()
                 //1st time O&C
                 if(weekNrFirstSelectedSlot == -1) {
                   //SLOT(S) AVAILABLE?
-                  if(checkSlotsAvailable(slotNr) == 1) {
+                  if(checkSlotsAvailable(slotNr, cLength) === 1) {
                     //SLOT(S) AANDUIDEN
                     weekNrFirstSelectedSlot = weekNr;
                     updateSlotsSelected(event);
@@ -567,7 +567,7 @@ function addEventlistenerSlots()
                   }
                   else {
                     //SLOT(S) AVAILABLE?
-                    if(checkSlotsAvailable(slotNr) == 1) {
+                    if(checkSlotsAvailable(slotNr, cLength) === 1) {
                       //SLOT(S) AANDUIDEN
                       updateSlotsSelected(event);
                     }
@@ -591,7 +591,7 @@ function addEventlistenerSlots()
                 //CORRECT WEEK
                 else {
                   //SLOT(S) AVAILABLE?
-                  if(checkSlotsAvailable(slotNr) == 1) {
+                  if(checkSlotsAvailable(slotNr) === 1) {
                     //MINIMUM 4 BLOCKS AFTER ONCO?
                     if(slotNr >= oncoSlotOC+5*42  ) {
                       //SLOT(S) AANDUIDEN
@@ -642,9 +642,10 @@ function addEventlistenerSlots()
 }
 
 //CHECK AVAILABIlITY (ARRAY CHECK)
-function checkSlotsAvailable(slotNr) {
+function checkSlotsAvailable(slotNr, chemoLength) {
   let slotsAvailableBool = 1;
 
+  //REGULAR CHECK
   for(let range = lengthSelectedSlot; range > 0; range--) {
     //De duur (verschillende vakjes) aanspreken (1 per doorlopen for loop)
     let tempSlotNr = slotNr + (range-1)*42;
@@ -659,7 +660,24 @@ function checkSlotsAvailable(slotNr) {
       slotsAvailableBool = 0;
       break;
     }
-    else { /*slotsAvailableBool = 1;*/ }
+  }
+
+  //EXTRA CHECK FOR O&C (Planning onco and chemo yet to come. So 4 + length/range space needed)
+  if(slotsAvailableBool === 1) {
+    if(chemoLength !== undefined) {
+      console.log("chemoLength:" + chemoLength);
+      let slotNummerke = slotNr + (5*42);
+      console.log("slotNummerke: " + slotNummerke);
+      for(let lengte = 0; lengte < chemoLength; lengte++) {
+        let temp = slotNummerke + lengte*42;
+        console.log("temp: " + temp + "met lengte: " + lengte);
+        if(temp > 839) { 
+          alert("Attention! This onco slot is not useful. You won't be able to schedule the chemo session. Considering minimum 2 hours time interval between onco & chemo session is required, the chemo appointment would fall outside working hours.");
+          slotsAvailableBool = 0;
+          break;
+        }
+      }
+    }
   }
 
   return slotsAvailableBool; 
