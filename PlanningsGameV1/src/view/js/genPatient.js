@@ -30,7 +30,7 @@ pl.view.genPatient = {
 
     nrOfPatients = keys.length;
   
-    if(i < nrOfPatients) {
+    if(i < nrOfPatients-1) {
         i++;
         key = keys[i];
         tableBody.rows[1].cells[0].innerHTML = Patient.list[key].patientID;
@@ -44,10 +44,7 @@ pl.view.genPatient = {
         tableBody.rows[1].cells[8].innerHTML = Patient.list[key].chemoLength;
         
     } else {
-        window.alert("This was the last patient.");
-        if(lastPatient === 0) 
-        { lastPatient = 1;}
-        else{lastPatient = 2; } 
+        lastPatient = 1;
     }
     return lastPatient;
   }

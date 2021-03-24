@@ -35,6 +35,7 @@ let varianceArray = [];
 let dayNrFirstSelectedSlot;
 let weekNrFirstForCalc;
 
+let probBloodFailEasy = 0.8;
 
 function renderAgenda()
 {
@@ -151,13 +152,15 @@ function renderAgenda()
   
 }
 
+
 function checkWeek() { 
-  if ( currentWeek == weekNr){
+  if (currentWeek == weekNr){
     return  "greyedOutSlot";
   } else {
     return "";
   } 
 }
+
 function checkDay(i, greyedOutString)
 {
   if(i >  todayNr ) {
@@ -188,7 +191,6 @@ document.querySelector(".next").addEventListener("click", () => {
   }
   renderAgenda();
 });
-
 function addWeekToArray() {
   //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
   slotsTakenArray.push([]);
@@ -200,12 +202,38 @@ function addWeekToArray() {
 }
 
 
+function endGame() {
+  let endTime = performance.now();
+  //Performance returns uSec! /1000 gives Seconds.
+  let gameTime = (endTime - startTime)/1000;
+  let gametimeMinutes = Math.floor(gameTime / 60);
+  let gameTimeSeconds = Math.ceil(gameTime % 60);
+
+  const timeParagraph = document.getElementById("showGameTime");
+  timeParagraph.innerHTML = "You completed the game in " + gametimeMinutes + "min " + gameTimeSeconds + " seconds!";
+
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "block";
+
+  const popUpText= document.getElementById("popUpContentText");
+  popUpText.style.display = "flex";
+}
+
+function resetEndPopup() {
+  const popUpText = document.getElementById("popUpContentText");
+  popUpText.style.display = "none";
+
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "none";
+
+  window.location.href = "home.html";
+}
+
 function addSelectedSlot() {
   
   if(IdSelectedSlot === -1) { alert("Must select a time slot!"); return; }
 
   const tableBody = document.getElementById('patientTableScheduler');
-  
   
   // check the scenario (onco or chemo) that has been done and change the nr of times still needed
   if(scenario == "onco"){
@@ -265,7 +293,9 @@ function addSelectedSlot() {
     addSelectVar = checkPatientsPerDay();
     
 
-    //LAST PATIENT 1x TIME PROCESS / NEW PATIENT PROCESSING
+    console.log("addSelectVar: " + addSelectVar);
+
+    //NEW PATIENT PROCESSING
     if(addSelectVar <= 1) {
       yellow();
       addToVarianceArray();
@@ -276,6 +306,11 @@ function addSelectedSlot() {
       console.log(currentPatientId);
       currentPatientObject = Patient.list[currentPatientId];
       
+      
+      //LAST PATIENT - END GAME
+      if(addSelectVar === 1) {
+        endGame();
+      }
 
     }
     else if (addSelectVar === 3)
@@ -422,9 +457,9 @@ function testBloodPatients()
        
     // check and remove patient if bloodtest does not fail
     let probBloodFail = Patient.list[todayPatientsArray[i]].probBloodFail;
-    if ( probBloodFail < 0){     
+    if ( probBloodFail < probBloodFailEasy){     
         //change propability that bloodtest fails next time
-        let num = getRandomFloat(0,1).toFixed(3);   
+        let num = getRandomFloat(0,1).toFixed(2);   
         Patient.list[todayPatientsArray[i]].probBloodFail = num;    
         todayPatientsArray.splice(i, 1); 
         i--; 
@@ -527,16 +562,18 @@ function addEventlistenerSlots()
       const tableBody = document.getElementById('patientTableScheduler');
       
       let avDay = currentPatientObject.availability;
-      
       let nrOncoAppointments = currentPatientObject.onco;
       let nrChemoAppointments = currentPatientObject.chemo;
       let cLength = currentPatientObject.chemoLength;
       
       weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
 
+      console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
+
+      //SLOT NOT UNAVAILABLE
       if(slotsTakenArray[weekNr][slotNr] === false)
       {
-        document.getElementById("box2Right").style.display = "none";
+        document.getElementById("patientTableSlotinfo").style.visibility = "hidden";
 
         //PATIENT NOT AVAILABLE
         if(weekdays[dayNr] != avDay) { alert("Patient is not available this weekday.") }
@@ -618,7 +655,7 @@ function addEventlistenerSlots()
                 //1st time O&C
                 if(weekNrFirstSelectedSlot == -1) {
                   //SLOT(S) AVAILABLE?
-                  if(checkSlotsAvailable(slotNr) == 1) {
+                  if(checkSlotsAvailable(slotNr, cLength) === 1) {
                     //SLOT(S) AANDUIDEN
                     weekNrFirstSelectedSlot = weekNr;
                     weekNrFirstForCalc = weekNr;
@@ -633,7 +670,7 @@ function addEventlistenerSlots()
                   }
                   else {
                     //SLOT(S) AVAILABLE?
-                    if(checkSlotsAvailable(slotNr) == 1) {
+                    if(checkSlotsAvailable(slotNr, cLength) === 1) {
                       //SLOT(S) AANDUIDEN
                       updateSlotsSelected(event);
                     }
@@ -657,7 +694,7 @@ function addEventlistenerSlots()
                 //CORRECT WEEK
                 else {
                   //SLOT(S) AVAILABLE?
-                  if(checkSlotsAvailable(slotNr) == 1) {
+                  if(checkSlotsAvailable(slotNr) === 1) {
                     //MINIMUM 4 BLOCKS AFTER ONCO?
                     if(slotNr >= oncoSlotOC+5*42  ) {
                       //SLOT(S) AANDUIDEN
@@ -686,11 +723,12 @@ function addEventlistenerSlots()
         tableRight.rows[1].cells[5].innerHTML = currentPatientObject.chemo;
         tableRight.rows[1].cells[6].innerHTML = currentPatientObject.chemoLength;
       
-        document.getElementById("box2Right").style.display = "flex";
+        document.getElementById("patientTableSlotinfo").style.visibility = "visible";
       }
       else {
         //----------SHOW SLOT PATIENT INFO--------------//
         const tableRight = document.getElementById('patientTableSlotinfo');
+        console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
         let patientObj = Patient.list[slotsTakenArray[weekNr][slotNr]];     //let toegevoegd!
         tableRight.rows[1].cells[0].innerHTML = patientObj.patientID;
         tableRight.rows[1].cells[1].innerHTML = patientObj.firstName;
@@ -700,16 +738,17 @@ function addEventlistenerSlots()
         tableRight.rows[1].cells[5].innerHTML = patientObj.chemo;
         tableRight.rows[1].cells[6].innerHTML = patientObj.chemoLength;
       
-        document.getElementById("box2Right").style.display = "flex";
+        document.getElementById("patientTableSlotinfo").style.visibility = "visible";
       }
     });  
   });
 }
 
 //CHECK AVAILABIlITY (ARRAY CHECK)
-function checkSlotsAvailable(slotNr) {
+function checkSlotsAvailable(slotNr, chemoLength) {
   let slotsAvailableBool = 1;
 
+  //REGULAR CHECK
   for(let range = lengthSelectedSlot; range > 0; range--) {
     //De duur (verschillende vakjes) aanspreken (1 per doorlopen for loop)
     let tempSlotNr = slotNr + (range-1)*42;
@@ -724,7 +763,24 @@ function checkSlotsAvailable(slotNr) {
       slotsAvailableBool = 0;
       break;
     }
-    else { /*slotsAvailableBool = 1;*/ }
+  }
+
+  //EXTRA CHECK FOR O&C (Planning onco and chemo yet to come. So 4 + length/range space needed)
+  if(slotsAvailableBool === 1) {
+    if(chemoLength !== undefined) {
+      console.log("chemoLength:" + chemoLength);
+      let slotNummerke = slotNr + (5*42);
+      console.log("slotNummerke: " + slotNummerke);
+      for(let lengte = 0; lengte < chemoLength; lengte++) {
+        let temp = slotNummerke + lengte*42;
+        console.log("temp: " + temp + "met lengte: " + lengte);
+        if(temp > 839) { 
+          alert("Attention! This onco slot is not useful. You won't be able to schedule the chemo session. Considering minimum 2 hours time interval between onco & chemo session is required, the chemo appointment would fall outside working hours.");
+          slotsAvailableBool = 0;
+          break;
+        }
+      }
+    }
   }
 
   return slotsAvailableBool; 
@@ -836,7 +892,7 @@ function skipPatient() {
     
   }
   else { //addSelectVar  >= 1 
-    alert("Last patient was reached. Game ended."); 
+    endGame();
   }
   console.log("Atm " + skippedPatientsCounter + " patients are skipped and hence, not scheduled.");
 }
@@ -893,3 +949,5 @@ Patient.loadAll();
 currentPatientObject = Patient.list[0];
 console.log(currentPatientObject = Patient.list[0]);
 
+var startTime = performance.now();
+console.log("StartTime: " + startTime);
