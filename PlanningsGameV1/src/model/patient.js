@@ -12,14 +12,13 @@ function Patient(profile){
   this.lastSelectedSlotId = profile.lastSelectedSlotId;
 };
 
-var minNrDay = 3;
-var maxNrDay = 5;
+
 var minLength = 3;
 var maxLength = 7;
 var oncoProb = 0.5;
-var nrOfPersons = 1;
+var nrOfPersons = 10;
 var minPatDay = 3;
-var maxPatDay = 6;
+var maxPatDay = 5;
 var maxChemoLength = 3;
 
 Patient.genList = {};
@@ -37,7 +36,7 @@ var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(minNrDay,maxNrDay);
+var nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
@@ -60,12 +59,14 @@ Patient.generate = function() {
     else { tempFname = firstNameMale[getRandomInt(0, firstNameMale.length)];}
     tempLname = lastName[getRandomInt(0, lastName.length)];
     tempAvailability = availability[getRandomInt(0, availability.length)];
+   
+   
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
     tempChemoLength = getRandomInt(minLength,maxLength);
 
-    if( i === nrOfPersons-1) { tempLastPatientBool = false; }
-
+   
+    tempLastPatientBool = lastPatient();
     
     tempProbBloodFail = getRandomFloat(0,0.99).toFixed(2);
     

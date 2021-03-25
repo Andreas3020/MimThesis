@@ -36,6 +36,7 @@ let dayNrFirstSelectedSlot;
 let weekNrFirstForCalc;
 
 let probBloodFailEasy = 0.8;
+//let probBloodFailEasy = 0;
 
 function renderAgenda()
 {
@@ -866,6 +867,11 @@ function printNewRange() {
 }
 
 function resetPatient() {
+  if(addSelectVar=== 4 && currentPatientObject.onco === 0)
+  {
+    return;
+  }
+
   slotsCurrentArray.forEach(function([week,slotId]) {
     let tempSlotNr = getSlotNrFromId(slotId)[3];
     //RESET SLOTSTAKENARRAY (no slotsCurrent)
@@ -882,8 +888,7 @@ function resetPatient() {
   
   //RESET VARIABLES
   IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
-  currentPatientObject.weekNrFirstSelectedSlot = -1;
-  Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = -1;
+  
   slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
   slotsToAddArray = [];     //Huidige selectie eventListener
   weekNrFirstSelectedSlotTemp = -1;
@@ -893,8 +898,19 @@ function resetPatient() {
 
   //Reset HTML used for counting scheduled moments
   const tableLeft = document.getElementById('patientTableScheduler');
-  tableLeft.rows[1].cells[5].innerHTML = tableLeft.rows[1].cells[4].innerHTML
-  tableLeft.rows[1].cells[7].innerHTML = tableLeft.rows[1].cells[6].innerHTML
+  if(addSelectVar != 4)
+  {
+    currentPatientObject.weekNrFirstSelectedSlot = -1;
+    Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = -1;
+    tableLeft.rows[1].cells[5].innerHTML = tableLeft.rows[1].cells[4].innerHTML
+    tableLeft.rows[1].cells[7].innerHTML = tableLeft.rows[1].cells[6].innerHTML
+    
+  }
+  else
+  {
+    tableLeft.rows[1].cells[5].innerHTML = 1;
+    tableLeft.rows[1].cells[7].innerHTML = 1;
+  }
 }
 
 function skipPatient() {
