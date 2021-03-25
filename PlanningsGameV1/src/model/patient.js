@@ -9,6 +9,7 @@ function Patient(profile){
   this.chemoLength = profile.chemoLength;
   this.probBloodFail = profile.probBloodFail;
   this.weekNrFirstSelectedSlot = profile.weekNrFirstSelectedSlot;
+  //this.availabilityChosen = profile.availabilityChosen;
 };
 
 Patient.genList = {};
@@ -21,12 +22,14 @@ var firstNameFemale =
 ["Fien", "Annalies", "Femke", "Mariska", "Iemke", "Madelien", "Linde", "Carolien", "Liene", "Loes", "Floortje", "Josje", "Jolien", "Willemieke", "Karlijn", "Eline", "Petra", "Madelief", "Riet", "Marie", "Merel", "Renske"];
 var lastName =
 ["Stas", "Kappers", "Schulenburg", "Vanherbergen", "Janssens", "Davenschot", "Dierickx", "Van Riet", "Herms", "Feijtzes", "Kinds", "ter Welle", "Dreteler", "Kortstee", "Haaks", "Kompagnie", "Sietzen", "Velner", "Nevenzel", "van Beulingen", "Boekholt", "Grootehaar", "Soepenberg", "Schulting", "Mulhof", "Posthuma", "Klein Jan","Onnes", "Ganzeboom", "Verbomen", "Mets", "van 't Hag", "Hendrix", "Mourik", "Velderman", "van Lente", "Kroon", "Pongers", "Berkenvelder", "Groothuis", "Lugtenbeld", "Middelwijk", "Vorring", "Heijsman", "Aalders", "Kamp", "Kleinjans", "van het Vriesendijks", "Vermeer", "Pakhuis"];
-var availability = ["Monday", "Tuesday","Wednesday","Friday","Saturday","Sunday"];
+const weekdagen = ["Monday", "Tuesday","Wednesday","Thursday", "Friday","Saturday","Sunday"];
 var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
-//AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(3,7);
+
+var nrPatientsCurrentDay = getRandomInt(3,4); //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
+var nrOfPersons = 5; //TOTAL AMOUNT OF PERSONS TO BE SCHEDULED DURING THE GAME
+var nrOfAvailableDays = 3;
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
@@ -35,28 +38,45 @@ Patient.generate = function() {
   //Temp variables to write to individual object
   var tempFname = "";
   var tempLname = "";
-  var tempAvailability = "";
+  var tempAvailability = [];
   var tempOnco, tempChemo;    //tempChemo = periodicity (# weeks)
   var tempChemoLength;        //tempChemoLength = length of chemosession (type of chemo)
   var tempLastPatientBool;
   var tempProbBloodFail;
 
-  //TOTAL AMOUNT OF PERSONS TO BE SCHEDULED DURING THE GAME
-  var nrOfPersons = 1;
 
   for (let i = 0; i < nrOfPersons; i++) {
-    //Generate patient variables (random)...
+    tempAvailability = [];
+
+    //GENERATE NAME + SURNAME
     if(flipCoin()) { tempFname = firstNameFemale[getRandomInt(0, firstNameFemale.length)];}
     else { tempFname = firstNameMale[getRandomInt(0, firstNameMale.length)];}
     tempLname = lastName[getRandomInt(0, lastName.length)];
-    tempAvailability = availability[getRandomInt(0, availability.length)];
+
+    console.log("verdomme");
+    //GENERATE AVAILABILITY
+    for(let klote = 0; klote < nrOfAvailableDays; klote++) {
+      console.log("klote" + klote);
+
+      let newDay = weekdagen[getRandomInt(0, weekdagen.length)];
+      console.log("newDay: " + newDay);
+
+      while(tempAvailability.includes(newDay)) { 
+        newDay = weekdagen[getRandomInt(0, weekdagen.length)]; 
+        console.log("Inside while, a new day selected: " + newDay);
+      }
+
+      tempAvailability.push(newDay);
+    }
+
+    tempAvailability.sort(sortDays);
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
     tempChemoLength = getRandomInt(1,7);
 
-    if( i === nrOfPersons-1) { tempLastPatientBool = false; }
+   // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
 
-    
+    tempLastPatientBool = lastPatient();
     tempProbBloodFail = getRandomFloat(0,0.99).toFixed(3);
     
     tempWeekNrFirstSelectedSlot = -1;
@@ -129,7 +149,7 @@ function flipCoin() {
 //ASSIGN BOOL IF PATIENT NEEDS TO BE LAST PATIENT OF THE DAY
 function lastPatient() {
   if(nrPatientsCurrentDay == 0) {
-    nrPatientsCurrentDay = getRandomInt(3,7);   //Determine # patients per day (between x & y)
+    nrPatientsCurrentDay = getRandomInt(1,2);   //Determine # patients per day (between x & y)
     return true;
   } else {
     nrPatientsCurrentDay -= 1;
@@ -150,7 +170,11 @@ function allocateTempOncoAndChemo() {
   return [tempO, tempC];
 };
 
-
+const sortDays = function (a, b) {
+  a = weekdagen.indexOf(a);
+  b = weekdagen.indexOf(b);
+  return a < b ? 0 : 1;
+};
 
   //Fixed patient list (50x)
   /*Patient.list[0] = new Patient({patientID: "0001",firstName: "Jef", lastName: "Stas", availability: "Tuesday"});    

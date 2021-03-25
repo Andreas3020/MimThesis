@@ -29,7 +29,9 @@ let scenario;
 
 let addSelectVar;
 
-let probBloodFailEasy = 0.9;
+let probBloodFailEasy = 0.0;
+
+let available = [];
 
 function renderAgenda()
 {
@@ -242,14 +244,10 @@ function addSelectedSlot() {
 
   currentPatientObject.weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
   Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
-  
 
   //NEW PATIENT?
   if(tableBody.rows[1].cells[7].innerHTML == 0) {
     addSelectVar = checkPatientsPerDay();
-    
-
-    console.log("addSelectVar: " + addSelectVar);
 
     //NEW PATIENT PROCESSING
     if(addSelectVar <= 1) {
@@ -257,7 +255,7 @@ function addSelectedSlot() {
       red();
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
       currentPatientObject = Patient.list[currentPatientId];
-      
+      available = currentPatientObject.availability;
       
       //LAST PATIENT - END GAME
       if(addSelectVar === 1) {
@@ -291,29 +289,36 @@ function addSelectedSlot() {
       // only keep the unique patients in the array
       todayPatientsArray = todayPatientsArray.filter(onlyUnique);
       
+      //Check which patients of todayPatientsArray fail bloodtest. Update array.
       testBloodPatients();
       
-      // a will be 4 if there are patients where bloodtest failed
-
+      // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
       addSelectVar = checkPatientsPerDay();
 
-      let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
-      currentPatientObject = Patient.list[currentPatientId];
+      let currentPatientId;
+      if(addSelectVar === 3) { 
+        currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
+        currentPatientObject = Patient.list[currentPatientId];
+        available = currentPatientObject.availability;
+      }
     }
-    else if (addSelectVar === 2){ //addSelectVar ==2 
+    else if (addSelectVar === 2){
       alert("You already scheduled this last patient. Game ended."); 
     }
 
     if (addSelectVar === 4)
     {
     
-      id = todayPatientsArray[0];
+      let id = todayPatientsArray[0];
       currentPatientObject = Patient.list[id];
       tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
       tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
       tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
       tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
       tableBody.rows[1].cells[4].innerHTML = currentPatientObject.onco;
+
+      available = currentPatientObject.availability;
+
       if (currentPatientObject.onco>0)
       {
         tableBody.rows[1].cells[5].innerHTML = 1;
@@ -325,18 +330,13 @@ function addSelectedSlot() {
       }
       tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
       
-      
-        
-
-        setTimeout(function() {
+      setTimeout(function() {
           alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
         },15)
 
-      
       todayPatientsArray.splice(0, 1);
       
       currentPatientObject.weekNrFirstSelectedSlot += 1;
-      
       
       // Maybe don't use global variable but use currentPatientObject.
   
@@ -347,6 +347,12 @@ function addSelectedSlot() {
   //NOT NEW PATIENT?
   else {
     yellow();
+    let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
+    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
+    available = [weekdays[dayNr]];
+    console.log("available updated after notNewPatient: " + available);
+    //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
+    tableBody.rows[1].cells[3].innerHTML = available[0];
   }
   
   IdSelectedSlot = -1;
@@ -355,11 +361,11 @@ function addSelectedSlot() {
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay() {
 
+  //bloodTest failed patients need to be scheduled
   if(todayPatientsArray.length > 0)
   { 
     return 4;
   }
-  
   else if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
   {
     //Go to the next day or if at the end of the week and the next week
@@ -394,7 +400,9 @@ function checkPatientsPerDay() {
     } 
     return 3;    
   }
-  else{
+  else {
+    Patient.list[currentPatientObject.patientID].availability = available;
+    console.log("Updated cpo availability to 1 day (before the next person will be fetched)");
     return nextPatientEvent();
   }
 }
@@ -403,7 +411,6 @@ function checkPatientsPerDay() {
 function testBloodPatients()
 {
   for( var i = 0; i < todayPatientsArray.length; i++){ 
-       
     // check and remove patient if bloodtest does not fail
     let probBloodFail = Patient.list[todayPatientsArray[i]].probBloodFail;
     if ( probBloodFail < probBloodFailEasy){     
@@ -414,7 +421,6 @@ function testBloodPatients()
         i--; 
     }
     else{
-
       //change propability that bloodtest fails next time
       Patient.list[todayPatientsArray[i]].probBloodFail = getRandomFloat(0,1).toFixed(3);   
     }  
@@ -464,22 +470,30 @@ function addEventlistenerSlots()
       [dayNr, hourSlot, oncoChemoNr, slotNr] = getSlotNrFromId(slotId.toString());
       const tableBody = document.getElementById('patientTableScheduler');
       
-      let avDay = currentPatientObject.availability;
+      //let avDay = currentPatientObject.availability;
       let nrOncoAppointments = currentPatientObject.onco;
       let nrChemoAppointments = currentPatientObject.chemo;
       let cLength = currentPatientObject.chemoLength;
       
       weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
 
-      console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
+      //console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
 
       //SLOT NOT UNAVAILABLE
       if(slotsTakenArray[weekNr][slotNr] === false)
       {
         document.getElementById("patientTableSlotinfo").style.visibility = "hidden";
 
+        //Check availability
+        let patientAvailable = 0;
+        for(let avail = 0; avail < available.length; avail++) {
+          console.log("DayNr: " + weekdays[dayNr] + " availability CuPatObj: " + available[avail]);
+          if(weekdays[dayNr] === available[avail]) { patientAvailable = 1; break; }
+        }
+        console.log("patientAvailable: " + patientAvailable);
+
         //PATIENT NOT AVAILABLE
-        if(weekdays[dayNr] != avDay) { alert("Patient is not available this weekday.") }
+        if(patientAvailable === 0) { alert("Patient is not available this weekday."); }
 
         //PATIENT AVAILABLE
         else {
@@ -757,6 +771,9 @@ function resetPatient() {
   slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
   slotsToAddArray = [];     //Huidige selectie eventListener
   weekNrFirstSelectedSlotTemp = -1;
+  available = currentPatientObject.availability;
+  //Patient.list[currentPatientObject.patientID].availabilityChosen = [];
+  tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
   //oncoSlotOC = -1;
   //lengthSelectedSlot = -1;
   //scenario = ""; 
@@ -843,7 +860,7 @@ Patient.loadAll();
 
 //Initialise current patient object
 currentPatientObject = Patient.list[0];
-console.log(currentPatientObject = Patient.list[0]);
+available = currentPatientObject.availability;
+console.log("1st available read from currentPatientObject: " + available);
 
 var startTime = performance.now();
-console.log("StartTime: " + startTime);
