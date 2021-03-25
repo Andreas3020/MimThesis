@@ -153,15 +153,6 @@ function renderAgenda()
   
 }
 
-
-function checkWeek() { 
-  if (currentWeek == weekNr){
-    return  "greyedOutSlot";
-  } else {
-    return "";
-  } 
-}
-
 function checkDay(i, greyedOutString)
 {
   if(i >  todayNr ) {
@@ -174,8 +165,6 @@ function checkDay(i, greyedOutString)
     return greyedOutString;
   }
 }
-
-
 
 //CHANGE WEEK - EVENTLISTENERS (previous + next)
 document.querySelector(".prev").addEventListener("click", () => {
@@ -192,6 +181,15 @@ document.querySelector(".next").addEventListener("click", () => {
   }
   renderAgenda();
 });
+
+function goToCurrentWeek()
+{
+  weekNr = currentWeek
+  renderAgenda();
+}
+
+
+
 function addWeekToArray() {
   //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
   slotsTakenArray.push([]);
