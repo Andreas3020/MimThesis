@@ -1,35 +1,51 @@
 var setting = document.getElementsByName("difficulty") //Radio button (input)
 
 let roomName;
-let roomNameString;
+let roomNameJString;
 let difficulty; 
+let rnumber;
+let rnumberJString
 
 try {
   if (localStorage["roomName"]) {
-    roomNameString = localStorage["roomName"];
+    roomNameJString = localStorage["roomName"];
   }
 } catch (e) {
   alert("Error when reading from Local Storage\n" + e);
 }
 
-if(roomNameString){
-  roomName = JSON.parse( roomNameString);
+if(roomNameJString){
+  roomName = JSON.parse( roomNameJString);
 }
 
-// function changeDifficulty() {
+try {
+  if (localStorage["rnumber"]) {
+    rnumberJString = localStorage["rnumber"];
+  }
+} catch (e) {
+  alert("Error when reading from Local Storage\n" + e);
+}
 
-//   level = document.getElementById("diff").value;
-  
-//   console.log("test");
-//   //Update settings to difficulty level
-//   if(level == "Easy") {
-//     setting[0].checked = true;
-//   } else if(level == "Moderate") {
-//     setting[1].checked = true;
-//   } else if(level == "Difficult") {
-//     setting[2].checked = true;
-//   }
-// }
+if(rnumberJString){
+  rnumber = JSON.parse( rnumberJString);
+}
+
+database.child(roomName).child("users").child(rnumber).once('value', function(snapshot) {
+  let scores = Object.values(snapshot.val());
+
+  for(let i = 0; i< scores.length; i++){
+    tableBody = document.getElementById('resultTable');
+    row = tableBody.insertRow();
+    row.insertCell(0).textContent = scores[i]["difficulty"];
+    row.insertCell(1).textContent = scores[i]["skipped patients"];
+    row.insertCell(2).textContent = scores[i]["avg appintment variance"];
+    row.insertCell(3).textContent = scores[i]["avg appointment difference"];
+    row.insertCell(4).textContent = scores[i]["avg first appointment time"];
+    row.insertCell(5).textContent = scores[i]["completion time"];
+  } 
+});
+
+
 
 function startGame(){
   let level; 
@@ -50,6 +66,6 @@ function startGame(){
     localStorage["patientTable"] = patientTableString;
 
     //go the the game
-    window.location.href = "agendaAndreas.html";
+    window.location.href = "agenda.html";
   });
 }

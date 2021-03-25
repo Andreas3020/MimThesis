@@ -149,20 +149,19 @@ function enterRoom(roomName){
   if(rnumberArr.length == 8 && (rnumberArr[0]== "r" || rnumberArr[0]== "u" || rnumberArr[0]== "s" ) && isNaN(numberString) == false){
     clearUserPop()
     
-    //check if username already exists
-    database.once('value', function(snapshot) {
-      if(snapshot.hasChild(rnumber)){
-        // write previous results to local storage
-      }
-      // save the username in the database
-      else{
-        database.child(roomName).child("users").child(rnumber).set("0");
-      }
+    // save the username in the database
+    let patientTableJString = JSON.stringify(roomName);
+    localStorage["roomName"] = patientTableJString;
 
-      patientTableString = JSON.stringify(roomName);
-      localStorage["roomName"] = patientTableString;
+    let rnumberJString = JSON.stringify(rnumber);
+    localStorage["rnumber"] = rnumberJString;
 
-      window.location.href = "home.html";
+    //check if username already exists (mag helemaal weg behalve referentie want zolang er geen gegevens in een rnummer zitten wil je dit ook niet bijhouden)
+    database.child(roomName).child("users").once('value', function(snapshot) {
+
+      database.child(roomName).child("users").child(rnumber).child(snapshot.numChildren()).set({'difficulty': "Easy", 'skipped patients': 3, 'avg appintment variance': 1.9, 'avg appointment difference': 2.3, 'avg first appointment time': 4, 'completion time': 33}).then(function onSuccess() {
+        window.location.href = "home.html";
+      });
     });
 
     
