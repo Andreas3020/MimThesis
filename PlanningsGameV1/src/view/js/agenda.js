@@ -203,6 +203,32 @@ function addWeekToArray() {
 
 
 function endGame() {
+
+  let appointmentSpeed =0;
+  appointmentSpeedArray.forEach(function(speed) {
+    appointmentSpeed += speed;
+  });
+  appointmentSpeed = appointmentSpeed/appointmentSpeedArray.length;
+  
+  let avgVariance = 0;
+
+  varianceArray.forEach(function(variance) {
+    avgVariance += variance;
+  });
+  avgVariance = avgVariance/varianceArray.length;
+
+  let stDevVariance = 0;
+  varianceArray.forEach(function(variance) {
+    stDevVariance += (variance - avgVariance) * (variance - avgVariance);
+  });
+  stDevVariance = stDevVariance/varianceArray.length;
+  stDevVariance = Math.sqrt(stDevVariance);
+  console.log(appointmentSpeed);
+
+  console.log(avgVariance);
+  
+  console.log(stDevVariance);
+
   let endTime = performance.now();
   //Performance returns uSec! /1000 gives Seconds.
   let gameTime = (endTime - startTime)/1000;
