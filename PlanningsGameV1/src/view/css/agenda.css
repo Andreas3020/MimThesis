@@ -77,11 +77,11 @@ i {
   border: 0.5px dashed rgb(0, 64, 122);
 }
 
-#agendaTable td:nth-child(6n + 1) {
+#agendaTable td:nth-child(4n + 1) {
   border-right: 2px solid rgb(0, 64, 122);
 }
 
-#agendaTable td:nth-child(6n + 3) {
+#agendaTable td:nth-child(4n + 2) {
   border-right: 2px solid rgb(0, 64, 122);
 }
 
@@ -195,7 +195,7 @@ button {
   font-size: 18px;
   border: 1px solid white;
   padding: 10px;
-  
+
   cursor: pointer;
 }
 

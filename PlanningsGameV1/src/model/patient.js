@@ -62,19 +62,12 @@ Patient.generate = function() {
     else { tempFname = firstNameMale[getRandomInt(0, firstNameMale.length)];}
     tempLname = lastName[getRandomInt(0, lastName.length)];
 
-    console.log("verdomme");
     //GENERATE AVAILABILITY
-    for(let klote = 0; klote < nrOfAvailableDays; klote++) {
-      console.log("klote" + klote);
-
+    for(let loop = 0; loop < nrOfAvailableDays; loop++) {
       let newDay = weekdagen[getRandomInt(0, weekdagen.length)];
-      console.log("newDay: " + newDay);
-
       while(tempAvailability.includes(newDay)) { 
-        newDay = weekdagen[getRandomInt(0, weekdagen.length)]; 
-        console.log("Inside while, a new day selected: " + newDay);
+        newDay = weekdagen[getRandomInt(0, weekdagen.length)];
       }
-
       tempAvailability.push(newDay);
     }
 
