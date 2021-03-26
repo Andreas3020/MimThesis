@@ -59,27 +59,27 @@ function renderAgenda()
       for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
         if(i == 6 && k == 3) {  //End of row => add </tr>
           //Slot is AVAILABLE
-          if(slotsTakenArray[weekNr][6*i + 28*j +k] === false) {
+          if(slotsTakenArray[weekNr][4*i + 28*j +k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`;
           }  //Slot is CURRENTLY SELECTED   
-          else if( slotsTakenArray[weekNr][6*i + 28*j +k].length === 12) {
+          else if( slotsTakenArray[weekNr][4*i + 28*j +k].length === 12) {
             core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td> </tr>`;
           }  //SLot is TAKEN/UNAVAILABLE
           else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 28*j +k]}</td> </tr>`;
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][4*i + 28*j +k]}</td> </tr>`;
           }  
         } 
         else { //Not end of row, so no </tr> needed)
           console.log("Dag i: " + i + " & row/hourslot: " + j + " & OC k: " + k);
           //Slot is AVAILABLE
-          if(slotsTakenArray[weekNr][6*i + 28*j+k] === false) {
+          if(slotsTakenArray[weekNr][4*i + 28*j+k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
           } //Slot is CURRENTLY SELECTED   
-          else if( slotsTakenArray[weekNr][6*i + 28*j +k].length === 12) {
+          else if( slotsTakenArray[weekNr][4*i + 28*j +k].length === 12) {
             core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td>`;
           } //Slot is TAKEN/UNAVAILABLE
           else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][6*i + 28*j +k]}</td>`; 
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][4*i + 28*j +k]}</td>`; 
           }
         }
       }    
@@ -350,7 +350,7 @@ function addSelectedSlot() {
       {
         for (let k=0; k<4; k++) 
         {
-          todaySlot = slotsTakenArray[currentWeek][6*todayNr +28*j +k]
+          todaySlot = slotsTakenArray[currentWeek][4*todayNr +28*j +k]
           if (todaySlot !== false)
           {
             //onco's blood can't fail
@@ -971,7 +971,7 @@ function getSlotNrFromId(slotId) {
   let dayNr = parseInt(dayStr.split("D")[1],10);
   let hourSlot = parseInt(hourSlotStr.split("H")[1],10);
   let oncoChemoNr = parseInt(oncoChemoStr.split("OC")[1],10);
-  let slotNr = 6*dayNr + 28*hourSlot  + oncoChemoNr;
+  let slotNr = 4*dayNr + 28*hourSlot  + oncoChemoNr;
   return [dayNr, hourSlot, oncoChemoNr, slotNr];
 }
 
@@ -995,7 +995,7 @@ function getSlotIdFromNr(slotNummer) {
 
     //DETERMINE HOURSLOT
     hour = Math.floor(slotNummer/28);
-    oncoChemo = slotNummer - 6*day - 28*hour;
+    oncoChemo = slotNummer - 4*day - 28*hour;
   }
   let id = "D" + day +"_" + "H" + hour +"_" + "OC" + oncoChemo;
   return id;
