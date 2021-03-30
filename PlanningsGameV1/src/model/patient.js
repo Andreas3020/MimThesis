@@ -9,17 +9,19 @@ function Patient(profile){
   this.chemoLength = profile.chemoLength;
   this.probBloodFail = profile.probBloodFail;
   this.weekNrFirstSelectedSlot = profile.weekNrFirstSelectedSlot;
+  //this.availabilityChosen = profile.availabilityChosen;
+  this.lastSelectedSlotId = profile.lastSelectedSlotId;
 };
 
-var minNrDay = 3;
-var maxNrDay = 5;
+
 var minLength = 3;
 var maxLength = 7;
 var oncoProb = 0.5;
-var nrOfPersons = 70;
-var minPatDay = 3;
-var maxPatDay = 6;
+var nrOfPersons = 10;
+var minPatDay = 2; //3
+var maxPatDay = 3; //5
 var maxChemoLength = 3;
+var nrOfAvailableDays = 3;
 
 Patient.genList = {};
 Patient.list = {};
@@ -31,12 +33,12 @@ var firstNameFemale =
 ["Fien", "Annalies", "Femke", "Mariska", "Iemke", "Madelien", "Linde", "Carolien", "Liene", "Loes", "Floortje", "Josje", "Jolien", "Willemieke", "Karlijn", "Eline", "Petra", "Madelief", "Riet", "Marie", "Merel", "Renske"];
 var lastName =
 ["Stas", "Kappers", "Schulenburg", "Vanherbergen", "Janssens", "Davenschot", "Dierickx", "Van Riet", "Herms", "Feijtzes", "Kinds", "ter Welle", "Dreteler", "Kortstee", "Haaks", "Kompagnie", "Sietzen", "Velner", "Nevenzel", "van Beulingen", "Boekholt", "Grootehaar", "Soepenberg", "Schulting", "Mulhof", "Posthuma", "Klein Jan","Onnes", "Ganzeboom", "Verbomen", "Mets", "van 't Hag", "Hendrix", "Mourik", "Velderman", "van Lente", "Kroon", "Pongers", "Berkenvelder", "Groothuis", "Lugtenbeld", "Middelwijk", "Vorring", "Heijsman", "Aalders", "Kamp", "Kleinjans", "van het Vriesendijks", "Vermeer", "Pakhuis"];
-var availability = ["Monday", "Tuesday","Wednesday","Friday","Saturday","Sunday"];
+const weekdagen = ["Monday", "Tuesday","Wednesday","Thursday", "Friday","Saturday","Sunday"];
 var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(minNrDay,maxNrDay);
+var nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
@@ -45,31 +47,43 @@ Patient.generate = function() {
   //Temp variables to write to individual object
   var tempFname = "";
   var tempLname = "";
-  var tempAvailability = "";
+  var tempAvailability = [];
   var tempOnco, tempChemo;    //tempChemo = periodicity (# weeks)
   var tempChemoLength;        //tempChemoLength = length of chemosession (type of chemo)
   var tempLastPatientBool;
   var tempProbBloodFail;
 
   //TOTAL AMOUNT OF PERSONS TO BE SCHEDULED DURING THE GAME
-
   for (let i = 0; i < nrOfPersons; i++) {
-    //Generate patient variables (random)...
+    tempAvailability = [];
+
+    //GENERATE NAME + SURNAME
     if(flipCoin()) { tempFname = firstNameFemale[getRandomInt(0, firstNameFemale.length)];}
     else { tempFname = firstNameMale[getRandomInt(0, firstNameMale.length)];}
     tempLname = lastName[getRandomInt(0, lastName.length)];
-    tempAvailability = availability[getRandomInt(0, availability.length)];
+
+    //GENERATE AVAILABILITY
+    for(let loop = 0; loop < nrOfAvailableDays; loop++) {
+      let newDay = weekdagen[getRandomInt(0, weekdagen.length)];
+      while(tempAvailability.includes(newDay)) { 
+        newDay = weekdagen[getRandomInt(0, weekdagen.length)];
+      }
+      tempAvailability.push(newDay);
+    }
+
+    tempAvailability.sort(sortDays);
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
     tempChemoLength = getRandomInt(minLength,maxLength);
 
-    // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
-    
-    tempProbBloodFail = getRandomFloat(0,0.99).toFixed(2);
+   // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
+
+    tempLastPatientBool = lastPatient();
+    tempProbBloodFail = getRandomFloat(0,0.99).toFixed(3);
     
     tempWeekNrFirstSelectedSlot = -1;
     //Create patient/Write to list
-    Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot});
+    Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot, lastSelectedSlotId: -1});
   }
 
   //Save patient list (JSONstringify) to localStorage (patientTable)
@@ -163,7 +177,11 @@ function allocateTempOncoAndChemo() {
   return [tempO, tempC];
 };
 
-
+const sortDays = function (a, b) {
+  a = weekdagen.indexOf(a);
+  b = weekdagen.indexOf(b);
+  return a < b ? 0 : 1;
+};
 
   //Fixed patient list (50x)
   /*Patient.list[0] = new Patient({patientID: "0001",firstName: "Jef", lastName: "Stas", availability: "Tuesday"});    

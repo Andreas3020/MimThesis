@@ -1,3 +1,5 @@
+
+let i;
 pl.view.genPatient = {
     setupUserInterface: function () {
         lastPatient = 0; // slecht oplossing voor probleem
