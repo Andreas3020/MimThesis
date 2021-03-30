@@ -74,7 +74,15 @@ Patient.generate = function() {
     tempAvailability.sort(sortDays);
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
-    tempChemoLength = getRandomInt(minLength,maxLength);
+    if(tempChemo !== 0)
+    {
+      tempChemoLength = getRandomInt(minLength,maxLength);
+    }
+    else
+    {
+      tempChemoLength = 0;
+    }
+    
 
    // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
 

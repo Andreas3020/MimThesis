@@ -66,6 +66,6 @@ function startGame(){
     localStorage["patientTable"] = patientTableString;
 
     //go the the game
-    window.location.href = "agenda.html";
+    window.location.href = "agendaNew.html";
   });
 }
