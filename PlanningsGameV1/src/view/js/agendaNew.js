@@ -349,7 +349,7 @@ function addSelectedSlot() {
 
       let currentPatientId;
       //Keeps being 3 if todayPatientArray is empty in checkPatientsPerDay() netPatient() gets called;
-      if(addSelectVar === 3) { 
+      if(addSelectVar === 0) { 
         currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
         currentPatientObject = Patient.list[currentPatientId];
         available = currentPatientObject.availability;
@@ -890,6 +890,7 @@ function printNewRange() {
     tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + (range)*28;
     tempSlotId = getSlotIdFromNr(tempSlotNr);
     slotsToAddArray.push(tempSlotId); //add ids to array that have to be added to slotstakenArray after pressing next
+    
     document.getElementById(tempSlotId).classList.add("slotsCurrent");
   }
 
@@ -1036,3 +1037,5 @@ available = currentPatientObject.availability;
 console.log("1st available read from currentPatientObject: " + available);
 
 var startTime = performance.now();
+
+console.log(Patient.list);
