@@ -63,8 +63,7 @@ Patient.generate = function() {
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
     tempChemoLength = getRandomInt(minLength,maxLength);
 
-    if( i === nrOfPersons-1) { tempLastPatientBool = false; }
-
+    // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
     
     tempProbBloodFail = getRandomFloat(0,0.99).toFixed(2);
     

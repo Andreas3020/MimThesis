@@ -35,6 +35,31 @@
             <div class="charts" id="time"></div>
     </div>
 
+    <div class="individualScores">
+        <h2>Individual scores</h2>
+        <form name="mySettings" class="difficulty">
+            <label><input type="radio" name="evaluation" id="skippedPatients" value="skipped patients" checked="checked">Skipped patients</label><br>  
+            <label><input type="radio" name="evaluation" id="appVariance" value="appointment variance">Appointment variance</label><br>
+            <label><input type="radio" name="evaluation" id="appDifference" value="appointment difference">Appointment difference</label>
+            <label><input type="radio" name="evaluation" id="appSpeed" value="appointment speed">Appointment speed</label><br>  
+            <label><input type="radio" name="evaluation" id="completionTime" value="completion time">Completion time</label><br>
+          </form>
+        <div class="tableDiv">
+            <table class="resultTable" id="resultTable">
+                <thead>
+                  <tr>
+                    <th>Ranking</th>
+                    <th>Skipped patients</th>
+                    <th>Appointment variance</th>
+                    <th>Avg appointment difference</th>
+                    <th>Avg first appointment time</th>
+                    <th>Completion time</th>
+                  </tr>
+                </thead>
+        </div>
+    </div>
+    
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 
