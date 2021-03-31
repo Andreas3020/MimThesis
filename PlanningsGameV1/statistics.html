@@ -24,7 +24,7 @@
         <h1>STATISTICS</h1>
         <div class="upBackDiv" >
             <button class="upBackButton" type="button" onClick="location.href='index.html'">Back to rooms</button>
-            <button class="upBackButton" type="button" onClick="createChart()">Update</button>
+            <button class="upBackButton" type="button" onClick="update()">Update</button>
         </div>
     </div>
     <div class="chartsFigure">
@@ -37,18 +37,25 @@
 
     <div class="individualScores">
         <h2>Individual scores</h2>
-        <form name="mySettings" class="difficulty">
-            <label><input type="radio" name="evaluation" id="skippedPatients" value="skipped patients" checked="checked">Skipped patients</label><br>  
-            <label><input type="radio" name="evaluation" id="appVariance" value="appointment variance">Appointment variance</label><br>
-            <label><input type="radio" name="evaluation" id="appDifference" value="appointment difference">Appointment difference</label>
-            <label><input type="radio" name="evaluation" id="appSpeed" value="appointment speed">Appointment speed</label><br>  
-            <label><input type="radio" name="evaluation" id="completionTime" value="completion time">Completion time</label><br>
+        <form class="settings">
+            <select class="difficulty" id="difficulty">
+                <option value="Easy" selected="selected">Easy</option> 
+                <option value="Moderate">Moderate</option>
+                <option value="Hard">Hard</option>
+            </select>
+            <label><input type="radio" name="evaluation" id="skippedPatients" value="skippedPatients" checked="checked">Skipped patients</label><br>  
+            <label><input type="radio" name="evaluation" id="appVariance" value="avgAppDev">Appointment variance</label><br>
+            <label><input type="radio" name="evaluation" id="appDifference" value="avgAppDiff">Appointment difference</label>
+            <label><input type="radio" name="evaluation" id="appSpeed" value="avgAppSpeed">Appointment speed</label><br>  
+            <label><input type="radio" name="evaluation" id="completionTime" value="time">Completion time</label><br>
           </form>
         <div class="tableDiv">
+            <button onClick="generateRanking()">Generate ranking</button>
             <table class="resultTable" id="resultTable">
                 <thead>
                   <tr>
                     <th>Ranking</th>
+                    <th>r-number</th>
                     <th>Skipped patients</th>
                     <th>Appointment variance</th>
                     <th>Avg appointment difference</th>
@@ -90,7 +97,7 @@
     // Get a reference to the database service
     var database = firebase.database().ref(); 
     </script>
-    <script>getStat();</script>
+    <script>update();</script>
    
 </body>
 </html>

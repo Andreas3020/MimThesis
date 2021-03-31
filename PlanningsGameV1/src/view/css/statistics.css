@@ -59,26 +59,38 @@ h1{
     margin-bottom: 1%;
 }
 
-.difficulty{
+.settings{
     display: flex;
     justify-content: center;
     margin: 1%;
     padding: 10px;
 }
 
-.difficulty label{
+.settings label{
     padding-left: 1%;
     padding-right: 1%;
     font-size: 15pt;
 }
 
-.difficulty input{
+.settings input{
     margin-right: 4px;
+}
+
+.difficulty{
+    background-color: white;
+    font-size: 15pt;
 }
 
 .tableDiv{
    display: flex;
    justify-content: center;
+}
+
+.tableDiv button{
+    background-color: rgb(212, 208, 208);
+    font-size: 15pt;
+    height: max-content;
+    margin: 5px;
 }
 
 .resultTable{

@@ -70,7 +70,7 @@ function renderAgenda()
           }  
         } 
         else { //Not end of row, so no </tr> needed)
-          console.log("Dag i: " + i + " & row/hourslot: " + j + " & OC k: " + k);
+          //console.log("Dag i: " + i + " & row/hourslot: " + j + " & OC k: " + k);
           //Slot is AVAILABLE
           if(slotsTakenArray[weekNr][4*i + 28*j+k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
@@ -223,11 +223,6 @@ function endGame() {
   });
   stDevVariance = stDevVariance/varianceArray.length;
   stDevVariance = Math.sqrt(stDevVariance);
-  console.log(appointmentSpeed);
-
-  console.log(avgVariance);
-  
-  console.log(stDevVariance);
 
   let endTime = performance.now();
   //Performance returns uSec! /1000 gives Seconds.
@@ -243,6 +238,69 @@ function endGame() {
 
   const popUpText= document.getElementById("popUpContentText");
   popUpText.style.display = "flex";
+
+  skippedPatientsCounter = Math.round(skippedPatientsCounter*100)/100;
+  avgVariance = Math.round(avgVariance*100)/100;
+  stDevVariance = Math.round(stDevVariance*100)/100;
+
+  console.log("skipped: " + skippedPatientsCounter);
+
+  console.log("appspeed: " + appointmentSpeed);
+
+  console.log("avgVar: " + avgVariance);
+  
+  console.log("stdev: " + stDevVariance);
+
+  console.log("gametime: " + gametimeMinutes);
+
+  //get from local storage: rnumber, difficulty
+  let roomNameJString;
+  var roomName;
+  let rnumberJString;
+  var rnumber;
+  let difficultyJString;
+  var difficulty;
+  
+  try {
+    if (localStorage["roomName"]) {
+      roomNameJString = localStorage["roomName"];
+    }
+  } catch (e) {
+    alert("Error when reading from Local Storage\n" + e);
+  }
+  
+  if(roomNameJString){
+    roomName = JSON.parse( roomNameJString);
+  }
+
+  try {
+    if (localStorage["rnumber"]) {
+      rnumberJString = localStorage["rnumber"];
+    }
+  } catch (e) {
+    alert("Error when reading from Local Storage\n" + e);
+  }
+  
+  if(rnumberJString){
+    rnumber = JSON.parse( rnumberJString);
+  }
+
+  try {
+    if (localStorage["difficulty"]) {
+      difficultyJString = localStorage["difficulty"];
+    }
+  } catch (e) {
+    alert("Error when reading from Local Storage\n" + e);
+  }
+  
+  if(difficultyJString){
+    difficulty = JSON.parse( difficultyJString);
+  }
+
+  database.child(roomName).child("users").child(rnumber).once('value', function(snapshot) {
+    database.child(roomName).child("users").child(rnumber).child(snapshot.numChildren()).set({'difficulty': difficulty, 'skippedPatients': skippedPatientsCounter, 'avgAppDev': stDevVariance, 'avgAppDiff': avgVariance, 'avgAppSpeed': appointmentSpeed, 'time': gametimeMinutes});
+  });
+
 }
 
 function resetEndPopup() {

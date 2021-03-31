@@ -17,7 +17,7 @@ function Patient(profile){
 var minLength = 3;
 var maxLength = 7;
 var oncoProb = 0.5;
-var nrOfPersons = 10;
+var nrOfPersons = 5;
 var minPatDay = 2; //3
 var maxPatDay = 3; //5
 var maxChemoLength = 3;
