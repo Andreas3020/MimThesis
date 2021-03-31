@@ -70,7 +70,6 @@ function renderAgenda()
           }  
         } 
         else { //Not end of row, so no </tr> needed)
-          console.log("Dag i: " + i + " & row/hourslot: " + j + " & OC k: " + k);
           //Slot is AVAILABLE
           if(slotsTakenArray[weekNr][4*i + 28*j+k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
@@ -223,6 +222,7 @@ function endGame() {
   });
   stDevVariance = stDevVariance/varianceArray.length;
   stDevVariance = Math.sqrt(stDevVariance);
+  
   console.log(appointmentSpeed);
 
   console.log(avgVariance);
@@ -281,8 +281,7 @@ function addSelectedSlot() {
     if (addSelectVar == 4)
     {
       yellow();
-      console.log("jabajajaja")
-      console.log(currentPatientObject);
+    
       let prevHourSlot = getSlotNrFromId(currentPatientObject.lastSelectedSlotId)[1];
       let hourSlot;
       
@@ -343,8 +342,45 @@ function addSelectedSlot() {
       
       red();
 
-      let todaySlot;
+      threeLogic();
       
+      // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
+      addSelectVar = checkPatientsPerDay();
+
+      let currentPatientId;
+      //Keeps being 3 if todayPatientArray is empty in checkPatientsPerDay() netPatient() gets called;
+      if(addSelectVar === 0) { 
+        currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
+        currentPatientObject = Patient.list[currentPatientId];
+        available = currentPatientObject.availability;
+      }
+    }
+    else if (addSelectVar === 2){
+      alert("You already scheduled this last patient. Game ended."); 
+    }
+
+    if (addSelectVar === 4)
+    {
+      fourLogic();
+    } 
+  }
+  //NOT NEW PATIENT?
+  else {
+    yellow();
+    let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
+    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
+    available = [weekdays[dayNr]];
+    console.log("available updated after notNewPatient: " + available);
+    //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
+    tableBody.rows[1].cells[3].innerHTML = available[0];
+  }
+  
+  IdSelectedSlot = -1;
+}
+
+function threeLogic()
+{
+  let todaySlot; 
       //fill todayPatientsarray 
       for(let j=0; j<20; j++) 
       {
@@ -366,25 +402,12 @@ function addSelectedSlot() {
       
       //Check which patients of todayPatientsArray fail bloodtest. Update array.
       testBloodPatients();
-      
-      // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
-      addSelectVar = checkPatientsPerDay();
 
-      let currentPatientId;
-      if(addSelectVar === 3) { 
-        currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
-        currentPatientObject = Patient.list[currentPatientId];
-        available = currentPatientObject.availability;
-      }
-    }
-    else if (addSelectVar === 2){
-      alert("You already scheduled this last patient. Game ended."); 
-    }
+}
 
-    if (addSelectVar === 4)
-    {
-    
-      let id = todayPatientsArray[0];
+function fourLogic()
+{
+  let id = todayPatientsArray[0];
       currentPatientObject = Patient.list[id];
       tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
       tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
@@ -411,29 +434,15 @@ function addSelectedSlot() {
       
       todayPatientsArray.splice(0, 1);
       
-      currentPatientObject.weekNrFirstSelectedSlot += 1;      
-    } 
-  }
-  //NOT NEW PATIENT?
-  else {
-    yellow();
-    let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
-    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
-    available = [weekdays[dayNr]];
-    console.log("available updated after notNewPatient: " + available);
-    //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
-    tableBody.rows[1].cells[3].innerHTML = available[0];
-  }
-  
-  IdSelectedSlot = -1;
+      currentPatientObject.weekNrFirstSelectedSlot += 1; 
 }
-
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay() {
 
   //bloodTest failed patients need to be scheduled
   if(todayPatientsArray.length > 0)
   { 
+    console.log("slmkdfjqmslfkj")
     return 4;
   }
   else if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
@@ -881,6 +890,7 @@ function printNewRange() {
     tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + (range)*28;
     tempSlotId = getSlotIdFromNr(tempSlotNr);
     slotsToAddArray.push(tempSlotId); //add ids to array that have to be added to slotstakenArray after pressing next
+    
     document.getElementById(tempSlotId).classList.add("slotsCurrent");
   }
 
@@ -941,10 +951,21 @@ function skipPatient() {
 
   addSelectVar = checkPatientsPerDay();
 
-  if (addSelectVar == 3)
+  if (addSelectVar === 3)
   {
-    addSelectVar = nextPatientEvent();
+    threeLogic();
+    console.log("3scenario");
+    console.log(addSelectVar);
+    addSelectVar = checkPatientsPerDay();
+    console.log(addSelectVar);
   }
+  if(addSelectVar === 4)
+  { 
+    console.log("4scenario")
+    fourLogic();
+  }
+
+
   //NOT LAST PATIENT
   if(addSelectVar != 2) {
     skippedPatientsCounter += 1;
@@ -959,7 +980,7 @@ function skipPatient() {
   else { //addSelectVar  >= 1 
     endGame();
   }
-  console.log("Atm " + skippedPatientsCounter + " patients are skipped and hence, not scheduled.");
+ 
 }
 
 //Check day, row (hourslot) and slot based on id (Dx_Hy_OCz)
@@ -1016,3 +1037,5 @@ available = currentPatientObject.availability;
 console.log("1st available read from currentPatientObject: " + available);
 
 var startTime = performance.now();
+
+console.log(Patient.list);

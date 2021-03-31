@@ -49,3 +49,61 @@ h1{
     display: inline-block; 
     padding: 4.5%;
 }
+
+.individualScores{
+    text-align: center;
+}
+
+.individualScores h2{
+    margin-top: 3%;
+    margin-bottom: 1%;
+}
+
+.difficulty{
+    display: flex;
+    justify-content: center;
+    margin: 1%;
+    padding: 10px;
+}
+
+.difficulty label{
+    padding-left: 1%;
+    padding-right: 1%;
+    font-size: 15pt;
+}
+
+.difficulty input{
+    margin-right: 4px;
+}
+
+.tableDiv{
+   display: flex;
+   justify-content: center;
+}
+
+.resultTable{
+    text-align: center;
+    margin: 5px;
+    border: 2px solid rgb(20, 20, 20);
+    border-collapse: collapse;
+    background-color: rgb(31, 171, 231);
+    font-size: 11pt;
+    margin-bottom: 100px;
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+  
+.resultTable th {
+    font-size: 14pt;
+    background-color: rgb(29, 141, 176);
+    border: 2px solid rgb(20, 20, 20);
+    padding: 5px;
+    color: white;
+}
+
+.resultTable td {
+    font-size: 11pt;
+    background-color: rgb(31, 171, 231);
+    border: 2px solid rgb(20, 20, 20);
+    padding: 5px;
+}

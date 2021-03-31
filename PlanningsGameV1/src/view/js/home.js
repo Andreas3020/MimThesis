@@ -58,7 +58,7 @@ function startGame(){
    }
 
   //get the data of the specific room and load them into the local storage
-  database.child(roomName).child("Patient lists").child(level).once('value', function(snapshot) {
+  database.child(roomName).child("patients").child(level).once('value', function(snapshot) {
     let patients = Object.values(snapshot.val());
     let keys = Object.keys(snapshot.val()); 
 
@@ -66,6 +66,6 @@ function startGame(){
     localStorage["patientTable"] = patientTableString;
 
     //go the the game
-    window.location.href = "agenda.html";
+    window.location.href = "agendaNew.html";
   });
 }

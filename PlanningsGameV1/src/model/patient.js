@@ -74,7 +74,15 @@ Patient.generate = function() {
     tempAvailability.sort(sortDays);
 
     [tempOnco, tempChemo] = allocateTempOncoAndChemo();
-    tempChemoLength = getRandomInt(minLength,maxLength);
+    if(tempChemo !== 0)
+    {
+      tempChemoLength = getRandomInt(minLength,maxLength);
+    }
+    else
+    {
+      tempChemoLength = 0;
+    }
+    
 
    // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
 
@@ -83,7 +91,7 @@ Patient.generate = function() {
     
     tempWeekNrFirstSelectedSlot = -1;
     //Create patient/Write to list
-    Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot});
+    Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot, lastSelectedSlotId: -1});
   }
 
   //Save patient list (JSONstringify) to localStorage (patientTable)

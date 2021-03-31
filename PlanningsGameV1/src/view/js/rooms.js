@@ -77,12 +77,14 @@ function addRoom(){
           
           //Generate patient list and send them to the database
           Patient.generate();
-          database.child(roomName).child("Patient lists").child("Easy").set(Patient.genList);
+          Patient.loadAll();
+          database.child(roomName).child("patients").child("Easy").set(Patient.genList);
           Patient.generate();
-          database.child(roomName).child("Patient lists").child("Moderate").set(Patient.genList);
+          Patient.loadAll();
+          database.child(roomName).child("patients").child("Moderate").set(Patient.genList);
           Patient.generate();
-          database.child(roomName).child("Patient lists").child("Hard").set(Patient.genList);
-          //database.child(users).child('r0679809').set('Game 1', '');
+          Patient.loadAll();
+          database.child(roomName).child("patients").child("Hard").set(Patient.genList);
           generateStats(roomName);
       }        
     });
