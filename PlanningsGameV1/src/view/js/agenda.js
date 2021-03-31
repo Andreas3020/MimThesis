@@ -371,7 +371,7 @@ function addSelectedSlot() {
       addSelectVar = checkPatientsPerDay();
 
       let currentPatientId;
-      if(addSelectVar === 3) { 
+      if(addSelectVar === 0) { 
         currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
         currentPatientObject = Patient.list[currentPatientId];
         available = currentPatientObject.availability;

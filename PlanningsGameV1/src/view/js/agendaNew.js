@@ -814,7 +814,7 @@ function checkSlotsAvailable(slotNr, chemoLength) {
       slotsAvailableBool = 0;
       break;
     }
-    else if(slotsTakenArray[weekNr][tempSlotNr] != false) {
+    else if(slotsTakenArray[weekNr][tempSlotNr] !== false) {
       window.alert("Selection of slot(s) not available. Remember the range of slots you need is " + lengthSelectedSlot);
       slotsAvailableBool = 0;
       break;

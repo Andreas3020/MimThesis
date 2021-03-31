@@ -12,7 +12,6 @@ let todayNr = 0;
 let IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
 let lengthSelectedSlot = -1;
 let weekNrFirstSelectedSlot = -1;
-let weekNrFirstSelectedSlotTemp = -1;
 let oncoSlotOC = -1;
 let slotsTakenArray = [];     //De agenda met gereserveerde slots (alle weken)
 let slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
@@ -29,7 +28,7 @@ let scenario;
 
 let addSelectVar;
 
-let probBloodFailEasy = 0.0;
+let probBloodFailEasy = 0.5;
 
 let available = [];
 let appointmentSpeedArray = [];
@@ -666,7 +665,7 @@ function addEventlistenerSlots()
           else if(nrOncoAppointments >= 1 && nrChemoAppointments >= 2) {
             
             //SCHEDULE ONCO
-            if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML) {
+            if(tableBody.rows[1].cells[5].innerHTML === tableBody.rows[1].cells[7].innerHTML) {
               lengthSelectedSlot = 1;
               scenario = "onco";
               //CHEMO SELECTED (ONCO NEEDED)
@@ -675,7 +674,7 @@ function addEventlistenerSlots()
               else {
                 oncoSlotOC = slotNr;
                 //1st time O&C
-                if(weekNrFirstSelectedSlot == -1) {
+                if(weekNrFirstSelectedSlot === -1) {
                   //SLOT(S) AVAILABLE?
                   if(checkSlotsAvailable(slotNr, cLength) === 1) {
                     //SLOT(S) AANDUIDEN
@@ -880,10 +879,8 @@ function resetPatient() {
   
   //RESET VARIABLES
   IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
-  
   slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
   slotsToAddArray = [];     //Huidige selectie eventListener
-  weekNrFirstSelectedSlotTemp = -1;
   available = currentPatientObject.availability;
   //patientListTuto[currentPatientObject.patientID].availabilityChosen = [];
   tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
@@ -972,6 +969,8 @@ function getSlotIdFromNr(slotNummer) {
   let id = "D" + day +"_" + "H" + hour +"_" + "OC" + oncoChemo;
   return id;
 }
+
+function getRandomFloat(min, max) { return min + Math.random() * (max - min); }
 
 //GENERATE 1ST WEEK ARRAY
 addWeekToArray();
