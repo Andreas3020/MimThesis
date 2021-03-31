@@ -1,7 +1,7 @@
 //VARIABLES
 let weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 let weekdaysShort = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-let hours = ["8:00","8:30","9:00","9:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30"];
+let hours = ["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"];
 
 /* Week being displayed (may be past, future or current week)
 Week 1: weekNr = 0. Array convenience for coding. (the displayed week, not actual weekNr) */
@@ -47,7 +47,7 @@ function renderAgenda()
   let greyedOutString="";
 
   //GENERATE AGENDA BODY (hour column + slots)
-  for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS
+  for(let j=0; j<hours.length; j++) { //10x ROWS - HOUR SLOTS
     core += `<tr>`;
     core += `<th> ${hours[j]} </th>`;   //E.g. <th>8:00</th>
 
@@ -56,30 +56,30 @@ function renderAgenda()
       else if (currentWeek > weekNr)  { greyedOutString = "greyedOutSlot"; } 
       else                            { greyedOutString = ""; }
 
-      for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
-        if(i == 6 && k == 3) {  //End of row => add </tr>
+      for (let k=0; k<3; k++) { //x ONCOCHEMO (1 onco + 2 chemo)
+        if(i == 6 && k == 2) {  //End of row => add </tr>
           //Slot is AVAILABLE
-          if(slotsTakenArray[weekNr][4*i + 28*j +k] === false) {
+          if(slotsTakenArray[weekNr][3*i + 21*j +k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`;
           }  //Slot is CURRENTLY SELECTED   
-          else if( slotsTakenArray[weekNr][4*i + 28*j +k].length === 12) {
+          else if( slotsTakenArray[weekNr][3*i + 21*j +k].length === 12) {
             core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td> </tr>`;
           }  //SLot is TAKEN/UNAVAILABLE
           else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][4*i + 28*j +k]}</td> </tr>`;
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][3*i + 21*j +k]}</td> </tr>`;
           }  
         } 
         else { //Not end of row, so no </tr> needed)
-          console.log("Dag i: " + i + " & row/hourslot: " + j + " & OC k: " + k);
+          //console.log("Dag i: " + i + " & row/hourslot: " + j + " & OC k: " + k);
           //Slot is AVAILABLE
-          if(slotsTakenArray[weekNr][4*i + 28*j+k] === false) {
+          if(slotsTakenArray[weekNr][3*i + 21*j+k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
           } //Slot is CURRENTLY SELECTED   
-          else if( slotsTakenArray[weekNr][4*i + 28*j +k].length === 12) {
+          else if( slotsTakenArray[weekNr][3*i + 21*j +k].length === 12) {
             core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td>`;
           } //Slot is TAKEN/UNAVAILABLE
           else {  
-            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][4*i + 28*j +k]}</td>`; 
+            core += `<td class="${weekdaysShort[i]} slotTaken ${greyedOutString}" id="D${i}_H${j}_OC${k}"> ${slotsTakenArray[weekNr][3*i + 21*j +k]}</td>`; 
           }
         }
       }    
@@ -196,7 +196,7 @@ function addWeekToArray() {
   slotsTakenArray.push([]);
 
   //FILL WEEK SLOTS WITH FALSE (available)
-  for (let i=0; i<=559; i++){    
+  for (let i=0; i<=209; i++){    
     slotsTakenArray[weekNr].push(false);
   } 
 }
@@ -223,11 +223,9 @@ function endGame() {
   });
   stDevVariance = stDevVariance/varianceArray.length;
   stDevVariance = Math.sqrt(stDevVariance);
-  console.log(appointmentSpeed);
-
-  console.log(avgVariance);
-  
-  console.log(stDevVariance);
+  //console.log(appointmentSpeed);
+  //console.log(avgVariance);
+  //console.log(stDevVariance);
 
   let endTime = performance.now();
   //Performance returns uSec! /1000 gives Seconds.
@@ -273,7 +271,7 @@ function addSelectedSlot() {
   }
  
   currentPatientObject.weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
-  Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
+  patientListTuto[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
  
   //NEW PATIENT?
   if(tableBody.rows[1].cells[7].innerHTML == 0) {
@@ -281,33 +279,27 @@ function addSelectedSlot() {
     if (addSelectVar == 4)
     {
       yellow();
-      console.log("jabajajaja")
-      console.log(currentPatientObject);
+      //console.log(currentPatientObject);
       let prevHourSlot = getSlotNrFromId(currentPatientObject.lastSelectedSlotId)[1];
       let hourSlot;
       
       if(currentPatientObject.chemo > 0 &&  currentPatientObject.onco > 0)
       {
         hourSlot = getSlotNrFromId(slotsCurrentArray[1][1])[1];
-        Patient.list[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[1][1];
+        patientListTuto[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[1][1];
 
       }
       else
       {
         hourSlot = getSlotNrFromId(slotsCurrentArray[0][1])[1];
-        Patient.list[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[0][1];
+        patientListTuto[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[0][1];
       }
-      console.log("hourslot" + hourSlot);
-      console.log("prevHourslot" + prevHourSlot);
 
       let variance = hourSlot - prevHourSlot;
       let varianceAbs = Math.abs(variance);
       varianceArray.push(varianceAbs);
       
       //currentPatientObject.lastSelectedSlotId = slotsCurrentArray[slotsCurrentArray.length -1][1];
-      
-      console.log("varianceAraay");
-      console.log(varianceArray);
       
       
       red();
@@ -325,9 +317,7 @@ function addSelectedSlot() {
       
       red();
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
-      console.log("currentPatientId");
-      console.log(currentPatientId);
-      currentPatientObject = Patient.list[currentPatientId];
+      currentPatientObject = patientListTuto[currentPatientId];
       available = currentPatientObject.availability;
       
       //LAST PATIENT - END GAME
@@ -346,15 +336,15 @@ function addSelectedSlot() {
       let todaySlot;
       
       //fill todayPatientsarray 
-      for(let j=0; j<20; j++) 
+      for(let j=0; j<10; j++) 
       {
-        for (let k=0; k<4; k++) 
+        for (let k=0; k<3; k++) 
         {
-          todaySlot = slotsTakenArray[currentWeek][4*todayNr +28*j +k]
+          todaySlot = slotsTakenArray[currentWeek][3*todayNr +21*j +k]
           if (todaySlot !== false)
           {
             //onco's blood can't fail
-            if (Patient.list[todaySlot].chemo > 0)
+            if (patientListTuto[todaySlot].chemo > 0)
             {
               todayPatientsArray.push(todaySlot);
             }
@@ -373,7 +363,7 @@ function addSelectedSlot() {
       let currentPatientId;
       if(addSelectVar === 3) { 
         currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
-        currentPatientObject = Patient.list[currentPatientId];
+        currentPatientObject = patientListTuto[currentPatientId];
         available = currentPatientObject.availability;
       }
     }
@@ -385,7 +375,7 @@ function addSelectedSlot() {
     {
     
       let id = todayPatientsArray[0];
-      currentPatientObject = Patient.list[id];
+      currentPatientObject = patientListTuto[id];
       tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
       tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
       tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
@@ -398,7 +388,7 @@ function addSelectedSlot() {
       {
         tableBody.rows[1].cells[5].innerHTML = 1;
       }
-      tableBody.rows[1].cells[6].innerHTML = Patient.list[id].chemo;
+      tableBody.rows[1].cells[6].innerHTML = patientListTuto[id].chemo;
       if (currentPatientObject.chemo>0)
       {
         tableBody.rows[1].cells[7].innerHTML = 1;
@@ -418,10 +408,8 @@ function addSelectedSlot() {
   else {
     yellow();
     let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
-    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
     available = [weekdays[dayNr]];
-    console.log("available updated after notNewPatient: " + available);
-    //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
+    //patientListTuto[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
     tableBody.rows[1].cells[3].innerHTML = available[0];
   }
   
@@ -436,7 +424,7 @@ function checkPatientsPerDay() {
   { 
     return 4;
   }
-  else if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
+  else if(patientListTuto[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
   {
     //Go to the next day or if at the end of the week and the next week
     if(todayNr < 6) {
@@ -472,11 +460,8 @@ function checkPatientsPerDay() {
   }
   else {
     calculateAppointmentSpeed();
-    console.log("appointmentSpeed" );
-    console.log( appointmentSpeedArray);
 
-    Patient.list[currentPatientObject.patientID].availability = available;
-    console.log("Updated cpo availability to 1 day (before the next person will be fetched)");
+    patientListTuto[currentPatientObject.patientID].availability = available;
     
     return nextPatientEvent();
   }
@@ -495,17 +480,17 @@ function testBloodPatients()
 {
   for( var i = 0; i < todayPatientsArray.length; i++){ 
     // check and remove patient if bloodtest does not fail
-    let probBloodFail = Patient.list[todayPatientsArray[i]].probBloodFail;
+    let probBloodFail = patientListTuto[todayPatientsArray[i]].probBloodFail;
     if ( probBloodFail < probBloodFailEasy){     
         //change propability that bloodtest fails next time
         let num = getRandomFloat(0,1).toFixed(2);   
-        Patient.list[todayPatientsArray[i]].probBloodFail = num;    
+        patientListTuto[todayPatientsArray[i]].probBloodFail = num;    
         todayPatientsArray.splice(i, 1); 
         i--; 
     }
     else{
       //change propability that bloodtest fails next time
-      Patient.list[todayPatientsArray[i]].probBloodFail = getRandomFloat(0,1).toFixed(3);   
+      patientListTuto[todayPatientsArray[i]].probBloodFail = getRandomFloat(0,1).toFixed(3);   
     }  
   }
 }
@@ -580,13 +565,7 @@ function addToVarianceArray()
     varianceArray.push(varianceAbs);
   }
   
-  Patient.list[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[slotsCurrentArray.length - currentPatientObject.chemoLength][1];
-  console.log(currentPatientObject);
-  console.log(Patient.list[currentPatientObject.patientID]);
-
-
-  console.log("varianceArray");
-      console.log(varianceArray);
+  patientListTuto[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[slotsCurrentArray.length - currentPatientObject.chemoLength][1];
 }
 
 function addEventlistenerSlots() 
@@ -607,8 +586,6 @@ function addEventlistenerSlots()
       
       weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
 
-      //console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
-
       //SLOT NOT UNAVAILABLE
       if(slotsTakenArray[weekNr][slotNr] === false)
       {
@@ -617,10 +594,8 @@ function addEventlistenerSlots()
         //Check availability
         let patientAvailable = 0;
         for(let avail = 0; avail < available.length; avail++) {
-          console.log("DayNr: " + weekdays[dayNr] + " availability CuPatObj: " + available[avail]);
           if(weekdays[dayNr] === available[avail]) { patientAvailable = 1; break; }
         }
-        console.log("patientAvailable: " + patientAvailable);
 
         //PATIENT NOT AVAILABLE
         if(patientAvailable === 0) { alert("Patient is not available this weekday."); }
@@ -743,7 +718,7 @@ function addEventlistenerSlots()
                   //SLOT(S) AVAILABLE?
                   if(checkSlotsAvailable(slotNr) === 1) {
                     //MINIMUM 4 BLOCKS AFTER ONCO?
-                    if(slotNr >= oncoSlotOC+5*28  ) {
+                    if(slotNr >= oncoSlotOC+3*21  ) {
                       //SLOT(S) AANDUIDEN
                       updateSlotsSelected(event);
                     }
@@ -775,8 +750,8 @@ function addEventlistenerSlots()
       else {
         //----------SHOW SLOT PATIENT INFO--------------//
         const tableRight = document.getElementById('patientTableSlotinfo');
-        console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
-        let patientObj = Patient.list[slotsTakenArray[weekNr][slotNr]];     //let toegevoegd!
+        //console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
+        let patientObj = patientListTuto[slotsTakenArray[weekNr][slotNr]];     //let toegevoegd!
         tableRight.rows[1].cells[0].innerHTML = patientObj.patientID;
         tableRight.rows[1].cells[1].innerHTML = patientObj.firstName;
         tableRight.rows[1].cells[2].innerHTML = patientObj.lastName;
@@ -798,9 +773,9 @@ function checkSlotsAvailable(slotNr, chemoLength) {
   //REGULAR CHECK
   for(let range = lengthSelectedSlot; range > 0; range--) {
     //De duur (verschillende vakjes) aanspreken (1 per doorlopen for loop)
-    let tempSlotNr = slotNr + (range-1)*28;
+    let tempSlotNr = slotNr + (range-1)*21;
 
-    if(tempSlotNr > 559) { 
+    if(tempSlotNr > 209) { 
       alert("Appointment would fall outside working hours!");
       slotsAvailableBool = 0;
       break;
@@ -815,13 +790,10 @@ function checkSlotsAvailable(slotNr, chemoLength) {
   //EXTRA CHECK FOR O&C (Planning onco and chemo yet to come. So 4 + length/range space needed)
   if(slotsAvailableBool === 1) {
     if(chemoLength !== undefined) {
-      console.log("chemoLength:" + chemoLength);
-      let slotNummerke = slotNr + (5*28);
-      console.log("slotNummerke: " + slotNummerke);
+      let slotNummerke = slotNr + (3*21);
       for(let lengte = 0; lengte < chemoLength; lengte++) {
-        let temp = slotNummerke + lengte*28;
-        console.log("temp: " + temp + "met lengte: " + lengte);
-        if(temp > 559) { 
+        let temp = slotNummerke + lengte*21;
+        if(temp > 209) { 
           alert("Attention! This onco slot is not useful. You won't be able to schedule the chemo session. Considering minimum 2 hours time interval between onco & chemo session is required, the chemo appointment would fall outside working hours.");
           slotsAvailableBool = 0;
           break;
@@ -867,7 +839,7 @@ function removeOldRange() {
   let NrSelectedSlot = getSlotNrFromId(IdSelectedSlot.toString())[3];
 
   for(let range = lengthSelectedSlot; range > 0; range--) {
-    tempSlotNr = NrSelectedSlot + (range-1)*28;
+    tempSlotNr = NrSelectedSlot + (range-1)*21;
     tempSlotId = getSlotIdFromNr(tempSlotNr);
     document.getElementById(tempSlotId).classList.remove("slotsCurrent");
   }
@@ -878,7 +850,7 @@ function printNewRange() {
   let tempSlotNr = ""; let tempSlotId = "";
   for (let range = 0; range < lengthSelectedSlot; range ++)
   {
-    tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + (range)*28;
+    tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + (range)*21;
     tempSlotId = getSlotIdFromNr(tempSlotNr);
     slotsToAddArray.push(tempSlotId); //add ids to array that have to be added to slotstakenArray after pressing next
     document.getElementById(tempSlotId).classList.add("slotsCurrent");
@@ -913,7 +885,7 @@ function resetPatient() {
   slotsToAddArray = [];     //Huidige selectie eventListener
   weekNrFirstSelectedSlotTemp = -1;
   available = currentPatientObject.availability;
-  //Patient.list[currentPatientObject.patientID].availabilityChosen = [];
+  //patientListTuto[currentPatientObject.patientID].availabilityChosen = [];
   tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
   //oncoSlotOC = -1;
   //lengthSelectedSlot = -1;
@@ -924,7 +896,7 @@ function resetPatient() {
   if(addSelectVar != 4)
   {
     currentPatientObject.weekNrFirstSelectedSlot = -1;
-    Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = -1;
+    patientListTuto[currentPatientObject.patientID].weekNrFirstSelectedSlot = -1;
     tableLeft.rows[1].cells[5].innerHTML = tableLeft.rows[1].cells[4].innerHTML
     tableLeft.rows[1].cells[7].innerHTML = tableLeft.rows[1].cells[6].innerHTML
     
@@ -951,7 +923,7 @@ function skipPatient() {
 
     //SAVE NEW PATIENT TO CURRENTPATIENTOBJECT
     let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
-    currentPatientObject = Patient.list[currentPatientId];
+    currentPatientObject = patientListTuto[currentPatientId];
 
     IdSelectedSlot = -1;
     
@@ -971,7 +943,7 @@ function getSlotNrFromId(slotId) {
   let dayNr = parseInt(dayStr.split("D")[1],10);
   let hourSlot = parseInt(hourSlotStr.split("H")[1],10);
   let oncoChemoNr = parseInt(oncoChemoStr.split("OC")[1],10);
-  let slotNr = 4*dayNr + 28*hourSlot  + oncoChemoNr;
+  let slotNr = 3*dayNr + 21*hourSlot  + oncoChemoNr;
   return [dayNr, hourSlot, oncoChemoNr, slotNr];
 }
 
@@ -982,20 +954,20 @@ function getSlotIdFromNr(slotNummer) {
 
   if(slotNummer != 0) {
     //Get decimals from float
-    let temp = (((slotNummer/28) % 1).toFixed(3));
+    let temp = (((slotNummer/21) % 1).toFixed(3));
 
     //DETERMINE DAY
-    if(temp < 0.11) { day = 0;}
-    else if(temp < 0.26) { day = 1;}
-    else if(temp < 0.40) { day = 2;}
-    else if(temp < 0.54) { day = 3;}
-    else if(temp < 0.68) { day = 4;}
-    else if(temp < 0.83) { day = 5;}
+    if(temp < 0.10) { day = 0;}
+    else if(temp < 0.24) { day = 1;}
+    else if(temp < 0.39) { day = 2;}
+    else if(temp < 0.53) { day = 3;}
+    else if(temp < 0.67) { day = 4;}
+    else if(temp < 0.81) { day = 5;}
     else { day = 6;}
 
     //DETERMINE HOURSLOT
-    hour = Math.floor(slotNummer/28);
-    oncoChemo = slotNummer - 4*day - 28*hour;
+    hour = Math.floor(slotNummer/21);
+    oncoChemo = slotNummer - 3*day - 21*hour;
   }
   let id = "D" + day +"_" + "H" + hour +"_" + "OC" + oncoChemo;
   return id;
@@ -1007,11 +979,8 @@ addWeekToArray();
 //RENDER AGENDA 1ST TIME
 renderAgenda();
 
-// with this we can acces patient.list
-Patient.loadAll();
-
 //Initialise current patient object
-currentPatientObject = Patient.list[0];
+currentPatientObject = patientListTuto[0];
 available = currentPatientObject.availability;
 console.log("1st available read from currentPatientObject: " + available);
 
