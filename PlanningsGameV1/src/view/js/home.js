@@ -37,11 +37,11 @@ database.child(roomName).child("users").child(rnumber).once('value', function(sn
     tableBody = document.getElementById('resultTable');
     row = tableBody.insertRow();
     row.insertCell(0).textContent = scores[i]["difficulty"];
-    row.insertCell(1).textContent = scores[i]["skipped patients"];
-    row.insertCell(2).textContent = scores[i]["avg appintment variance"];
-    row.insertCell(3).textContent = scores[i]["avg appointment difference"];
-    row.insertCell(4).textContent = scores[i]["avg first appointment time"];
-    row.insertCell(5).textContent = scores[i]["completion time"];
+    row.insertCell(1).textContent = scores[i]["skippedPatients"];
+    row.insertCell(2).textContent = scores[i]["avgAppDev"];
+    row.insertCell(3).textContent = scores[i]["avgAppDiff"];
+    row.insertCell(4).textContent = scores[i]["avgAppSpeed"];
+    row.insertCell(5).textContent = scores[i]["time"]+"min";
   } 
 });
 
@@ -62,8 +62,11 @@ function startGame(){
     let patients = Object.values(snapshot.val());
     let keys = Object.keys(snapshot.val()); 
 
-    patientTableString = JSON.stringify(patients);
+    let patientTableString = JSON.stringify(patients);
     localStorage["patientTable"] = patientTableString;
+
+    let difficultyJString = JSON.stringify(level);
+    localStorage["difficulty"] = difficultyJString;
 
     //go the the game
     window.location.href = "agendaNew.html";

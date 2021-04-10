@@ -5,72 +5,85 @@ var varianceListE, varianceListM, varianceListH;
 var avgDifferenceListE, avgDifferenceListM, avgDifferenceListH;
 var appointementSpeedListE, appointementSpeedListM, appointementSpeedListH;
 var timeListE, timeListM, timeListH;
+let roomNameJString;
+var roomName;
+var userList;
 
+try {
+  if (localStorage["roomName"]) {
+    roomNameJString = localStorage["roomName"];
+  }
+} catch (e) {
+  alert("Error when reading from Local Storage\n" + e);
+}
+
+if(roomNameJString){
+  roomName = JSON.parse( roomNameJString);
+}
 
 function getStat(){
-    database.once('value', function(snapshot) {
-        let roomList = Object.keys(snapshot.val());
-        let nrOfRooms = roomList.length;
+  database.once('value', function(snapshot) {
+    let roomList = Object.keys(snapshot.val());
+    let nrOfRooms = roomList.length;
 
-        if(nrOfRooms>0){
-            roomName = roomList[0];
-            //skipped patients lists
-            database.child(roomName).child("statistics").child("skippedPatients").child("easy").on('value', function(snapshot){
-              skippedPatientsListE = Object.values(snapshot.val());
-            });
+    if(nrOfRooms>0){
+        //skipped patients lists
+        database.child(roomName).child("statistics").child("skippedPatients").child("easy").once('value', function(snapshot){
+          skippedPatientsListE = Object.values(snapshot.val());
+        });
 
-            database.child(roomName).child("statistics").child("skippedPatients").child("moderate").on('value', function(snapshot){
-              skippedPatientsListM = Object.values(snapshot.val());
-            });
+        database.child(roomName).child("statistics").child("skippedPatients").child("moderate").once('value', function(snapshot){
+          skippedPatientsListM = Object.values(snapshot.val());
+        });
 
-            database.child(roomName).child("statistics").child("skippedPatients").child("hard").on('value', function(snapshot){
-              skippedPatientsListH = Object.values(snapshot.val());
-            });
+        database.child(roomName).child("statistics").child("skippedPatients").child("hard").once('value', function(snapshot){
+          skippedPatientsListH = Object.values(snapshot.val());
+        });
 
-            //variance lists
-            database.child(roomName).child("statistics").child("variance").child("easy").child("variance").on('value', function(snapshot){
-                varianceListE = Object.values(snapshot.val());
-            });
-            database.child(roomName).child("statistics").child("variance").child("easy").child("avgDifference").on('value', function(snapshot){
-                avgDifferenceListE = Object.values(snapshot.val());
-            });
+        //variance lists
+        database.child(roomName).child("statistics").child("variance").child("easy").child("variance").once('value', function(snapshot){
+            varianceListE = Object.values(snapshot.val());
+        });
+        database.child(roomName).child("statistics").child("variance").child("easy").child("avgDifference").once('value', function(snapshot){
+            avgDifferenceListE = Object.values(snapshot.val());
+        });
 
-            database.child(roomName).child("statistics").child("variance").child("moderate").child("variance").on('value', function(snapshot){
-              varianceListM = Object.values(snapshot.val());
-            });
-            database.child(roomName).child("statistics").child("variance").child("moderate").child("avgDifference").on('value', function(snapshot){
-              avgDifferenceListM = Object.values(snapshot.val());
-            });
+        database.child(roomName).child("statistics").child("variance").child("moderate").child("variance").once('value', function(snapshot){
+          varianceListM = Object.values(snapshot.val());
+        });
+        database.child(roomName).child("statistics").child("variance").child("moderate").child("avgDifference").once('value', function(snapshot){
+          avgDifferenceListM = Object.values(snapshot.val());
+        });
 
-            database.child(roomName).child("statistics").child("variance").child("hard").child("variance").on('value', function(snapshot){
-              varianceListH = Object.values(snapshot.val());
-            });
-            database.child(roomName).child("statistics").child("variance").child("hard").child("avgDifference").on('value', function(snapshot){
-              avgDifferenceListH = Object.values(snapshot.val());
-            });
+        database.child(roomName).child("statistics").child("variance").child("hard").child("variance").once('value', function(snapshot){
+          varianceListH = Object.values(snapshot.val());
+        });
+        database.child(roomName).child("statistics").child("variance").child("hard").child("avgDifference").once('value', function(snapshot){
+          avgDifferenceListH = Object.values(snapshot.val());
+        });
 
-            //appointment speed lists
-            database.child(roomName).child("statistics").child("appointmentSpeed").child("easy").on('value', function(snapshot){
-                appointementSpeedListE = Object.values(snapshot.val());
-            });
-            database.child(roomName).child("statistics").child("appointmentSpeed").child("moderate").on('value', function(snapshot){
-              appointementSpeedListM = Object.values(snapshot.val());
-            });
-            database.child(roomName).child("statistics").child("appointmentSpeed").child("hard").on('value', function(snapshot){
-              appointementSpeedListH = Object.values(snapshot.val());
-            });
+        //appointment speed lists
+        database.child(roomName).child("statistics").child("appointmentSpeed").child("easy").once('value', function(snapshot){
+            appointementSpeedListE = Object.values(snapshot.val());
+        });
+        database.child(roomName).child("statistics").child("appointmentSpeed").child("moderate").once('value', function(snapshot){
+          appointementSpeedListM = Object.values(snapshot.val());
+        });
+        database.child(roomName).child("statistics").child("appointmentSpeed").child("hard").once('value', function(snapshot){
+          appointementSpeedListH = Object.values(snapshot.val());
+        });
 
-            //completion time lists
-            database.child(roomName).child("statistics").child("time").child("easy").on('value', function(snapshot){
-              timeListE = Object.values(snapshot.val());
-            });
-            database.child(roomName).child("statistics").child("time").child("moderate").on('value', function(snapshot){
-              timeListM = Object.values(snapshot.val());
-            });
-            database.child(roomName).child("statistics").child("time").child("hard").on('value', function(snapshot){
-              timeListH = Object.values(snapshot.val());
-              createChart();
-            });
+        //completion time lists
+        database.child(roomName).child("statistics").child("time").child("easy").once('value', function(snapshot){
+          timeListE = Object.values(snapshot.val());
+        });
+        database.child(roomName).child("statistics").child("time").child("moderate").once('value', function(snapshot){
+          timeListM = Object.values(snapshot.val());
+        });
+        database.child(roomName).child("statistics").child("time").child("hard").once('value', function(snapshot){
+          timeListH = Object.values(snapshot.val());
+          createChart();
+        });
 
         }
     });
@@ -727,17 +740,68 @@ function createChart(){
       });
 }
 
-function addData(){
-  database.child("Room: Andreas").child("statistics").child("skippedPatients").child("easy").once('value', function(snapshot) {
-    let skippedEasyList = Object.keys(snapshot.val());
-    let nrOfPatients = skippedEasyList.length;
-    let lastPatient = nrOfPatients.toString();
-    console.log(lastPatient);
-    database.child("Room: Andreas").child("statistics").child("skippedPatients").child("easy").update({[lastPatient]: 5});
-    console.log(skippedPatientsListE);
+function update(){
+  getStat();
+  
+  database.child(roomName).child("users").once('value', function(snapshot){
+    if(snapshot.val()){
+      userList = snapshot.val();
+    }
+  }).then(function onSuccess() {
+    generateRanking();
   });
 }
 
-function updateChart(){
-  createChart();
+function generateRanking(){
+  let keys = Object.keys(userList);
+  let level = document.getElementById("difficulty").value;
+  let evaluationList = document.getElementsByName("evaluation");
+  let evaluation;
+  for (let i = 0; i < evaluationList.length; i++) {
+    if(evaluationList[i].checked){
+      evaluation = evaluationList[i]
+    }
+  }
+
+  var rankingList = [];
+  
+  for(let i = 0; i < keys.length; i++){
+    var gameList = userList[keys[i]]; 
+    var diffGameList = [];
+
+    for(let j = 0; j < gameList.length; j++){
+      if(gameList[j].difficulty == level){
+        gameList[j].rnumber = keys[i];
+        diffGameList[diffGameList.length] = gameList[j];
+      }
+    }
+
+    diffGameList.sort(function(a,b){
+      return parseFloat(a.avgAppDiff) - parseFloat(b.avgAppDiff);
+    });
+    rankingList[rankingList.length] = diffGameList[0]; 
+  }
+
+  rankingList.sort(function(a,b){
+    return a[evaluation] - b[evaluation];
+  });
+
+  const table = document.getElementById("resultTable");
+
+  for(let i = 1; i < table.rows.length; i++){
+    table.deleteRow(i);
+  }
+
+  if(rankingList[0]){
+    for (let i = 0; i < rankingList.length; i++) {
+      let row = table.insertRow();
+      row.insertCell(0).textContent = i+1;
+      row.insertCell(1).textContent = rankingList[i].rnumber;
+      row.insertCell(2).textContent = rankingList[i].skippedPatients;
+      row.insertCell(3).textContent = rankingList[i].avgAppDev;
+      row.insertCell(4).textContent = rankingList[i].avgAppDiff;
+      row.insertCell(5).textContent = rankingList[i].avgAppSpeed;
+      row.insertCell(6).textContent = rankingList[i].time;
+    }
+  }
 }

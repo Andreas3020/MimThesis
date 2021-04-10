@@ -78,13 +78,13 @@ function addRoom(){
           //Generate patient list and send them to the database
           Patient.generate();
           Patient.loadAll();
-          database.child(roomName).child("patients").child("Easy").set(Patient.genList);
+          database.child(roomName).child("patients").child("Easy").set(Patient.list);
           Patient.generate();
           Patient.loadAll();
-          database.child(roomName).child("patients").child("Moderate").set(Patient.genList);
+          database.child(roomName).child("patients").child("Moderate").set(Patient.list);
           Patient.generate();
           Patient.loadAll();
-          database.child(roomName).child("patients").child("Hard").set(Patient.genList);
+          database.child(roomName).child("patients").child("Hard").set(Patient.list);
           generateStats(roomName);
       }        
     });
@@ -152,21 +152,13 @@ function enterRoom(roomName){
     clearUserPop()
     
     // save the username in the database
-    let patientTableJString = JSON.stringify(roomName);
-    localStorage["roomName"] = patientTableJString;
+    let roomNameJString = JSON.stringify(roomName);
+    localStorage["roomName"] = roomNameJString;
 
     let rnumberJString = JSON.stringify(rnumber);
     localStorage["rnumber"] = rnumberJString;
 
-    //check if username already exists (mag helemaal weg behalve referentie want zolang er geen gegevens in een rnummer zitten wil je dit ook niet bijhouden)
-    database.child(roomName).child("users").once('value', function(snapshot) {
-
-      database.child(roomName).child("users").child(rnumber).child(snapshot.numChildren()).set({'difficulty': "Easy", 'skipped patients': 3, 'avg appintment variance': 1.9, 'avg appointment difference': 2.3, 'avg first appointment time': 4, 'completion time': 33}).then(function onSuccess() {
-        window.location.href = "home.html";
-      });
-    });
-
-    
+    window.location.href = "home.html";    
   }
   else{
     let userErr = document.getElementById("userErr")
@@ -296,7 +288,9 @@ function generateStats(roomName){
   database.child(roomName).child("statistics").child("time").child("hard").set(randomListH);
 }
 
-function roomStats(){
+function roomStats(roomName){
+  let roomNameJString = JSON.stringify(roomName);
+  localStorage["roomName"] = roomNameJString;
   window.location.href = "statistics.html";
 }
 
