@@ -12,7 +12,6 @@ let todayNr = 0;
 let IdSelectedSlot = -1;  //Indicate whether currenly a slot is selected.
 let lengthSelectedSlot = -1;
 let weekNrFirstSelectedSlot = -1;
-let weekNrFirstSelectedSlotTemp = -1;
 let oncoSlotOC = -1;
 let slotsTakenArray = [];     //De agenda met gereserveerde slots (alle weken)
 let slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
@@ -70,6 +69,7 @@ function renderAgenda()
           }  
         } 
         else { //Not end of row, so no </tr> needed)
+
           //Slot is AVAILABLE
           if(slotsTakenArray[weekNr][4*i + 28*j+k] === false) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
@@ -222,11 +222,8 @@ function endGame() {
   });
   stDevVariance = stDevVariance/varianceArray.length;
   stDevVariance = Math.sqrt(stDevVariance);
-  
   console.log(appointmentSpeed);
-
   console.log(avgVariance);
-  
   console.log(stDevVariance);
 
   let endTime = performance.now();
@@ -296,17 +293,12 @@ function addSelectedSlot() {
         hourSlot = getSlotNrFromId(slotsCurrentArray[0][1])[1];
         Patient.list[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[0][1];
       }
-      console.log("hourslot" + hourSlot);
-      console.log("prevHourslot" + prevHourSlot);
 
       let variance = hourSlot - prevHourSlot;
       let varianceAbs = Math.abs(variance);
       varianceArray.push(varianceAbs);
       
       //currentPatientObject.lastSelectedSlotId = slotsCurrentArray[slotsCurrentArray.length -1][1];
-      
-      console.log("varianceAraay");
-      console.log(varianceArray);
       
       
       red();
@@ -324,8 +316,6 @@ function addSelectedSlot() {
       
       red();
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
-      console.log("currentPatientId");
-      console.log(currentPatientId);
       currentPatientObject = Patient.list[currentPatientId];
       available = currentPatientObject.availability;
       
@@ -348,7 +338,6 @@ function addSelectedSlot() {
       addSelectVar = checkPatientsPerDay();
 
       let currentPatientId;
-      //Keeps being 3 if todayPatientArray is empty in checkPatientsPerDay() netPatient() gets called;
       if(addSelectVar === 0) { 
         currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
         currentPatientObject = Patient.list[currentPatientId];

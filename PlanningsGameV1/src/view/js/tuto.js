@@ -332,35 +332,13 @@ function addSelectedSlot() {
       
       red();
 
-      let todaySlot;
-      
-      //fill todayPatientsarray 
-      for(let j=0; j<10; j++) 
-      {
-        for (let k=0; k<3; k++) 
-        {
-          todaySlot = slotsTakenArray[currentWeek][3*todayNr +21*j +k]
-          if (todaySlot !== false)
-          {
-            //onco's blood can't fail
-            if (patientListTuto[todaySlot].chemo > 0)
-            {
-              todayPatientsArray.push(todaySlot);
-            }
-          }
-        }
-      }
-      // only keep the unique patients in the array
-      todayPatientsArray = todayPatientsArray.filter(onlyUnique);
-      
-      //Check which patients of todayPatientsArray fail bloodtest. Update array.
-      testBloodPatients();
+      threeLogic();
       
       // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
       addSelectVar = checkPatientsPerDay();
 
       let currentPatientId;
-      if(addSelectVar === 3) { 
+      if(addSelectVar === 0) { 
         currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
         currentPatientObject = patientListTuto[currentPatientId];
         available = currentPatientObject.availability;
@@ -372,35 +350,7 @@ function addSelectedSlot() {
 
     if (addSelectVar === 4)
     {
-    
-      let id = todayPatientsArray[0];
-      currentPatientObject = patientListTuto[id];
-      tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
-      tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
-      tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
-      tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
-      tableBody.rows[1].cells[4].innerHTML = currentPatientObject.onco;
-
-      available = currentPatientObject.availability;
-
-      if (currentPatientObject.onco>0)
-      {
-        tableBody.rows[1].cells[5].innerHTML = 1;
-      }
-      tableBody.rows[1].cells[6].innerHTML = patientListTuto[id].chemo;
-      if (currentPatientObject.chemo>0)
-      {
-        tableBody.rows[1].cells[7].innerHTML = 1;
-      } 
-      tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
-
-        setTimeout(function() {
-          alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
-        },15)
-      
-      todayPatientsArray.splice(0, 1);
-      
-      currentPatientObject.weekNrFirstSelectedSlot += 1;      
+      fourLogic();     
     } 
   }
   //NOT NEW PATIENT?
@@ -413,6 +363,65 @@ function addSelectedSlot() {
   }
   
   IdSelectedSlot = -1;
+}
+
+function threeLogic()
+{
+  let todaySlot; 
+      //fill todayPatientsarray 
+      for(let j=0; j<20; j++) 
+      {
+        for (let k=0; k<4; k++) 
+        {
+          todaySlot = slotsTakenArray[currentWeek][4*todayNr +28*j +k]
+          if (todaySlot !== false)
+          {
+            //onco's blood can't fail
+            if (Patient.list[todaySlot].chemo > 0)
+            {
+              todayPatientsArray.push(todaySlot);
+            }
+          }
+        }
+      }
+      // only keep the unique patients in the array
+      todayPatientsArray = todayPatientsArray.filter(onlyUnique);
+      
+      //Check which patients of todayPatientsArray fail bloodtest. Update array.
+      testBloodPatients();
+
+}
+
+function fourLogic()
+{
+  let id = todayPatientsArray[0];
+      currentPatientObject = Patient.list[id];
+      tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
+      tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
+      tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
+      tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
+      tableBody.rows[1].cells[4].innerHTML = currentPatientObject.onco;
+
+      available = currentPatientObject.availability;
+
+      if (currentPatientObject.onco>0)
+      {
+        tableBody.rows[1].cells[5].innerHTML = 1;
+      }
+      tableBody.rows[1].cells[6].innerHTML = Patient.list[id].chemo;
+      if (currentPatientObject.chemo>0)
+      {
+        tableBody.rows[1].cells[7].innerHTML = 1;
+      } 
+      tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
+
+        setTimeout(function() {
+          alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
+        },15)
+      
+      todayPatientsArray.splice(0, 1);
+      
+      currentPatientObject.weekNrFirstSelectedSlot += 1; 
 }
 
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
