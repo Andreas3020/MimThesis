@@ -281,8 +281,7 @@ function addSelectedSlot() {
     if (addSelectVar == 4)
     {
       yellow();
-      console.log("jabajajaja")
-      console.log(currentPatientObject);
+      (currentPatientObject);
       let prevHourSlot = getSlotNrFromId(currentPatientObject.lastSelectedSlotId)[1];
       let hourSlot;
       
@@ -297,17 +296,12 @@ function addSelectedSlot() {
         hourSlot = getSlotNrFromId(slotsCurrentArray[0][1])[1];
         Patient.list[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[0][1];
       }
-      console.log("hourslot" + hourSlot);
-      console.log("prevHourslot" + prevHourSlot);
 
       let variance = hourSlot - prevHourSlot;
       let varianceAbs = Math.abs(variance);
       varianceArray.push(varianceAbs);
       
       //currentPatientObject.lastSelectedSlotId = slotsCurrentArray[slotsCurrentArray.length -1][1];
-      
-      console.log("varianceAraay");
-      console.log(varianceArray);
       
       
       red();
@@ -343,30 +337,8 @@ function addSelectedSlot() {
       
       red();
 
-      let todaySlot;
+      threeLogic();
 
-      //fill todayPatientsarray
-      for(let j=0; j<20; j++)
-      {
-        for (let k=0; k<6; k++)
-        {
-          todaySlot = slotsTakenArray[currentWeek][6*todayNr +42*j +k]
-          if (todaySlot !== false)
-          {
-            //onco's blood can't fail
-            if (Patient.list[todaySlot].chemo > 0)
-            {
-              todayPatientsArray.push(todaySlot);
-            }
-          }
-        }
-      }
-      // only keep the unique patients in the array
-      todayPatientsArray = todayPatientsArray.filter(onlyUnique);
-      
-      //Check which patients of todayPatientsArray fail bloodtest. Update array.
-      testBloodPatients();
-      
       // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
       addSelectVar = checkPatientsPerDay();
 
@@ -383,8 +355,53 @@ function addSelectedSlot() {
 
     if (addSelectVar === 4)
     {
-    
-      let id = todayPatientsArray[0];
+      fourLogic(); 
+    }
+  }
+  //NOT NEW PATIENT?
+  else {
+    yellow();
+    let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
+    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
+    available = [weekdays[dayNr]];
+    console.log("available updated after notNewPatient: " + available);
+    //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
+    tableBody.rows[1].cells[3].innerHTML = available[0];
+  }
+
+  IdSelectedSlot = -1;
+}
+
+function threeLogic()
+{
+  let todaySlot; 
+      //fill todayPatientsarray 
+      for(let j=0; j<20; j++) 
+      {
+        for (let k=0; k<4; k++) 
+        {
+          todaySlot = slotsTakenArray[currentWeek][4*todayNr +28*j +k]
+          if (todaySlot !== false)
+          {
+            //onco's blood can't fail
+            if (Patient.list[todaySlot].chemo > 0)
+            {
+              todayPatientsArray.push(todaySlot);
+            }
+          }
+        }
+      }
+      // only keep the unique patients in the array
+      todayPatientsArray = todayPatientsArray.filter(onlyUnique);
+      
+      //Check which patients of todayPatientsArray fail bloodtest. Update array.
+      testBloodPatients();
+
+}
+
+function fourLogic()
+{
+  let id = todayPatientsArray[0];
       currentPatientObject = Patient.list[id];
       tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
       tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
@@ -406,30 +423,13 @@ function addSelectedSlot() {
       tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
 
         setTimeout(function() {
-          let s = 'Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!';
-          showBloodtestFail(s);
-          // alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
+          alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
         },15)
       
       todayPatientsArray.splice(0, 1);
       
-      currentPatientObject.weekNrFirstSelectedSlot += 1;      
-    } 
-  }
-  //NOT NEW PATIENT?
-  else {
-    yellow();
-    let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
-    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
-    available = [weekdays[dayNr]];
-    console.log("available updated after notNewPatient: " + available);
-    //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
-    tableBody.rows[1].cells[3].innerHTML = available[0];
-  }
-
-  IdSelectedSlot = -1;
+      currentPatientObject.weekNrFirstSelectedSlot += 1; 
 }
-
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay() {
 
