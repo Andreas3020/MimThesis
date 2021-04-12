@@ -58,9 +58,13 @@ function renderAgenda()
       for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
         if(i == 6 && k == 3) {  //End of row => add </tr>
           //Slot is AVAILABLE
-          if(slotsTakenArray[weekNr][4*i + 28*j +k] === false) {
+          if(slotsTakenArray[weekNr][4*i + 28*j+k] === false || (slotsTakenArray[weekNr][4*i + 28*j +k] === "grey" && greyedOutString === "greyedOutSlotToday")) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td> </tr>`;
-          }  //Slot is CURRENTLY SELECTED   
+          }  //Slot is CURRENTLY SELECTED 
+          else if (slotsTakenArray[weekNr][4*i + 28*j +k] === "grey" && greyedOutString !== "greyedOutSlotToday")
+          {
+            core += `<td class="${weekdaysShort[i]} greyedOutSlot" id="D${i}_H${j}_OC${k}"></td> </tr>`;
+          }  
           else if( slotsTakenArray[weekNr][4*i + 28*j +k].length === 12) {
             core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td> </tr>`;
           }  //SLot is TAKEN/UNAVAILABLE
@@ -71,9 +75,13 @@ function renderAgenda()
         else { //Not end of row, so no </tr> needed)
 
           //Slot is AVAILABLE
-          if(slotsTakenArray[weekNr][4*i + 28*j+k] === false) {
+          if(slotsTakenArray[weekNr][4*i + 28*j+k] === false || (slotsTakenArray[weekNr][4*i + 28*j +k] === "grey" && greyedOutString === "greyedOutSlotToday") ) {
             core += `<td class="${weekdaysShort[i]} ${greyedOutString}" id="D${i}_H${j}_OC${k}"></td>`;
-          } //Slot is CURRENTLY SELECTED   
+          } //Slot is CURRENTLY SELECTED 
+          else if (slotsTakenArray[weekNr][4*i + 28*j +k] === "grey") 
+          {
+            core += `<td class="${weekdaysShort[i]} greyedOutSlot" id="D${i}_H${j}_OC${k}"></td>`;
+          }   
           else if( slotsTakenArray[weekNr][4*i + 28*j +k].length === 12) {
             core += `<td class="${weekdaysShort[i]} slotsCurrent ${greyedOutString}" id="D${i}_H${j}_OC${k}">${currentPatientObject.patientID}</td>`;
           } //Slot is TAKEN/UNAVAILABLE
@@ -199,7 +207,26 @@ function addWeekToArray() {
     slotsTakenArray[weekNr].push(false);
   } 
 }
+function addFirstWeeksToArray(firstWeeksNr) {
+  //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
+  slotsTakenArray.push([]);
 
+  //FILL WEEK SLOTS WITH FALSE (available)
+  for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+    for (let i=0; i<7; i++) { //7x DAYS                           
+      for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+          if((j < 6 && k > 1 )|| j>12 && (k == 1 || k ==2))
+            {
+              slotsTakenArray[firstWeeksNr].push("grey");
+            } 
+            else
+            {
+              slotsTakenArray[firstWeeksNr].push(false);
+            }
+          }
+        }
+      }
+}
 
 function endGame() {
 
@@ -436,7 +463,7 @@ function threeLogic()
         for (let k=0; k<4; k++) 
         {
           todaySlot = slotsTakenArray[currentWeek][4*todayNr +28*j +k]
-          if (todaySlot !== false)
+          if (todaySlot !== false && todaySlot !=="grey")
           {
             //onco's blood can't fail
             if (Patient.list[todaySlot].chemo > 0)
@@ -1072,7 +1099,8 @@ function getSlotIdFromNr(slotNummer) {
 }
 
 //GENERATE 1ST WEEK ARRAY
-addWeekToArray();
+addFirstWeeksToArray(0);
+addFirstWeeksToArray(1);
 
 //RENDER AGENDA 1ST TIME
 renderAgenda();
