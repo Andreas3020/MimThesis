@@ -28,7 +28,7 @@ let scenario;
 
 let addSelectVar;
 
-let probBloodFailEasy = 0.0;
+let probBloodFailEasy = 0.7;
 
 let available = [];
 let appointmentSpeedArray = [];

@@ -14,14 +14,16 @@ function Patient(profile){
 };
 
 
-var minLength = 3;
-var maxLength = 7;
-var oncoProb = 0.5;
-var nrOfPersons = 5;
+var minLength = 5;
+var maxLength = 8;
+var oncoProb = 0.7;
+var nrOfPersons = 50;
 var minPatDay = 2; //3
-var maxPatDay = 3; //5
+var maxPatDay = 4; //5
 var maxChemoLength = 3;
-var nrOfAvailableDays = 3;
+var nrOfAvailableDays;// = 3;
+var availableOneProb = 0.2;
+var availableTwoProb = 0.6;
 
 Patient.genList = {};
 Patient.list = {};
@@ -61,6 +63,20 @@ Patient.generate = function() {
     if(flipCoin()) { tempFname = firstNameFemale[getRandomInt(0, firstNameFemale.length)];}
     else { tempFname = firstNameMale[getRandomInt(0, firstNameMale.length)];}
     tempLname = lastName[getRandomInt(0, lastName.length)];
+
+    //Generate a random nr of available days
+    let availableProb = Math.random();
+    console.log("prob: "+ availableProb);
+    if(availableProb < availableOneProb){
+      nrOfAvailableDays = 1;
+    }
+    else if(availableProb < availableTwoProb){
+      nrOfAvailableDays = 2;
+    }
+    else{
+      nrOfAvailableDays = 3;
+    }
+    console.log(nrOfAvailableDays);
 
     //GENERATE AVAILABILITY
     for(let loop = 0; loop < nrOfAvailableDays; loop++) {
