@@ -28,7 +28,7 @@ let scenario;
 
 let addSelectVar;
 
-let probBloodFailEasy = 0.7;
+let probBloodFailEasy = 0.7; // deze wil ik in patient.js zetten
 
 let available = [];
 let appointmentSpeedArray = [];
@@ -1111,8 +1111,6 @@ Patient.loadAll();
 //Initialise current patient object
 currentPatientObject = Patient.list[0];
 available = currentPatientObject.availability;
-console.log("1st available read from currentPatientObject: " + available);
 
 var startTime = performance.now();
 
-console.log(Patient.list);

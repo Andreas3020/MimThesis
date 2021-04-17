@@ -79,9 +79,11 @@ function addRoom(){
           Patient.generate();
           Patient.loadAll();
           database.child(roomName).child("patients").child("Easy").set(Patient.list);
+          Patient.Moderate();
           Patient.generate();
           Patient.loadAll();
           database.child(roomName).child("patients").child("Moderate").set(Patient.list);
+          Patient.Hard();
           Patient.generate();
           Patient.loadAll();
           database.child(roomName).child("patients").child("Hard").set(Patient.list);

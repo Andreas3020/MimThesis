@@ -13,7 +13,6 @@ function Patient(profile){
   this.lastSelectedSlotId = profile.lastSelectedSlotId;
 };
 
-
 var minLength = 5;
 var maxLength = 8;
 var oncoProb = 0.7;
@@ -38,6 +37,32 @@ var lastName =
 const weekdagen = ["Monday", "Tuesday","Wednesday","Thursday", "Friday","Saturday","Sunday"];
 var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
+
+Patient.Moderate = function(){
+  minLength = 5;
+  maxLength = 8;
+  oncoProb = 0.6;
+  nrOfPersons = 50;
+  minPatDay = 2; //3
+  maxPatDay = 4; //5
+  maxChemoLength = 3;
+  nrOfAvailableDays;// = 3;
+  availableOneProb = 0.3;
+  availableTwoProb = 0.7;
+}
+
+Patient.Hard = function(){
+  minLength = 5;
+  maxLength = 8;
+  oncoProb = 0.6;
+  nrOfPersons = 50;
+  minPatDay = 2; //3
+  maxPatDay = 4; //5
+  maxChemoLength = 3;
+  nrOfAvailableDays;// = 3;
+  availableOneProb = 0.4;
+  availableTwoProb = 0.8;
+}
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
 var nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
