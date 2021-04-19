@@ -241,40 +241,81 @@ function addWeekToArray() {
   slotsTakenArray.push([]);
 
   //FILL WEEK SLOTS WITH FALSE (available) AND GREY (unavailable)
-  for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
-    for (let i=0; i<7; i++) { //7x DAYS                           
-      for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
-          if( j>15 && k == 0 )
-            {
-              slotsTakenArray[weekNr].push("grey");
-            } 
-            else
-            {
-              slotsTakenArray[weekNr].push(false);
+  if(difficulty == "Easy")
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if( j>15 && k == 0 )
+              {
+                slotsTakenArray[weekNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[weekNr].push(false);
+              }
             }
           }
         }
-      }
+  }
+  else
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if( (j>15 && k == 0) || (j<2 && (k >0) ) )
+              {
+                slotsTakenArray[weekNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[weekNr].push(false);
+              }
+            }
+          }
+        }
+  }
 }
 function addFirstWeeksToArray(firstWeeksNr) {
   //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
   slotsTakenArray.push([]);
 
   //FILL WEEK SLOTS WITH FALSE (available) AND GREY (unavailable)
-  for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
-    for (let i=0; i<7; i++) { //7x DAYS                           
-      for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
-          if((j < 6 && k > 1 )|| j>12 && (k == 1 || k ==2) || (j>15 && k == 0) )
-            {
-              slotsTakenArray[firstWeeksNr].push("grey");
-            } 
-            else
-            {
-              slotsTakenArray[firstWeeksNr].push(false);
+  if(difficulty == "Easy")
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if((j < 6 && k > 1 )|| j>12 && (k == 1 || k ==2) || (j>15 && k == 0) )
+              {
+                slotsTakenArray[firstWeeksNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[firstWeeksNr].push(false);
+              }
             }
           }
         }
-      }
+  }
+  else
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if( (j < 6 && k > 1 )|| j>12 && (k == 1 || k ==2) || (j>15 && k == 0) || (j<2 && (k >0) ))
+              {
+                slotsTakenArray[firstWeeksNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[firstWeeksNr].push(false);
+              }
+            }
+          }
+        }
+  }
+
 }
 
 function endGame() {
