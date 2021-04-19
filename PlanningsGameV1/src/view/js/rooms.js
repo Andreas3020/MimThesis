@@ -76,6 +76,7 @@ function addRoom(){
           rButton.innerHTML += `<div class="addDelStatButton"><button class="delStat" type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button class="delStat" type="button" onClick="roomStats(\'${roomName}\')">Statistics</button></div>`;
           
           //Generate patient list and send them to the database
+          Patient.Easy();
           Patient.generate();
           Patient.loadAll();
           database.child(roomName).child("patients").child("Easy").set(Patient.list);

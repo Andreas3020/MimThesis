@@ -174,6 +174,28 @@ function checkDay(i, greyedOutString)
   }
 }
 
+shortcut.add("left", function() {
+  if(weekNr > 0) {
+    weekNr -= 1;
+    renderAgenda();
+  } else { console.log("Can't move further back than week 1!");}
+},{
+'type':'keydown',
+'propagate':true,
+'target':document
+}); 
+shortcut.add("right", function() {
+  weekNr += 1;
+  if(weekNr+1 > slotsTakenArray.length){
+    addWeekToArray();
+  }
+  renderAgenda();
+},{
+'type':'keydown',
+'propagate':true,
+'target':document
+});   
+
 //CHANGE WEEK - EVENTLISTENERS (previous + next)
 document.querySelector(".prev").addEventListener("click", () => {
   if(weekNr > 0) {
