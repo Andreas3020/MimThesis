@@ -198,3 +198,16 @@ function createAvg(){
   row.insertCell(5).textContent = avgTimeHard;
   
 }
+
+function clearPopup(){
+  const popUpPass = document.getElementById("instructionPopUp");
+  popUpPass.style.display = "none";
+
+ 
+}
+
+function patientInformation(){
+  const popUp = document.getElementById("instructionPopUp");
+  popUp.style.display = "flex";
+  
+}
