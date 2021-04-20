@@ -319,8 +319,6 @@ function addSelectedSlot() {
       
       red();
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
-      console.log("currentPatientId");
-      console.log(currentPatientId);
       currentPatientObject = Patient.list[currentPatientId];
       available = currentPatientObject.availability;
       
@@ -362,9 +360,7 @@ function addSelectedSlot() {
   else {
     yellow();
     let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
-    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
     available = [weekdays[dayNr]];
-    console.log("available updated after notNewPatient: " + available);
     //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
     tableBody.rows[1].cells[3].innerHTML = available[0];
   }
@@ -474,11 +470,9 @@ function checkPatientsPerDay() {
   }
   else {
     calculateAppointmentSpeed();
-    console.log("appointmentSpeed" );
-    console.log( appointmentSpeedArray);
 
     Patient.list[currentPatientObject.patientID].availability = available;
-    console.log("Updated cpo availability to 1 day (before the next person will be fetched)");
+
     
     return nextPatientEvent();
   }
@@ -582,12 +576,6 @@ function addToVarianceArray()
   }
   
   Patient.list[currentPatientObject.patientID].lastSelectedSlotId = slotsCurrentArray[slotsCurrentArray.length - currentPatientObject.chemoLength][1];
-  console.log(currentPatientObject);
-  console.log(Patient.list[currentPatientObject.patientID]);
-
-
-  console.log("varianceArray");
-      console.log(varianceArray);
 }
 
 function addEventlistenerSlots()
@@ -618,10 +606,8 @@ function addEventlistenerSlots()
         //Check availability
         let patientAvailable = 0;
         for(let avail = 0; avail < available.length; avail++) {
-          console.log("DayNr: " + weekdays[dayNr] + " availability CuPatObj: " + available[avail]);
           if(weekdays[dayNr] === available[avail]) { patientAvailable = 1; break; }
         }
-        console.log("patientAvailable: " + patientAvailable);
 
         //PATIENT NOT AVAILABLE
         if(patientAvailable === 0) { alert("Patient is not available this weekday."); }
@@ -787,7 +773,6 @@ function addEventlistenerSlots()
       else {
         //----------SHOW SLOT PATIENT INFO--------------//
         const tableRight = document.getElementById('patientTableSlotinfo');
-        console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
         let patientObj = Patient.list[slotsTakenArray[weekNr][slotNr]];     //let toegevoegd!
         tableRight.rows[1].cells[0].innerHTML = patientObj.patientID;
         tableRight.rows[1].cells[1].innerHTML = patientObj.firstName;
@@ -830,12 +815,9 @@ function checkSlotsAvailable(slotNr, chemoLength) {
   //EXTRA CHECK FOR O&C (Planning onco and chemo yet to come. So 4 + length/range space needed)
   if(slotsAvailableBool === 1) {
     if(chemoLength !== undefined) {
-      console.log("chemoLength:" + chemoLength);
       let slotNummerke = slotNr + (5*42);
-      console.log("slotNummerke: " + slotNummerke);
       for(let lengte = 0; lengte < chemoLength; lengte++) {
         let temp = slotNummerke + lengte*42;
-        console.log("temp: " + temp + "met lengte: " + lengte);
         if(temp > 839) {
           showUselesSlot();
           // alert("Attention! Chemo will fall outside working hours with this onco slot");
@@ -1225,6 +1207,6 @@ Patient.loadAll();
 //Initialise current patient object
 currentPatientObject = Patient.list[0];
 available = currentPatientObject.availability;
-console.log("1st available read from currentPatientObject: " + available);
+
 
 var startTime = performance.now();

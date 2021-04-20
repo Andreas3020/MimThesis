@@ -307,6 +307,6 @@ function generateStats(roomName){
 function roomStats(roomName){
   let roomNameJString = JSON.stringify(roomName);
   localStorage["roomName"] = roomNameJString;
-  window.location.href = "statistics.html";
+  window.location.href = "statisticsBug.html";
 }
 
