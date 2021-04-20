@@ -23,6 +23,7 @@ var maxChemoLength;
 var nrOfAvailableDays;
 var availableOneProb;
 var availableTwoProb;
+var nrPatientsCurrentDay;
 
 Patient.genList = {};
 Patient.list = {};
@@ -48,7 +49,10 @@ Patient.Easy = function(){
   maxChemoLength = 3;
   nrOfAvailableDays;// = 3;
   availableOneProb = 0.2;
-  availableTwoProb = 0.6;// hier bloedtest nog toevoegen
+  availableTwoProb = 0.6;
+  //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)    
+  nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
+  // hier bloedtest nog toevoegen
 }
 
 Patient.Moderate = function(){
@@ -62,6 +66,8 @@ Patient.Moderate = function(){
   nrOfAvailableDays;// = 3;
   availableOneProb = 0.2;
   availableTwoProb = 0.6;
+  //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)    
+  nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
   // hier bloedtest nog toevoegen
 }
 
@@ -76,11 +82,12 @@ Patient.Hard = function(){
   nrOfAvailableDays;// = 3;
   availableOneProb = 0.4;
   availableTwoProb = 0.8;
+  //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)    
+  nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
   // hier bloedtest vaker laten falen
 }
 
-//AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)
-var nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
+
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
 Patient.generate = function() {
