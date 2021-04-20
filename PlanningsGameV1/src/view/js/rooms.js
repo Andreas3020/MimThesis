@@ -47,49 +47,60 @@ function nameRoom(){
 }
 
 function addRoom(){
-  const roomErr2 = document.getElementById("roomErr2");
   const roomErr1 = document.getElementById("roomErr1");
+  const roomErr2 = document.getElementById("roomErr2");
+  const roomErr3 = document.getElementById("roomErr3");
   let name = document.getElementById("rname").value;
   let roomName = "Room: ";
   roomName += name;
 
   if(name == ""){
     roomErr2.style.display = "none";
+    roomErr3.style.display = "none";
     roomErr1.style.display = "block";
   }
   else{
-    database.once('value', function(snapshot) {
-      if(snapshot.hasChild(roomName)){
-        //const roomErr1 = document.getElementById("roomErr1");
-        roomErr1.style.display = "none";
-        roomErr2.style.display = "block";
-      }
-      else{
-          //hide the pop-up again
-          clearNamePop();
-        
-          //Make the room button 
-          const htmlRooms = document.getElementById("rooms");
-          htmlRooms.innerHTML +=`<div class ="roomButtonDiv" id="${roomName}"><button class="roomButton" onClick="rnumberPop(\'${roomName}\')">${roomName}</button></div>`;
-        
-          const rButton = document.getElementById(roomName);
-          rButton.innerHTML += `<div class="addDelStatButton"><button class="delStat" type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button class="delStat" type="button" onClick="roomStats(\'${roomName}\')">Statistics</button></div>`;
+    if(name.includes("/")==false && name.includes("[")==false && name.includes("]")==false && name.includes(".") == false && name.includes("$")==false && name.includes("#")==false){
+      database.once('value', function(snapshot) {
+        if(snapshot.hasChild(roomName)){
+          //const roomErr1 = document.getElementById("roomErr1");
+          roomErr1.style.display = "none";
+          roomErr3.style.display = "none";
+          roomErr2.style.display = "block";
+        }
+        else{
+            //hide the pop-up again
+            clearNamePop();
           
-          //Generate patient list and send them to the database
-          Patient.generate();
-          Patient.loadAll();
-          database.child(roomName).child("patients").child("Easy").set(Patient.list);
-          Patient.Moderate();
-          Patient.generate();
-          Patient.loadAll();
-          database.child(roomName).child("patients").child("Moderate").set(Patient.list);
-          Patient.Hard();
-          Patient.generate();
-          Patient.loadAll();
-          database.child(roomName).child("patients").child("Hard").set(Patient.list);
-          generateStats(roomName);
-      }        
-    });
+            //Make the room button 
+            const htmlRooms = document.getElementById("rooms");
+            htmlRooms.innerHTML +=`<div class ="roomButtonDiv" id="${roomName}"><button class="roomButton" onClick="rnumberPop(\'${roomName}\')">${roomName}</button></div>`;
+          
+            const rButton = document.getElementById(roomName);
+            rButton.innerHTML += `<div class="addDelStatButton"><button class="delStat" type="button" onClick="confirmDel(\'${roomName}\')">Delete</button><button class="delStat" type="button" onClick="roomStats(\'${roomName}\')">Statistics</button></div>`;
+            
+            //Generate patient list and send them to the database
+            Patient.Easy();
+            Patient.generate();
+            Patient.loadAll();
+            database.child(roomName).child("patients").child("Easy").set(Patient.list);
+            Patient.Moderate();
+            Patient.generate();
+            Patient.loadAll();
+            database.child(roomName).child("patients").child("Moderate").set(Patient.list);
+            Patient.Hard();
+            Patient.generate();
+            Patient.loadAll();
+            database.child(roomName).child("patients").child("Hard").set(Patient.list);
+            generateStats(roomName);
+        }        
+      });
+    }
+    else{
+      roomErr1.style.display = "none";
+      roomErr2.style.display = "none";
+      roomErr3.style.display = "block";
+    }
   }
 }
 
@@ -105,6 +116,9 @@ function clearNamePop(){
 
   const roomErr2 = document.getElementById("roomErr2");
   roomErr2.style.display = "none";
+
+  const roomErr3 = document.getElementById("roomErr3");
+  roomErr3.style.display = "none";
 }
 
 function loadRooms(){

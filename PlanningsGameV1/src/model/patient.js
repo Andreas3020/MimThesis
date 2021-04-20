@@ -13,16 +13,16 @@ function Patient(profile){
   this.lastSelectedSlotId = profile.lastSelectedSlotId;
 };
 
-var minLength = 5;
-var maxLength = 8;
-var oncoProb = 0.7;
-var nrOfPersons = 50;
-var minPatDay = 2; //3
-var maxPatDay = 4; //5
-var maxChemoLength = 3;
-var nrOfAvailableDays;// = 3;
-var availableOneProb = 0.2;
-var availableTwoProb = 0.6;
+var minLength;
+var maxLength;
+var oncoProb;
+var nrOfPersons;
+var minPatDay; 
+var maxPatDay; 
+var maxChemoLength;
+var nrOfAvailableDays;
+var availableOneProb;
+var availableTwoProb;
 
 Patient.genList = {};
 Patient.list = {};
@@ -38,30 +38,45 @@ const weekdagen = ["Monday", "Tuesday","Wednesday","Thursday", "Friday","Saturda
 var onco = [0,1];
 var chemo = [0,2,3,4,5,6];  //Chemo: Niet, of periodisch tussen 2 tot 6 weken lang.
 
-Patient.Moderate = function(){
+Patient.Easy = function(){
   minLength = 5;
   maxLength = 8;
-  oncoProb = 0.6;
+  oncoProb = 0.7;
   nrOfPersons = 50;
   minPatDay = 2; //3
   maxPatDay = 4; //5
   maxChemoLength = 3;
   nrOfAvailableDays;// = 3;
-  availableOneProb = 0.3;
-  availableTwoProb = 0.7;
+  availableOneProb = 0.2;
+  availableTwoProb = 0.6;// hier bloedtest nog toevoegen
+}
+
+Patient.Moderate = function(){
+  minLength = 5;
+  maxLength = 8;
+  oncoProb = 0.7;
+  nrOfPersons = 50;
+  minPatDay = 2; //3
+  maxPatDay = 4; //5
+  maxChemoLength = 3;
+  nrOfAvailableDays;// = 3;
+  availableOneProb = 0.2;
+  availableTwoProb = 0.6;
+  // hier bloedtest nog toevoegen
 }
 
 Patient.Hard = function(){
   minLength = 5;
   maxLength = 8;
-  oncoProb = 0.6;
+  oncoProb = 0.8;
   nrOfPersons = 50;
-  minPatDay = 2; //3
+  minPatDay = 3; //3
   maxPatDay = 4; //5
   maxChemoLength = 3;
   nrOfAvailableDays;// = 3;
-  availableOneProb = 0.4;
+  availableOneProb = 0.3;
   availableTwoProb = 0.8;
+  // hier bloedtest vaker laten falen
 }
 
 //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)

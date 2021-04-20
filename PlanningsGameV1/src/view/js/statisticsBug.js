@@ -92,6 +92,69 @@ function getStat(){
 // Create the chart
 function createChart(){
   //so only 3 times a '9' and 4 times a '10'
+  let testArray = [0,0,0,1,1,1,1,1,2,2,3,3,4,4,4,4,5,5,6,6,6,6,7,7,7,8,8,8,8,8,9,9,9,10,10,10,10]
+
+  Highcharts.chart('test', {
+    title: {
+        text: 'test',
+        margin: 50,
+        style:{
+          fontWeight: "bold",
+        },
+    },
+
+    xAxis: [{
+        visible: false,
+    }, {
+        title: { 
+          text: 'test x',
+          style:{
+            fontWeight: "bold",
+          },
+        },
+        showLastLabel: true,
+    }],
+
+    yAxis: [{
+        visible: false
+    }, {
+      title: { 
+        text: 'test x',
+        style:{
+          fontWeight: "bold",
+        },
+      },
+    }],
+
+    plotOptions: {
+      series: {
+        borderWidth: 0,
+        pointPlacement: 'between',
+        dataLabels: {
+          enabled: true
+        },
+      },
+      histogram: {
+            binWidth: 1
+        }
+        
+    },
+
+    series: [{
+      name: 'Test',
+      type: 'histogram',
+      yaxis: 1,
+      xAxis: 1,
+      baseSeries: 'testSeries'
+    },
+    {
+      id: 'testSeries',
+      visible: false,
+      data: testArray
+    }]
+    });
+
+
     let avgSkippedEasy = Math.round(100*skippedPatientsListE.reduce((a, b) => a + b, 0)/skippedPatientsListE.length)/100;
     let avgSkippedModerate = Math.round(100*skippedPatientsListM.reduce((a, b) => a + b, 0)/skippedPatientsListM.length)/100;
     let avgSkippedHard = Math.round(100*skippedPatientsListH.reduce((a, b) => a + b, 0)/skippedPatientsListH.length)/100;

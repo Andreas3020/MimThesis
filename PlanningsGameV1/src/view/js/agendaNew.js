@@ -37,6 +37,22 @@ let varianceArray = [];
 let dayNrFirstSelectedSlot;
 let weekNrFirstForCalc;
 
+//get difficulty from local storage
+let difficultyJString;
+var difficulty;
+
+try {
+  if (localStorage["difficulty"]) {
+    difficultyJString = localStorage["difficulty"];
+  }
+} catch (e) {
+  alert("Error when reading from Local Storage\n" + e);
+}
+
+if(difficultyJString){
+  difficulty = JSON.parse( difficultyJString);
+}
+
 function renderAgenda()
 {
   /* tableCore = agenda body = hour legenda (left column) + slots (7days with each 6 slots (2 onco slots + 4 chemo slots). */
@@ -174,6 +190,28 @@ function checkDay(i, greyedOutString)
   }
 }
 
+shortcut.add("left", function() {
+  if(weekNr > 0) {
+    weekNr -= 1;
+    renderAgenda();
+  } else { console.log("Can't move further back than week 1!");}
+},{
+'type':'keydown',
+'propagate':true,
+'target':document
+}); 
+shortcut.add("right", function() {
+  weekNr += 1;
+  if(weekNr+1 > slotsTakenArray.length){
+    addWeekToArray();
+  }
+  renderAgenda();
+},{
+'type':'keydown',
+'propagate':true,
+'target':document
+});   
+
 //CHANGE WEEK - EVENTLISTENERS (previous + next)
 document.querySelector(".prev").addEventListener("click", () => {
   if(weekNr > 0) {
@@ -202,30 +240,82 @@ function addWeekToArray() {
   //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
   slotsTakenArray.push([]);
 
-  //FILL WEEK SLOTS WITH FALSE (available)
-  for (let i=0; i<=559; i++){    
-    slotsTakenArray[weekNr].push(false);
-  } 
+  //FILL WEEK SLOTS WITH FALSE (available) AND GREY (unavailable)
+  if(difficulty == "Easy")
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if( j>15 && k == 0 )
+              {
+                slotsTakenArray[weekNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[weekNr].push(false);
+              }
+            }
+          }
+        }
+  }
+  else
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if( (j>15 && k == 0) || (j<2 && (k >0) ) )
+              {
+                slotsTakenArray[weekNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[weekNr].push(false);
+              }
+            }
+          }
+        }
+  }
 }
 function addFirstWeeksToArray(firstWeeksNr) {
   //2D ARRAY. GENERATE WEEK ARRAY INSIDE MAIN ARRAY.
   slotsTakenArray.push([]);
 
-  //FILL WEEK SLOTS WITH FALSE (available)
-  for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
-    for (let i=0; i<7; i++) { //7x DAYS                           
-      for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
-          if((j < 6 && k > 1 )|| j>12 && (k == 1 || k ==2))
-            {
-              slotsTakenArray[firstWeeksNr].push("grey");
-            } 
-            else
-            {
-              slotsTakenArray[firstWeeksNr].push(false);
+  //FILL WEEK SLOTS WITH FALSE (available) AND GREY (unavailable)
+  if(difficulty == "Easy")
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if((j < 6 && k > 1 )|| j>12 && (k == 1 || k ==2) || (j>15 && k == 0) )
+              {
+                slotsTakenArray[firstWeeksNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[firstWeeksNr].push(false);
+              }
             }
           }
         }
-      }
+  }
+  else
+  {
+    for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS 
+      for (let i=0; i<7; i++) { //7x DAYS                           
+        for (let k=0; k<4; k++) { //4x ONCOCHEMO (1 onco + 3 chemo)
+            if( (j < 6 && k > 1 )|| j>12 && (k == 1 || k ==2) || (j>15 && k == 0) || (j<2 && (k >0) ))
+              {
+                slotsTakenArray[firstWeeksNr].push("grey");
+              } 
+              else
+              {
+                slotsTakenArray[firstWeeksNr].push(false);
+              }
+            }
+          }
+        }
+  }
+
 }
 
 function endGame() {
@@ -284,8 +374,7 @@ function endGame() {
   var roomName;
   let rnumberJString;
   var rnumber;
-  let difficultyJString;
-  var difficulty;
+  
   
   try {
     if (localStorage["roomName"]) {
@@ -311,17 +400,6 @@ function endGame() {
     rnumber = JSON.parse( rnumberJString);
   }
 
-  try {
-    if (localStorage["difficulty"]) {
-      difficultyJString = localStorage["difficulty"];
-    }
-  } catch (e) {
-    alert("Error when reading from Local Storage\n" + e);
-  }
-  
-  if(difficultyJString){
-    difficulty = JSON.parse( difficultyJString);
-  }
 
   database.child(roomName).child("users").child(rnumber).once('value', function(snapshot) {
     database.child(roomName).child("users").child(rnumber).child(snapshot.numChildren()).set({'difficulty': difficulty, 'skippedPatients': skippedPatientsCounter, 'avgAppDev': stDevVariance, 'avgAppDiff': avgVariance, 'avgAppSpeed': appointmentSpeed, 'time': gametimeMinutes});
