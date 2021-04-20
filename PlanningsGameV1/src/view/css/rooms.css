@@ -141,5 +141,7 @@ h1{
       color: red;
       display: none;
       background-color: transparent;
+      padding-top: 5px;
+      padding-bottom: 7px;
   }
   
