@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="src/view/css/home.css">
+  
   <title>Planning Game - Home</title>
 </head>
 
@@ -17,10 +18,10 @@
   <div class="homeBody">
     <div class="rulesSettings">
       <div class=container>
-        <h2>Rules</h2>
-        <p>Hier komt een paragraaf met alle spelregels uitgelegd en opgesomd. <br>
+        <h2>Instructions</h2>
+        <p> In this game you play a planner of patients in an oncology department. Every day, various patients will want to schedule an appointment for chemo therapy and/or with an oncologist. It is for you to decide where to put every patient in the angenda. Pay attention, from the moment you planned a patient in, no other patient can be sheduled on that same spot. So, you wil have to think clearly about every choice you make.   <br>
           <ul>
-            <li>Rule 1</li>
+            <li>  The <p class="pictureText" onclick="patientInformation()">information</p>  of the to shedule patient </li>
             <li>Rule 2</li>
             <li>Rule 3</li>
             <li>Rule 4</li>
@@ -83,7 +84,16 @@
       </table> 
     </div>
   </div>
-  
+
+ 
+
+  <div id="instructionPopUp" class="popUp">
+    <!-- popUp content -->
+        <img id="patientInformationImg" src="pictures/PatientInformation.png" alt="Information of patient" style="width:70%;max-width:800px;">
+        <a class="close"  onclick="clearPopup()">x</a>  
+      
+      </div>
+    </div>
    <!-- The core Firebase JS SDK is always required and must be listed first -->
    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 
@@ -92,7 +102,7 @@
    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
 
    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
-
+  
    <script>
    // Your web app's Firebase configuration
    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
