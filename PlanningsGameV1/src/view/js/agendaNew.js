@@ -809,7 +809,6 @@ function addEventlistenerSlots()
         //PATIENT AVAILABLE
         else {
           //(1st appointment) NOT too far in future
-          console.log("slotsCurrentArray.length: " + slotsCurrentArray.length + " week? " +  weekNr + "<=" + (currentWeek+2) + " day?" + dayNr + "===" + todayNr);
           if(max2WeeksAdvance(dayNr)) {
             
             //ONLY ONCO APPOINTMENT (2 slots)
