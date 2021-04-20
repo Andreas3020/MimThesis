@@ -74,13 +74,13 @@ Patient.Moderate = function(){
 Patient.Hard = function(){
   minLength = 5;
   maxLength = 8;
-  oncoProb = 0.7;
+  oncoProb = 0.8;
   nrOfPersons = 50;
-  minPatDay = 2; //3
+  minPatDay = 3; //3
   maxPatDay = 4; //5
   maxChemoLength = 3;
   nrOfAvailableDays;// = 3;
-  availableOneProb = 0.4;
+  availableOneProb = 0.3;
   availableTwoProb = 0.8;
   //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)    
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
