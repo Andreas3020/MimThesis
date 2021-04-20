@@ -457,60 +457,60 @@ function addSelectedSlot() {
 function threeLogic()
 {
   let todaySlot; 
-      //fill todayPatientsarray 
-      for(let j=0; j<20; j++) 
+
+  //fill todayPatientsarray 
+  for(let j=0; j<20; j++) 
+  {
+    for (let k=0; k<4; k++) 
+    {
+      todaySlot = slotsTakenArray[currentWeek][4*todayNr +28*j +k]
+      if (todaySlot !== false && todaySlot !=="grey")
       {
-        for (let k=0; k<4; k++) 
+        //onco's blood can't fail
+        if (Patient.list[todaySlot].chemo > 0)
         {
-          todaySlot = slotsTakenArray[currentWeek][4*todayNr +28*j +k]
-          if (todaySlot !== false && todaySlot !=="grey")
-          {
-            //onco's blood can't fail
-            if (Patient.list[todaySlot].chemo > 0)
-            {
-              todayPatientsArray.push(todaySlot);
-            }
-          }
+          todayPatientsArray.push(todaySlot);
         }
       }
-      // only keep the unique patients in the array
-      todayPatientsArray = todayPatientsArray.filter(onlyUnique);
-      
-      //Check which patients of todayPatientsArray fail bloodtest. Update array.
-      testBloodPatients();
-
+    }
+  }
+  // only keep the unique patients in the array
+  todayPatientsArray = todayPatientsArray.filter(onlyUnique);
+  
+  //Check which patients of todayPatientsArray fail bloodtest. Update array.
+  testBloodPatients();
 }
 
 function fourLogic()
 {
   let id = todayPatientsArray[0];
-      currentPatientObject = Patient.list[id];
-      tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
-      tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
-      tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
-      tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
-      tableBody.rows[1].cells[4].innerHTML = currentPatientObject.onco;
+  currentPatientObject = Patient.list[id];
+  tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
+  tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
+  tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
+  tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
+  tableBody.rows[1].cells[4].innerHTML = currentPatientObject.onco;
 
-      available = currentPatientObject.availability;
+  available = currentPatientObject.availability;
 
-      if (currentPatientObject.onco>0)
-      {
-        tableBody.rows[1].cells[5].innerHTML = 1;
-      }
-      tableBody.rows[1].cells[6].innerHTML = Patient.list[id].chemo;
-      if (currentPatientObject.chemo>0)
-      {
-        tableBody.rows[1].cells[7].innerHTML = 1;
-      } 
-      tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
+  if (currentPatientObject.onco>0)
+  {
+    tableBody.rows[1].cells[5].innerHTML = 1;
+  }
+  tableBody.rows[1].cells[6].innerHTML = Patient.list[id].chemo;
+  if (currentPatientObject.chemo>0)
+  {
+    tableBody.rows[1].cells[7].innerHTML = 1;
+  } 
+  tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
 
-        setTimeout(function() {
-          alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
-        },15)
-      
-      todayPatientsArray.splice(0, 1);
-      
-      currentPatientObject.weekNrFirstSelectedSlot += 1; 
+    setTimeout(function() {
+      alert('Patient with ID: ' + currentPatientObject.patientID + ' failed their bloodtest!');
+    },15)
+  
+  todayPatientsArray.splice(0, 1);
+  
+  currentPatientObject.weekNrFirstSelectedSlot += 1; 
 }
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay() {
@@ -518,7 +518,7 @@ function checkPatientsPerDay() {
   //bloodTest failed patients need to be scheduled
   if(todayPatientsArray.length > 0)
   { 
-    console.log("slmkdfjqmslfkj")
+    console.log("slmkdfjqmslfkj");
     return 4;
   }
   else if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
@@ -674,6 +674,24 @@ function addToVarianceArray()
       console.log(varianceArray);
 }
 
+function max2WeeksAdvance(dayNr) {
+  if(slotsCurrentArray.length === 0) {
+    if(weekNr < currentWeek + 2) {
+      return true;
+    }
+    else if(weekNr === currentWeek + 2) {
+      if(dayNr <= todayNr) {
+        return true;
+      }
+      else { return false; }
+    }
+    else { return false; }
+  } 
+  else {
+    return true;
+  }
+}
+
 function addEventlistenerSlots() 
 {
   document.querySelectorAll("#agendaBody > tr > td:not(.greyedOutSlotToday):not(.greyedOutSlot)").forEach
@@ -712,82 +730,47 @@ function addEventlistenerSlots()
 
         //PATIENT AVAILABLE
         else {
-          //ONLY ONCO APPOINTMENT (2 slots)
-          if(nrOncoAppointments >= 1 && nrChemoAppointments == 0) {
+          //(1st appointment) NOT too far in future
+          console.log("slotsCurrentArray.length: " + slotsCurrentArray.length + " week? " +  weekNr + "<=" + (currentWeek+2) + " day?" + dayNr + "===" + todayNr);
+          if(max2WeeksAdvance(dayNr)) {
+            
+            //ONLY ONCO APPOINTMENT (2 slots)
+            if(nrOncoAppointments >= 1 && nrChemoAppointments == 0) {
 
-            scenario = "onco";
-            //Bijhouden dat 2 slots moeten weggeschreven worden bij klikken next (en dus niet 1)
-            lengthSelectedSlot = 2;
+              scenario = "onco";
+              //Bijhouden dat 2 slots moeten weggeschreven worden bij klikken next (en dus niet 1)
+              lengthSelectedSlot = 2;
 
-            //CHEMO SELECTED (ONCO NEEDED)
-            if(oncoChemoNr > 0) { window.alert('The patient needs to be alloted an onco slot!'); }
-            //ONCO SELECTED (ONCO NEEDED) (oncoChemoNr <= 1)
-            else {
-              //2 SLOTS AVAILABLE?
-              if (checkSlotsAvailable(slotNr)) {
-                //2 SLOTS AANDUIDEN
-                weekNrFirstSelectedSlot = weekNr;
-                weekNrFirstForCalc = weekNr;
-                dayNrFirstSelectedSlot = dayNr;
-                updateSlotsSelected(event);
-              }
-            } 
-          }
-
-          //ONLY CHEMO APPOINTMENTS
-          //Schedule chemo without bloodtests in advance
-          else if(nrOncoAppointments == 0 && nrChemoAppointments >= 2) {
-            //Bijhouden dat 2 slots moeten weggeschreven worden bij klikken next (en dus niet 1)
-            scenario = "chemo";
-            lengthSelectedSlot = cLength;
-
-            //ONCO SELECTED (CHEMO NEEDED)
-            if(oncoChemoNr === 0) { window.alert('The patient needs to be alloted a chemo slot!'); }
-            //CHEMO SELECTED (CHEMO NEEDED)
-            else {
-              //1e CHEMO a/h inplannen
-              if(weekNrFirstSelectedSlot === -1) {
-                //SLOT(S) AVAILABLE?
-                if(checkSlotsAvailable(slotNr) === 1) {
-                  //SLOT(S) AANDUIDEN
+              //CHEMO SELECTED (ONCO NEEDED)
+              if(oncoChemoNr > 0) { window.alert('The patient needs to be alloted an onco slot!'); }
+              //ONCO SELECTED (ONCO NEEDED) (oncoChemoNr <= 1)
+              else {
+                //2 SLOTS AVAILABLE?
+                if (checkSlotsAvailable(slotNr)) {
+                  //2 SLOTS AANDUIDEN
                   weekNrFirstSelectedSlot = weekNr;
                   weekNrFirstForCalc = weekNr;
                   dayNrFirstSelectedSlot = dayNr;
                   updateSlotsSelected(event);
                 }
-              }
-              else { // 2e tot Xe chemo inplannen (weekNrFirstSelectedSlot != -1)
-                let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
-                if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
-                  alert("You are scheduling the next chemo appointment in the wrong week!");
-                }
-                else {
+              } 
+            }
+
+            //ONLY CHEMO APPOINTMENTS
+            //Schedule chemo without bloodtests in advance
+            else if(nrOncoAppointments == 0 && nrChemoAppointments >= 2) {
+              //Bijhouden dat 2 slots moeten weggeschreven worden bij klikken next (en dus niet 1)
+              scenario = "chemo";
+              lengthSelectedSlot = cLength;
+
+              //ONCO SELECTED (CHEMO NEEDED)
+              if(oncoChemoNr === 0) { window.alert('The patient needs to be alloted a chemo slot!'); }
+              //CHEMO SELECTED (CHEMO NEEDED)
+              else {
+                //1e CHEMO a/h inplannen
+                if(weekNrFirstSelectedSlot === -1) {
                   //SLOT(S) AVAILABLE?
                   if(checkSlotsAvailable(slotNr) === 1) {
-                    //SLOT(S) AANDUIDEN
-                    updateSlotsSelected(event);
-                  }
-                }
-              }
-            }
-          }
-          //O&C APPOINTMENTS
-          //Schedule chemo WITH bloodtests in advance
-          else if(nrOncoAppointments >= 1 && nrChemoAppointments >= 2) {
-            
-            //SCHEDULE ONCO
-            if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML) {
-              lengthSelectedSlot = 1;
-              scenario = "onco";
-              //CHEMO SELECTED (ONCO NEEDED)
-              if(oncoChemoNr > 0) { window.alert('The patient needs to be alloted an onco slot!'); }
-              //ONCO SELECTED (ONCO NEEDED) (oncoChemoNr <= 1)
-              else {
-                oncoSlotOC = slotNr;
-                //1st time O&C
-                if(weekNrFirstSelectedSlot == -1) {
-                  //SLOT(S) AVAILABLE?
-                  if(checkSlotsAvailable(slotNr, cLength) === 1) {
                     //SLOT(S) AANDUIDEN
                     weekNrFirstSelectedSlot = weekNr;
                     weekNrFirstForCalc = weekNr;
@@ -795,53 +778,96 @@ function addEventlistenerSlots()
                     updateSlotsSelected(event);
                   }
                 }
-                else { //2nd or more appointment of O&C periodicity
-                  let amountAlreadyPlanned = nrOncoAppointments - tableBody.rows[1].cells[5].innerHTML;
+                else { // 2e tot Xe chemo inplannen (weekNrFirstSelectedSlot != -1)
+                  let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
                   if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
-                    alert("You are scheduling the next onco appointment in the wrong week!");
+                    alert("You are scheduling the next chemo appointment in the wrong week!");
                   }
                   else {
                     //SLOT(S) AVAILABLE?
+                    if(checkSlotsAvailable(slotNr) === 1) {
+                      //SLOT(S) AANDUIDEN
+                      updateSlotsSelected(event);
+                    }
+                  }
+                }
+              }
+            }
+            //O&C APPOINTMENTS
+            //Schedule chemo WITH bloodtests in advance
+            else if(nrOncoAppointments >= 1 && nrChemoAppointments >= 2) {
+              
+              //SCHEDULE ONCO
+              if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML) {
+                lengthSelectedSlot = 1;
+                scenario = "onco";
+                //CHEMO SELECTED (ONCO NEEDED)
+                if(oncoChemoNr > 0) { window.alert('The patient needs to be alloted an onco slot!'); }
+                //ONCO SELECTED (ONCO NEEDED) (oncoChemoNr <= 1)
+                else {
+                  oncoSlotOC = slotNr;
+                  //1st time O&C
+                  if(weekNrFirstSelectedSlot == -1) {
+                    //SLOT(S) AVAILABLE?
                     if(checkSlotsAvailable(slotNr, cLength) === 1) {
                       //SLOT(S) AANDUIDEN
+                      weekNrFirstSelectedSlot = weekNr;
+                      weekNrFirstForCalc = weekNr;
+                      dayNrFirstSelectedSlot = dayNr;
                       updateSlotsSelected(event);
+                    }
+                  }
+                  else { //2nd or more appointment of O&C periodicity
+                    let amountAlreadyPlanned = nrOncoAppointments - tableBody.rows[1].cells[5].innerHTML;
+                    if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
+                      alert("You are scheduling the next onco appointment in the wrong week!");
+                    }
+                    else {
+                      //SLOT(S) AVAILABLE?
+                      if(checkSlotsAvailable(slotNr, cLength) === 1) {
+                        //SLOT(S) AANDUIDEN
+                        updateSlotsSelected(event);
+                      }
                     }
                   }
                 }
               }
-            }
-            //SCHEDULE CHEMO
-            else if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML - 1) {
-              scenario = "chemo";
-              lengthSelectedSlot = cLength;
-              //ONCO SELECTED (CHEMO NEEDED)
-              if(oncoChemoNr <= 0) { window.alert('The patient needs to be alloted a chemo slot!'); }
-              // CHEMO SELECTED (CHEMO NEEDED)
-              else {
-                let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
-                //WRONG WEEK
-                if((weekNrFirstSelectedSlot + amountAlreadyPlanned) != weekNr) {
-                  alert("You are scheduling the next chemo appointment in the wrong week!");
-                }
-                //CORRECT WEEK
+              //SCHEDULE CHEMO
+              else if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML - 1) {
+                scenario = "chemo";
+                lengthSelectedSlot = cLength;
+                //ONCO SELECTED (CHEMO NEEDED)
+                if(oncoChemoNr <= 0) { window.alert('The patient needs to be alloted a chemo slot!'); }
+                // CHEMO SELECTED (CHEMO NEEDED)
                 else {
-                  //SLOT(S) AVAILABLE?
-                  if(checkSlotsAvailable(slotNr) === 1) {
-                    //MINIMUM 4 BLOCKS AFTER ONCO?
-                    if(slotNr >= oncoSlotOC+5*28  ) {
-                      //SLOT(S) AANDUIDEN
-                      updateSlotsSelected(event);
-                    }
-                    else {window.alert("There must be at least 2 hours of time between the onco & chemo appointment.");}
+                  let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
+                  //WRONG WEEK
+                  if((weekNrFirstSelectedSlot + amountAlreadyPlanned) != weekNr) {
+                    alert("You are scheduling the next chemo appointment in the wrong week!");
                   }
+                  //CORRECT WEEK
+                  else {
+                    //SLOT(S) AVAILABLE?
+                    if(checkSlotsAvailable(slotNr) === 1) {
+                      //MINIMUM 4 BLOCKS AFTER ONCO?
+                      if(slotNr >= oncoSlotOC+5*28  ) {
+                        //SLOT(S) AANDUIDEN
+                        updateSlotsSelected(event);
+                      }
+                      else {window.alert("There must be at least 2 hours of time between the onco & chemo appointment.");}
+                    }
+                  }
+                  //oncoSlotOC = -1;
                 }
-                //oncoSlotOC = -1;
               }
+              else { console.log("Not planning onco, nor planning chemo, inside the O&C appointment eventListener. CODE PROBLEM."); }
             }
-            else { console.log("Not planning onco, nor planning chemo, inside the O&C appointment eventListener. CODE PROBLEM."); }
-          }
 
-          else {console.log("Both nrOncoAppointments & nrChemoAppointments are zero. Not possible! CODE PROBLEM!!");}
+            else {console.log("Both nrOncoAppointments & nrChemoAppointments are zero. Not possible! CODE PROBLEM!!");}
+          }
+          else { //(1st appointment) too far in future.
+            window.alert("You may only plan maximum 2 weeks in advance.");
+          }
         }
       }
       else if(slotsTakenArray[weekNr][slotNr].length === 12) {
