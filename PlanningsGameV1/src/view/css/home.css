@@ -138,7 +138,11 @@ h2 {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+.smallPicture{
 
+  width: 30%; /* Full width */
+  height: 30%;
+}
 /* pop-up Content/Box */
 .popUpSquare {
   display: flexbox;
@@ -171,8 +175,8 @@ h2 {
   text-decoration: none; 
   color:  white; 
   background-color: transparent;
-  top: 20px; 
-  right: 1.67%;
+  top: 5%; 
+  right: 5%;
   position: absolute;
 }
 
@@ -182,7 +186,7 @@ h2 {
 }
 .pictureText
 {
-    display:inline;
+  display:inline;
   text-decoration: underline;
 }
 .pictureText:hover

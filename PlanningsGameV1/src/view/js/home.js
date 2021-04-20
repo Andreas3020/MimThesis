@@ -206,8 +206,11 @@ function clearPopup(){
  
 }
 
-function patientInformation(){
+function showPicture(source){
   const popUp = document.getElementById("instructionPopUp");
   popUp.style.display = "flex";
+  const img = document.getElementById("img");
+  console.log(source);
+  img.src = source;
   
 }
