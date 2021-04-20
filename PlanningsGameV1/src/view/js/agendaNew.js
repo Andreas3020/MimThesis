@@ -809,7 +809,7 @@ function addEventlistenerSlots()
         //PATIENT AVAILABLE
         else {
           //(1st appointment) NOT too far in future
-          if(max2WeeksAdvance(dayNr)) {
+          //if(max2WeeksAdvance(dayNr)) {
             
             //ONLY ONCO APPOINTMENT (2 slots)
             if(nrOncoAppointments >= 1 && nrChemoAppointments == 0) {
@@ -942,10 +942,10 @@ function addEventlistenerSlots()
 
             else {console.log("Both nrOncoAppointments & nrChemoAppointments are zero. Not possible! CODE PROBLEM!!");}
           }
-          else { //(1st appointment) too far in future.
+          /*else { //(1st appointment) too far in future.
             window.alert("You may only plan maximum 2 weeks in advance.");
           }
-        }
+        }*/
       }
       else if(slotsTakenArray[weekNr][slotNr].length === 12) {
         //----------SHOW CURRENT PATIENT INFO--------------//
@@ -1216,4 +1216,3 @@ currentPatientObject = Patient.list[0];
 available = currentPatientObject.availability;
 
 var startTime = performance.now();
-
