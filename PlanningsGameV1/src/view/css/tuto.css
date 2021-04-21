@@ -25,12 +25,17 @@ body,
 
 /*------------AGENDA TABLE-------------*/
 #agendaTable {
-  width: 100%;
-  height: 100%;
+  width: 96%;
+  height: 96%;
   table-layout: fixed;
   border-collapse: collapse;
   border: 3px solid rgb(0, 64, 122);
   text-align: center;
+
+  position: relative;
+  margin: auto;
+  top: 12px;
+  box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
   /*border-spacing: 0; ALternatief*/
 }
 
@@ -128,7 +133,6 @@ i {
 .box2 {
   background-color: rgb(234, 240, 250);
   display: flex;
-  border-top: 2px solid rgb(0, 64, 122);
 }
 
 #box2Left {
@@ -137,7 +141,6 @@ i {
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-right: 5px solid rgb(0, 64, 122);
 }
 #box2Right {
   /*background-color: turquoise;*/
@@ -175,6 +178,8 @@ i {
   border: 3px solid white;
   text-align: center;
   margin: 0 auto;
+  box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
+  font-size: 1.2vw;
   /*Wordt overschreven bij td. Nodig indien vakje geen inhoud heeft en dus niet wordt gegenereerd door JS (niet bestaande).*/
 }
 
@@ -192,11 +197,11 @@ i {
 
 button {
   background: rgb(29, 141, 176);
-  font-size: 18px;
+  font-size: 1.5vw;
   border: 1px solid white;
   padding: 10px;
-
   cursor: pointer;
+  box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
 }
 
 /*----------POP UP--------------*/

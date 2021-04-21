@@ -252,6 +252,38 @@ function resetEndPopup() {
   window.location.href = "home.html";
 }
 
+function showPopupGoHomepage() {
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "block";
+
+  const popUpText= document.getElementById("popUpGoHomepage");
+  popUpText.style.display = "flex";
+}
+
+function showPopupSkippatient() {
+  const popUp = document.getElementById("roomPopUp");
+  popUp.style.display = "block";
+
+  const popUpText= document.getElementById("popUpSkippatient");
+  popUpText.style.display = "flex";
+}
+
+function hidePopupHome() {
+  const popUp = document.getElementById("popUpGoHomepage");
+  popUp.style.display = "none";
+
+  const popUpText= document.getElementById("roomPopUp");
+  popUpText.style.display = "none";
+}
+
+function hidePopupSkippatient() {
+  const popUp = document.getElementById("popUpSkippatient");
+  popUp.style.display = "none";
+
+  const popUpText= document.getElementById("roomPopUp");
+  popUpText.style.display = "none";
+}
+
 function addSelectedSlot() {
   
   if(IdSelectedSlot === -1) { alert("Must select a time slot!"); return; }

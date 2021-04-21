@@ -147,7 +147,6 @@ i {
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-right: 5px solid rgb(0, 64, 122);
 }
 #box2Right {
   /*background-color: turquoise;*/
@@ -187,7 +186,7 @@ i {
   text-align: center;
   margin: 0 auto;
   box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
-  font-size: 1.3vw;
+  font-size: 1.2vw;
   /*Wordt overschreven bij td. Nodig indien vakje geen inhoud heeft en dus niet wordt gegenereerd door JS (niet bestaande).*/
 }
 
@@ -205,10 +204,9 @@ i {
 
 button {
   background: rgb(29, 141, 176);
-  font-size: 1.7vw;
+  font-size: 1.5vw;
   border: 1px solid white;
   padding: 10px;
-
   cursor: pointer;
   box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
 }
@@ -250,6 +248,7 @@ button {
   font-size: 14pt;
   background-color: transparent;
   color: black;
+  margin: 10px;
 }
 
 .popUpButton {
