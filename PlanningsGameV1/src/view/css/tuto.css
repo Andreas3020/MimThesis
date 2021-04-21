@@ -237,6 +237,7 @@ button {
   font-size: 14pt;
   background-color: transparent;
   color: black;
+  margin: 10px;
 }
 
 .popUpButton {
