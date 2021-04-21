@@ -49,7 +49,7 @@ database.child(roomName).child("users").child(rnumber).once('value', function(sn
     row.insertCell(2).textContent = scores[i]["avgAppDev"];
     row.insertCell(3).textContent = scores[i]["avgAppDiff"];
     row.insertCell(4).textContent = scores[i]["avgAppSpeed"];
-    row.insertCell(5).textContent = scores[i]["time"]+"min";
+    row.insertCell(5).textContent = scores[i]["time"]+" min";
   } 
   } 
 });
@@ -179,7 +179,7 @@ function createAvg(){
   row.insertCell(2).textContent = avgStDevEasy;
   row.insertCell(3).textContent = avgDiffEasy;
   row.insertCell(4).textContent = avgAppSpeedEasy;
-  row.insertCell(5).textContent = avgTimeEasy;
+  row.insertCell(5).textContent = avgTimeEasy + " min";
 
   row = tableBody.insertRow();
   row.insertCell(0).textContent = "Moderate";
@@ -187,7 +187,7 @@ function createAvg(){
   row.insertCell(2).textContent = avgStDevModerate;
   row.insertCell(3).textContent = avgDiffModerate;
   row.insertCell(4).textContent = avgAppSpeedModerate;
-  row.insertCell(5).textContent = avgTimeModerate;
+  row.insertCell(5).textContent = avgTimeModerate + " min";
 
   row = tableBody.insertRow();
   row.insertCell(0).textContent = "Hard";
@@ -195,7 +195,7 @@ function createAvg(){
   row.insertCell(2).textContent = avgStDevHard;
   row.insertCell(3).textContent = avgDiffHard;
   row.insertCell(4).textContent = avgAppSpeedHard;
-  row.insertCell(5).textContent = avgTimeHard;
+  row.insertCell(5).textContent = avgTimeHard + " min";
   
 }
 
