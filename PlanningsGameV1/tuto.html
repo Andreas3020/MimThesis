@@ -18,6 +18,8 @@
   <!-- PATIENT GENERATION-->
   <script src="src/ctrl/initialize.js"></script>
   <script src="src/view/js/genPatientTuto.js"></script>
+  <script src="src/view/js/shortcut.js"></script>
+
   <!-- on load generate is enkel voor testen -->
   <script> window.addEventListener( "load", pl.view.genPatientTuto.setupUserInterface); </script>
 </head>
@@ -176,7 +178,7 @@
           <button class="popUpButton" type="button" id="okButton" onclick="resetEndPopup()">Back to homepage</button></a>
       </div>
       <div class="popUpContent" id="popUpGoHomepage">
-        <p class="popUpText">Returning to homepage will make you loose all progress of the current game. Are you sure want to leave?</p>
+        <p class="popUpText">Returning to homepage will make you lose all progress of the current game. Are you sure want to leave?</p>
         <div>
           <button class="popUpButton" type="button" id="okButton" onclick="hidePopupHome()">Cancel</button></a>
           <button class="popUpButton" type="button" id="okButton" onclick="window.location.href='home.html'">Confirm</button></a>
@@ -191,6 +193,17 @@
       </div>
     <!--</div>-->
   </div>
+
+  <!-- <script src="src/view/js/agendaNew.js"></script>  -->
+  <script>
+    shortcut.add("enter", function() {
+      addSelectedSlot();
+    },{
+    'type':'keydown',
+    'propagate':true,
+    'target':document
+  });   
+  </script>
   
   <script src="src/view/js/tuto.js"></script>
   <script type = "text/javascript">  
