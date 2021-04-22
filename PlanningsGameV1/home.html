@@ -34,8 +34,8 @@
             </ol> <br>
             <li>Every day a random number of patients will come after which the agenda will go to the next day. It is not possible to schedule on the current and previous days. If, for whatever reason, you are not able to plan the patient in, you can press the <p class="pictureText" onclick="showPicture('pictures/skip.png')">skip</p> button with which you will go to the next patient.</li><br>
             <li>The game will check every patient ,that has a chemo appointment on that day, with a blood test to check if they are fit enough. If a patient fails their bloodtest, you will have to plan a new appointment the week after his last appointment. The game will let you know if this happens with a popup. </li> <br>
-            <li>Now you know how to play the game! If you want, you can play a demo which is a short simple version of the game with every possible scenario. If not, you can try one of the three difficulties of the game. Each game will be rated using 5 variables seen in the table on the right hand side. You can find more information by hovering over it.</li><br>
-            <li><i>Tip: you can use the arrowkeys to move beteen weeks</i></li>
+            <li>Now you know how to play the game! If you want, you can play a demo which is a short simple version of the game with every possible scenario. If not, you can try one of the three difficulties of the game. Each game will be rated using 5 variables seen in the table on the right hand side. You can find more information by hovering over it.</li>
+            
           </ul>
           
         </p>
@@ -47,10 +47,14 @@
         <form name="mySettings">
           <label><input type="radio" name="difficulty" id="easy" value="Easy" checked="checked">Easy</label>  
           <label><input type="radio" name="difficulty" id="moderate" value="Moderate">Moderate</label>
-          <label><input type="radio" name="difficulty" id="hard" value="Hard">Hard</label>
+          <label><input type="radio" name="difficulty" id="hard" value="Hard">Hard</label> 
         </form>
-
-        <button class="startButton" onClick="startGame()">Start game</button></a>
+        <div>
+          <i style="font-size: 12pt;">Tip: You can use the arrowkeys to move between weeks and press enter to confirm!</i>
+      </div>
+      <div>
+        <button class="startButton" onClick="startGame()">Start game</button>
+      </div>
       </div>
     </div>
 
