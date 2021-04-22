@@ -201,7 +201,9 @@ function createAvg(){
 
 function clearPopup(){
   const popUpPass = document.getElementById("instructionPopUp");
+
   popUpPass.style.display = "none";
+
 
  
 }
