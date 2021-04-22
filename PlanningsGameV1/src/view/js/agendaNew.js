@@ -1184,7 +1184,7 @@ function skipPatient() {
     //SAVE NEW PATIENT TO CURRENTPATIENTOBJECT
     let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
     currentPatientObject = Patient.list[currentPatientId];
-
+    available = currentPatientObject.availability;
     IdSelectedSlot = -1;
     
   }
