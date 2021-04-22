@@ -495,9 +495,6 @@ function addSelectedSlot() {
       let varianceAbs = Math.abs(variance);
       varianceArray.push(varianceAbs);
       
-      //currentPatientObject.lastSelectedSlotId = slotsCurrentArray[slotsCurrentArray.length -1][1];
-      
-      
       red();
       
 
@@ -554,10 +551,8 @@ function addSelectedSlot() {
   else {
     yellow();
     let dayNr = getSlotNrFromId(IdSelectedSlot)[0];
-    console.log("DayNr addSelectedSlot notNewPatient: " + dayNr);
     available = [weekdays[dayNr]];
-    console.log("available updated after notNewPatient: " + available);
-    //Patient.list[currentPatientObject.patientID].availabilityChosen = [weekdays[dayNr]];
+
     tableBody.rows[1].cells[3].innerHTML = available[0];
   }
   
@@ -628,7 +623,6 @@ function checkPatientsPerDay() {
   //bloodTest failed patients need to be scheduled
   if(todayPatientsArray.length > 0)
   { 
-    console.log("slmkdfjqmslfkj");
     return 4;
   }
   else if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
@@ -1132,7 +1126,6 @@ function resetPatient() {
   
   slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
   slotsToAddArray = [];     //Huidige selectie eventListener
-  weekNrFirstSelectedSlotTemp = -1;
   available = currentPatientObject.availability;
   //Patient.list[currentPatientObject.patientID].availabilityChosen = [];
   tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
@@ -1165,14 +1158,13 @@ function skipPatient() {
   if (addSelectVar === 3)
   {
     threeLogic();
-    console.log("3scenario");
     console.log(addSelectVar);
     addSelectVar = checkPatientsPerDay();
-    console.log(addSelectVar);
+    
   }
   if(addSelectVar === 4)
   { 
-    console.log("4scenario")
+    
     fourLogic();
   }
 
