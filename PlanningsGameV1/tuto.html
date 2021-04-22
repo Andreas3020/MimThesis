@@ -18,6 +18,8 @@
   <!-- PATIENT GENERATION-->
   <script src="src/ctrl/initialize.js"></script>
   <script src="src/view/js/genPatientTuto.js"></script>
+  <script src="src/view/js/shortcut.js"></script>
+
   <!-- on load generate is enkel voor testen -->
   <script> window.addEventListener( "load", pl.view.genPatientTuto.setupUserInterface); </script>
 </head>
@@ -191,6 +193,17 @@
       </div>
     <!--</div>-->
   </div>
+
+  <!-- <script src="src/view/js/agendaNew.js"></script>  -->
+  <script>
+    shortcut.add("enter", function() {
+      addSelectedSlot();
+    },{
+    'type':'keydown',
+    'propagate':true,
+    'target':document
+  });   
+  </script>
   
   <script src="src/view/js/tuto.js"></script>
   <script type = "text/javascript">  
