@@ -44,12 +44,12 @@ database.child(roomName).child("users").child(rnumber).once('value', function(sn
   for(let i = 0; i< scores.length; i++){
     tableBody = document.getElementById('resultTable');
     row = tableBody.insertRow();
-    row.insertCell(0).textContent = Math.round(100*scores[i]["difficulty"])/100;
+    row.insertCell(0).textContent = scores[i]["difficulty"];
     row.insertCell(1).textContent = Math.round(100*scores[i]["skippedPatients"])/100;
     row.insertCell(2).textContent = Math.round(100*scores[i]["avgAppDev"])/100;
     row.insertCell(3).textContent = Math.round(100*scores[i]["avgAppDiff"])/100;
     row.insertCell(4).textContent = Math.round(100*scores[i]["avgAppSpeed"])/100;
-    row.insertCell(5).textContent = Math.round(100*scores[i]["time"]+" min")/100;
+    row.insertCell(5).textContent = Math.round(100*scores[i]["time"])/100 + " min";
   } 
   } 
 });
