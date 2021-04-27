@@ -457,10 +457,10 @@ function addSelectedSlot() {
   
   // check the scenario (onco or chemo) that has been done and change the nr of times still needed
   if(scenario == "onco"){
-    tableBody.rows[1].cells[5].innerHTML -=1;
+    tableBody.rows[1].cells[4].innerHTML -=1;
     
   } else if(scenario == "chemo"){
-    tableBody.rows[1].cells[7].innerHTML -=1
+    tableBody.rows[1].cells[6].innerHTML -=1
     
   } else{
     
@@ -594,19 +594,17 @@ function fourLogic()
   tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
   tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
   tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
-  tableBody.rows[1].cells[4].innerHTML = currentPatientObject.onco;
+  
 
   available = currentPatientObject.availability;
 
-  if (currentPatientObject.onco>0)
-  {
-    tableBody.rows[1].cells[5].innerHTML = 1;
-  }
-  tableBody.rows[1].cells[6].innerHTML = Patient.list[id].chemo;
-  if (currentPatientObject.chemo>0)
-  {
-    tableBody.rows[1].cells[7].innerHTML = 1;
-  } 
+  if (currentPatientObject.onco > 0) { tableBody.rows[1].cells[4].innerHTML = 1; }
+  tableBody.rows[1].cells[5].innerHTML = currentPatientObject.onco;
+  
+  
+  if (currentPatientObject.chemo>0) { tableBody.rows[1].cells[6].innerHTML = 1; } 
+  tableBody.rows[1].cells[7].innerHTML = Patient.list[id].chemo;
+
   tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
 
     setTimeout(function() {
@@ -901,7 +899,7 @@ function addEventlistenerSlots()
             else if(nrOncoAppointments >= 1 && nrChemoAppointments >= 2) {
               
               //SCHEDULE ONCO
-              if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML) {
+              if(tableBody.rows[1].cells[4].innerHTML == tableBody.rows[1].cells[6].innerHTML) {
                 lengthSelectedSlot = 1;
                 scenario = "onco";
                 //CHEMO SELECTED (ONCO NEEDED)
@@ -921,7 +919,7 @@ function addEventlistenerSlots()
                     }
                   }
                   else { //2nd or more appointment of O&C periodicity
-                    let amountAlreadyPlanned = nrOncoAppointments - tableBody.rows[1].cells[5].innerHTML;
+                    let amountAlreadyPlanned = nrOncoAppointments - tableBody.rows[1].cells[4].innerHTML;
                     if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
                       alert("You are scheduling the next onco appointment in the wrong week!");
                     }
@@ -936,7 +934,7 @@ function addEventlistenerSlots()
                 }
               }
               //SCHEDULE CHEMO
-              else if(tableBody.rows[1].cells[5].innerHTML == tableBody.rows[1].cells[7].innerHTML - 1) {
+              else if(tableBody.rows[1].cells[4].innerHTML == tableBody.rows[1].cells[6].innerHTML - 1) {
                 scenario = "chemo";
                 lengthSelectedSlot = cLength;
                 //ONCO SELECTED (CHEMO NEEDED)
@@ -1141,14 +1139,14 @@ function resetPatient() {
   {
     currentPatientObject.weekNrFirstSelectedSlot = -1;
     Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = -1;
-    tableLeft.rows[1].cells[5].innerHTML = tableLeft.rows[1].cells[4].innerHTML
-    tableLeft.rows[1].cells[7].innerHTML = tableLeft.rows[1].cells[6].innerHTML
+    tableLeft.rows[1].cells[4].innerHTML = tableLeft.rows[1].cells[5].innerHTML
+    tableLeft.rows[1].cells[6].innerHTML = tableLeft.rows[1].cells[7].innerHTML
     
   }
   else
   {
-    tableLeft.rows[1].cells[5].innerHTML = 1;
-    tableLeft.rows[1].cells[7].innerHTML = 1;
+    tableLeft.rows[1].cells[4].innerHTML = 1;
+    tableLeft.rows[1].cells[6].innerHTML = 1;
   }
 }
 
