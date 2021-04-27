@@ -819,7 +819,7 @@ function addEventlistenerSlots()
       //SLOT NOT UNAVAILABLE
       if(slotsTakenArray[weekNr][slotNr] === false)
       {
-        document.getElementById("patientTableSlotinfo").style.visibility = "hidden";
+        //document.getElementById("patientTableSlotinfo").style.visibility = "hidden";
 
         //Check availability
         let patientAvailable = 0;
@@ -973,6 +973,7 @@ function addEventlistenerSlots()
           }
         }*/
       }
+      /*
       else if(slotsTakenArray[weekNr][slotNr].length === 12) {
         //----------SHOW CURRENT PATIENT INFO--------------//
         const tableRight = document.getElementById('patientTableSlotinfo');
@@ -1001,6 +1002,7 @@ function addEventlistenerSlots()
       
         document.getElementById("patientTableSlotinfo").style.visibility = "visible";
       }
+      */
     });  
   });
 }
