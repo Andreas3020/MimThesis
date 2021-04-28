@@ -573,7 +573,7 @@ function threeLogic()
       if (todaySlot !== false && todaySlot !=="grey")
       {
         //onco's blood can't fail
-        if (Patient.list[todaySlot].chemo > 0)
+        if (Patient.list[todaySlot -1].chemo > 0)
         {
           todayPatientsArray.push(todaySlot);
         }
@@ -590,7 +590,7 @@ function threeLogic()
 function fourLogic()
 {
   let id = todayPatientsArray[0];
-  currentPatientObject = Patient.list[id];
+  currentPatientObject = Patient.list[id - 1];
   tableBody.rows[1].cells[0].innerHTML = currentPatientObject.patientID;
   tableBody.rows[1].cells[1].innerHTML = currentPatientObject.firstName;
   tableBody.rows[1].cells[2].innerHTML = currentPatientObject.lastName;
@@ -604,7 +604,7 @@ function fourLogic()
   
   
   if (currentPatientObject.chemo>0) { tableBody.rows[1].cells[6].innerHTML = 1; } 
-  tableBody.rows[1].cells[7].innerHTML = Patient.list[id].chemo;
+  tableBody.rows[1].cells[7].innerHTML = Patient.list[id -1].chemo;
 
   tableBody.rows[1].cells[8].innerHTML = currentPatientObject.chemoLength;
 
@@ -624,7 +624,7 @@ function checkPatientsPerDay() {
   { 
     return 4;
   }
-  else if(Patient.list[tableBody.rows[1].cells[0].innerHTML].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
+  else if(Patient.list[tableBody.rows[1].cells[0].innerHTML -1].lastPatientBool == true && addSelectVar != 3 && addSelectVar != 4)
   {
     //Go to the next day or if at the end of the week and the next week
     if(todayNr < 6) {
@@ -683,17 +683,17 @@ function testBloodPatients()
 {
   for( var i = 0; i < todayPatientsArray.length; i++){ 
     // check and remove patient if bloodtest does not fail
-    let probBloodFail = Patient.list[todayPatientsArray[i]].probBloodFail;
+    let probBloodFail = Patient.list[todayPatientsArray[i] - 1].probBloodFail;
     if ( probBloodFail < probBloodFailEasy){     
         //change propability that bloodtest fails next time
         let num = getRandomFloat(0,1).toFixed(2);   
-        Patient.list[todayPatientsArray[i]].probBloodFail = num;    
+        Patient.list[todayPatientsArray[i] -1].probBloodFail = num;    
         todayPatientsArray.splice(i, 1); 
         i--; 
     }
     else{
       //change propability that bloodtest fails next time
-      Patient.list[todayPatientsArray[i]].probBloodFail = getRandomFloat(0,1).toFixed(3);   
+      Patient.list[todayPatientsArray[i] -1].probBloodFail = getRandomFloat(0,1).toFixed(3);   
     }  
   }
 }
