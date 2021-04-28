@@ -153,7 +153,7 @@ Patient.generate = function() {
     
     tempWeekNrFirstSelectedSlot = -1;
     //Create patient/Write to list
-    Patient.genList[i] = new Patient({patientID: i, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot, lastSelectedSlotId: -1});
+    Patient.genList[i] = new Patient({patientID: i+1, firstName: tempFname, lastName: tempLname, availability: tempAvailability, onco: tempOnco, chemo: tempChemo, chemoLength: tempChemoLength, lastPatientBool: tempLastPatientBool, probBloodFail: tempProbBloodFail, weekNrFirstSelectedSlot: tempWeekNrFirstSelectedSlot, lastSelectedSlotId: -1});
   }
 
   //Save patient list (JSONstringify) to localStorage (patientTable)
