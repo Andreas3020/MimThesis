@@ -327,7 +327,7 @@ function addSelectedSlot() {
   patientListTuto[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
  
   //NEW PATIENT?
-  if(tableBody.rows[1].cells[6].innerHTML === 0) {
+  if(tableBody.rows[1].cells[6].innerHTML == 0) {
    
     if (addSelectVar == 4)
     {
@@ -353,6 +353,7 @@ function addSelectedSlot() {
       varianceArray.push(varianceAbs);
       
       red();
+      setTimeout(function(){ goToCurrentWeek(); }, 350);
       
 
     }
@@ -366,6 +367,8 @@ function addSelectedSlot() {
       addToVarianceArray();
       
       red();
+      setTimeout(function(){ goToCurrentWeek(); }, 350);
+
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
       currentPatientObject = patientListTuto[currentPatientId];
       available = currentPatientObject.availability;
@@ -382,7 +385,7 @@ function addSelectedSlot() {
       addToVarianceArray();
       
       red();
-
+      setTimeout(function(){ goToCurrentWeek(); }, 350);
       threeLogic();
       
       // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
@@ -987,6 +990,7 @@ function skipPatient() {
     currentPatientObject = patientListTuto[currentPatientId];
     available = currentPatientObject.availability;
     IdSelectedSlot = -1;
+    goToCurrentWeek();
     
   }
   else { //addSelectVar  >= 1 
