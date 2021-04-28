@@ -779,7 +779,6 @@ function addToVarianceArray()
 }
 
 function max2WeeksAdvance(dayNr) {
-  if(slotsCurrentArray.length === 0) {
     if(weekNr < currentWeek + 2) {
       return true;
     }
@@ -790,10 +789,6 @@ function max2WeeksAdvance(dayNr) {
       else { return false; }
     }
     else { return false; }
-  } 
-  else {
-    return true;
-  }
 }
 
 function addEventlistenerSlots() 
@@ -814,7 +809,12 @@ function addEventlistenerSlots()
       
       weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
 
-      //console.log("slotTakenArray: " + slotsTakenArray[weekNr][slotNr]);
+      // CHECK NEW PATIENT + NOT TWO WEEKS IN ADVANCE
+      if(!max2WeeksAdvance(dayNr) && (tableBody.rows[1].cells[4].innerHTML == tableBody.rows[1].cells[5].innerHTML) && (tableBody.rows[1].cells[6].innerHTML == tableBody.rows[1].cells[7].innerHTML)) {
+        window.alert("You may only plan maximum 2 weeks in advance.");
+        return;
+      }
+    
 
       //SLOT NOT UNAVAILABLE
       if(slotsTakenArray[weekNr][slotNr] === false)
