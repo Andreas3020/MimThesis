@@ -170,11 +170,9 @@ function renderAgenda()
   tableCore.innerHTML = core;
 
   //DISPLAY WEEK NR
-  document.getElementById('weekNr').innerHTML= "week " + (weekNr+1);
+  document.getElementById('weekNr').innerHTML= "week" + (weekNr+1);
 
   addEventlistenerSlots()
-  
-  
 }
 
 function checkDay(i, greyedOutString)
@@ -470,7 +468,7 @@ function addSelectedSlot() {
   Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
  
   //NEW PATIENT?
-  if(tableBody.rows[1].cells[7].innerHTML == 0) {
+  if(tableBody.rows[1].cells[6].innerHTML == 0) {
    
     if (addSelectVar == 4)
     {
@@ -880,7 +878,7 @@ function addEventlistenerSlots()
                   }
                 }
                 else { // 2e tot Xe chemo inplannen (weekNrFirstSelectedSlot != -1)
-                  let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
+                  let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[6].innerHTML;
                   if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
                     alert("You are scheduling the next chemo appointment in the wrong week!");
                   }
@@ -941,7 +939,7 @@ function addEventlistenerSlots()
                 if(oncoChemoNr <= 0) { window.alert('The patient needs to be alloted a chemo slot!'); }
                 // CHEMO SELECTED (CHEMO NEEDED)
                 else {
-                  let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
+                  let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[6].innerHTML;
                   //WRONG WEEK
                   if((weekNrFirstSelectedSlot + amountAlreadyPlanned) != weekNr) {
                     alert("You are scheduling the next chemo appointment in the wrong week!");

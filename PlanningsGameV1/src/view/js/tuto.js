@@ -327,7 +327,7 @@ function addSelectedSlot() {
   patientListTuto[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
  
   //NEW PATIENT?
-  if(tableBody.rows[1].cells[7].innerHTML == 0) {
+  if(tableBody.rows[1].cells[6].innerHTML === 0) {
    
     if (addSelectVar == 4)
     {
@@ -416,6 +416,7 @@ function addSelectedSlot() {
   IdSelectedSlot = -1;
 }
 
+// SWITCH DAY LOGIC (Define bloodtest failed patients array new day)
 function threeLogic()
 {
   let todaySlot; 
@@ -443,6 +444,7 @@ function threeLogic()
 
 }
 
+// Process the blood test failed patients
 function fourLogic()
 {
   let id = todayPatientsArray[0];
@@ -694,7 +696,7 @@ function addEventlistenerSlots()
                 }
               }
               else { // 2e tot Xe chemo inplannen (weekNrFirstSelectedSlot != -1)
-                let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
+                let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[6].innerHTML;
                 if((weekNrFirstSelectedSlot +  amountAlreadyPlanned) != weekNr) {
                   alert("You are scheduling the next chemo appointment in the wrong week!");
                 }
@@ -755,7 +757,7 @@ function addEventlistenerSlots()
               if(oncoChemoNr <= 0) { window.alert('The patient needs to be alloted a chemo slot!'); }
               // CHEMO SELECTED (CHEMO NEEDED)
               else {
-                let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[7].innerHTML;
+                let amountAlreadyPlanned = nrChemoAppointments - tableBody.rows[1].cells[6].innerHTML;
                 //WRONG WEEK
                 if((weekNrFirstSelectedSlot + amountAlreadyPlanned) != weekNr) {
                   alert("You are scheduling the next chemo appointment in the wrong week!");
