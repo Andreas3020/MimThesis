@@ -201,11 +201,9 @@ function createAvg(){
 
 function clearPopup(){
   const popUpPass = document.getElementById("instructionPopUp");
-
   popUpPass.style.display = "none";
-
-
- 
+  const video = document.getElementById("video");
+  video.pause();
 }
 
 function showPicture(source){
@@ -215,4 +213,11 @@ function showPicture(source){
   console.log(source);
   img.src = source;
   
+}
+
+function playVideo(source){
+  const popUp = document.getElementById("instructionPopUp");
+  popUp.style.display = "flex";
+  const video = document.getElementById("video");
+  video.src = source;
 }

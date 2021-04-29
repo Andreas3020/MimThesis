@@ -39,7 +39,9 @@ h1{
   display: flex;
   height:100%
 }
-
+ul ol{
+  padding-left: 5%
+}
 .rulesSettings{
   width: 150%;
   height: 100%;
@@ -228,6 +230,7 @@ h2 {
 {
   display:inline;
   text-decoration: underline;
+  color: rgb(109, 94, 238);
 }
 .pictureText:hover
 {
