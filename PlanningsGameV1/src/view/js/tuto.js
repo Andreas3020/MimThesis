@@ -26,6 +26,9 @@ let todayPatientsArray = [];
 
 let scenario; 
 
+// variable that remebers the onco slot in order to remove the two hour range
+let oncoSlotTwoHours;
+
 let addSelectVar;
 
 let probBloodFailEasy = 0.5;
@@ -305,6 +308,24 @@ function hidePopupSkippatient() {
   const popUpText= document.getElementById("roomPopUp");
   popUpText.style.display = "none";
 }
+function removeTwoHoursRange()
+{
+  let tempSlotNr = ""; let tempSlotId = "";
+    let NrSelectedSlot = getSlotNrFromId(oncoSlotTwoHours.toString())[3];
+    for (let range = 1; range < 3; range ++)
+    {
+      for (let chemoBeds = 1; chemoBeds<3; chemoBeds ++)
+      {
+        tempSlotNr = NrSelectedSlot + chemoBeds + (range)*21;
+        tempSlotId = getSlotIdFromNr(tempSlotNr);
+        
+        if (slotsTakenArray[weekNr][tempSlotNr] == false)
+        {
+          document.getElementById(tempSlotId).classList.remove("chemoTwoHours");
+        }
+      }
+    }
+}
 
 function addSelectedSlot() {
   
@@ -316,10 +337,40 @@ function addSelectedSlot() {
   if(scenario == "onco"){
     tableBody.rows[1].cells[4].innerHTML -=1;
     
-  } else if(scenario == "chemo"){
-    tableBody.rows[1].cells[6].innerHTML -=1
+    
+    oncoSlotTwoHours = IdSelectedSlot;
+
+    let tempSlotNr = ""; let tempSlotId = "";
+    for (let range = 1; range < 3; range ++)
+    {
+      for (let chemoBeds = 1; chemoBeds<3; chemoBeds ++)
+      {
+        tempSlotNr = getSlotNrFromId(IdSelectedSlot.toString())[3] + chemoBeds + (range)*21;
+        tempSlotId = getSlotIdFromNr(tempSlotNr);
+        
+        if (slotsTakenArray[weekNr][tempSlotNr] == false)
+        {
+          document.getElementById(tempSlotId).classList.add("chemoTwoHours");
+        }
+      
+      }
+        
+    }
+
+  }  
+  else if(scenario == "chemo"){
+    tableBody.rows[1].cells[6].innerHTML -=1 
+
+    removeTwoHoursRange();
     
   } 
+  else if(scenario == "chemoChemo"){
+    tableBody.rows[1].cells[6].innerHTML -=1 
+
+  } 
+  else if(scenario == "oncoOnco"){
+    tableBody.rows[1].cells[4].innerHTML -=1;
+  }
 
  if(currentPatientObject.weekNrFirstSelectedSlot == -1)
  {
@@ -669,7 +720,7 @@ function addEventlistenerSlots()
           //ONLY ONCO APPOINTMENT (2 slots)
           if(nrOncoAppointments >= 1 && nrChemoAppointments == 0) {
 
-            scenario = "onco";
+            scenario = "oncoOnco";
             //Bijhouden dat 2 slots moeten weggeschreven worden bij klikken next (en dus niet 1)
             lengthSelectedSlot = 2;
 
@@ -692,7 +743,7 @@ function addEventlistenerSlots()
           //Schedule chemo without bloodtests in advance
           else if(nrOncoAppointments == 0 && nrChemoAppointments >= 2) {
             //Bijhouden dat 2 slots moeten weggeschreven worden bij klikken next (en dus niet 1)
-            scenario = "chemo";
+            scenario = "chemoChemo";
             lengthSelectedSlot = cLength;
 
             //ONCO SELECTED (CHEMO NEEDED)
@@ -955,11 +1006,10 @@ function resetPatient() {
   slotsCurrentArray = [];   //Alle gereserveerde slots patient die huidig ingepland wordt (yellow)
   slotsToAddArray = [];     //Huidige selectie eventListener
   available = currentPatientObject.availability;
-  //patientListTuto[currentPatientObject.patientID -1].availabilityChosen = [];
+ 
   tableBody.rows[1].cells[3].innerHTML = currentPatientObject.availability;
-  //oncoSlotOC = -1;
-  //lengthSelectedSlot = -1;
-  //scenario = ""; 
+  
+  removeTwoHoursRange();
 
   //Reset HTML used for counting scheduled moments
   const tableLeft = document.getElementById('patientTableScheduler');

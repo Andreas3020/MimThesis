@@ -120,6 +120,12 @@ i {
   color: black;
 }
 
+#agendaTable .chemoTwoHours {
+  text-shadow: 0 0rem 0rem rgba(0, 0, 0, 0.5);
+  background-color: rgb(173, 168, 168);
+  color: black;
+}
+
 #agendaTable .greyedOutSlotToday.slotTaken {
   background-color: rgb(221, 138, 46);
 }
