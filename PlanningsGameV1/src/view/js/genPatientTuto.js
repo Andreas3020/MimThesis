@@ -13,21 +13,21 @@ function Klant(profile){
 };
 
 var patientListTuto = [
-  new Klant({patientID: 0, firstName: "Raf", lastName: "Vanherbergen", availability: ["Tuesday","Wednesday","Sunday"], onco: 3, chemo: 3, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 1, firstName: "Andreas", lastName: "Dierickx", availability: ["Monday","Wednesday","Thursday"], onco: 0, chemo: 2, lastPatientBool: false, chemoLength: 4, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 2, firstName: "Laurens", lastName: "Stas", availability: ["Tuesday","Thursday","Sunday"], onco: 4, chemo: 4, lastPatientBool: true, chemoLength: 3, probBloodFail: 1, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
-  new Klant({patientID: 3, firstName: "Erik", lastName: "Demeulemeester", availability: ["Monday","Tuesday","Saturday"], onco: 0, chemo: 5, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
-  new Klant({patientID: 4, firstName: "Martina", lastName: "Vandebroeck", availability: ["Tuesday","Friday","Sunday"], onco: 0, chemo: 5, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
+  new Klant({patientID: 3, firstName: "Raf", lastName: "Vanherbergen", availability: ["Monday","Tuesday","Saturday"], onco: 0, chemo: 5, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
+  new Klant({patientID: 4, firstName: "Erik", lastName: "Demeulemeester", availability: ["Tuesday","Friday","Sunday"], onco: 0, chemo: 5, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 5, firstName: "Bart", lastName: "Van Riet", availability: ["Tuesday","Wednesday","Friday"], onco: 3, chemo: 3, lastPatientBool: true, chemoLength: 4, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 6, firstName: "Adam", lastName: "Smith", availability: ["Tuesday","Thursday","Friday"], onco: 1, chemo: 0, lastPatientBool: false, chemoLength: 0, probBloodFail: 1, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
-  new Klant({patientID: 7, firstName: "John", lastName: "Keynes", availability: ["Monday","Friday","Saturday"], onco: 0, chemo: 5, lastPatientBool: false, chemoLength: 4, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
+  new Klant({patientID: 7, firstName: "Martina", lastName: "Vandebroeck", availability: ["Monday","Friday","Saturday"], onco: 0, chemo: 5, lastPatientBool: false, chemoLength: 4, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 8, firstName: "Friedrich", lastName: "Hayek", availability: ["Tuesday","Friday","Sunday"], onco: 1, chemo: 0, lastPatientBool: true, chemoLength: 0, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 9, firstName: "Karl", lastName: "Marx", availability: ["Monday","Wednesday","Saturday"], onco: 1, chemo: 0, lastPatientBool: false, chemoLength: 0, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 10, firstName: "Max", lastName: "Weber", availability: ["Monday","Saturday","Sunday"], onco: 2, chemo: 2, lastPatientBool: false, chemoLength: 4, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 11, firstName: "Jan", lastName: "Tinbergen", availability: ["Monday","Tuesday","Sunday"], onco: 0, chemo: 5, lastPatientBool: true, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 12, firstName: "Milton", lastName: "Friedman", availability: ["Tuesday","Friday","Sunday"], onco: 3, chemo: 3, lastPatientBool: false, chemoLength: 4, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
   new Klant({patientID: 13, firstName: "Wilfried", lastName: "Lemahieu", availability: ["Wednesday","Friday","Saturday"], onco: 0, chemo: 5, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
-  new Klant({patientID: 14, firstName: "Luc", lastName: "Sels", availability: ["Monday","Friday","Saturday"], onco: 0, chemo: 2, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0})
+  new Klant({patientID: 14, firstName: "Luc", lastName: "Sels", availability: ["Monday","Friday","Saturday"], onco: 0, chemo: 2, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0}),
+  new Klant({patientID: 15, firstName: "John", lastName: "Keynes", availability: ["Tuesday","Wednesday","Sunday"], onco: 3, chemo: 3, lastPatientBool: false, chemoLength: 3, probBloodFail: 0, weekNrFirstSelectedSlot: -1, lastSelectedSlotId: 0})
 ];
 
 

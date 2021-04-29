@@ -44,8 +44,8 @@ Patient.Easy = function(){
   maxLength = 8;
   oncoProb = 0.7;
   nrOfPersons = 50;
-  minPatDay = 1; //3
-  maxPatDay = 1; //5
+  minPatDay = 3; //3
+  maxPatDay = 4; //5
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
   maxChemoLength = 3;
   nrOfAvailableDays;// = 3;
@@ -122,8 +122,6 @@ Patient.generate = function() {
     else{
       nrOfAvailableDays = 3;
     }
-    nrOfAvailableDays = 3;
-    console.log(nrOfAvailableDays);
 
     //GENERATE AVAILABILITY
     for(let loop = 0; loop < nrOfAvailableDays; loop++) {
