@@ -460,12 +460,14 @@ function addSelectedSlot() {
   } else if(scenario == "chemo"){
     tableBody.rows[1].cells[6].innerHTML -=1
     
-  } else{
-    
-  }
+  } 
  
-  currentPatientObject.weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
-  Patient.list[currentPatientObject.patientID -1].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
+  if(currentPatientObject.weekNrFirstSelectedSlot == -1)
+  {
+     currentPatientObject.weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
+     Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
+     console.log("weekfirstselectedslot2 " + weekNrFirstSelectedSlot);
+  }
  
   //NEW PATIENT?
   if(tableBody.rows[1].cells[6].innerHTML == 0) {
@@ -494,7 +496,7 @@ function addSelectedSlot() {
       varianceArray.push(varianceAbs);
       
       red();
-      setTimeout(function(){ goToCurrentWeek(); }, 350);
+      setTimeout(function(){ goToCurrentWeek(); }, 300);
       
 
     }
@@ -508,11 +510,12 @@ function addSelectedSlot() {
       addToVarianceArray();
       
       red();
-      setTimeout(function(){ goToCurrentWeek(); }, 350);
+      setTimeout(function(){ goToCurrentWeek(); }, 300);
       
       let currentPatientId = tableBody.rows[1].cells[0].innerHTML;  //Id equals amount of patients already passed by to schedule.
       currentPatientObject = Patient.list[currentPatientId -1];
       available = currentPatientObject.availability;
+      weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
       
       //LAST PATIENT - END GAME
       if(addSelectVar === 1) {
@@ -526,7 +529,7 @@ function addSelectedSlot() {
       addToVarianceArray();
       
       red();
-      setTimeout(function(){ goToCurrentWeek(); }, 350);
+      setTimeout(function(){ goToCurrentWeek(); }, 300);
       threeLogic();
       
       // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
@@ -537,6 +540,7 @@ function addSelectedSlot() {
         currentPatientId = tableBody.rows[1].cells[0].innerHTML; 
         currentPatientObject = Patient.list[currentPatientId - 1];
         available = currentPatientObject.availability;
+        weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
       }
     }
     else if (addSelectVar === 2){
@@ -614,7 +618,11 @@ function fourLogic()
   
   todayPatientsArray.splice(0, 1);
   
-  currentPatientObject.weekNrFirstSelectedSlot += 1; 
+  currentPatientObject.weekNrFirstSelectedSlot += 1;
+
+  weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot; 
+
+  Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
 }
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay() {
@@ -660,9 +668,7 @@ function checkPatientsPerDay() {
   }
   else {
     calculateAppointmentSpeed();
-    console.log("appointmentSpeed" );
-    console.log( appointmentSpeedArray);
-
+    
     Patient.list[currentPatientObject.patientID - 1].availability = available;
     console.log("Updated cpo availability to 1 day (before the next person will be fetched)");
     
@@ -805,8 +811,7 @@ function addEventlistenerSlots()
       let nrOncoAppointments = currentPatientObject.onco;
       let nrChemoAppointments = currentPatientObject.chemo;
       let cLength = currentPatientObject.chemoLength;
-      
-      weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
+     
 
       // CHECK NEW PATIENT + NOT TWO WEEKS IN ADVANCE
       if(!max2WeeksAdvance(dayNr) && (tableBody.rows[1].cells[4].innerHTML == tableBody.rows[1].cells[5].innerHTML) && (tableBody.rows[1].cells[6].innerHTML == tableBody.rows[1].cells[7].innerHTML)) {
@@ -870,7 +875,7 @@ function addEventlistenerSlots()
               //CHEMO SELECTED (CHEMO NEEDED)
               else {
                 //1e CHEMO a/h inplannen
-                if(weekNrFirstSelectedSlot === -1) {
+                if(currentPatientObject.weekNrFirstSelectedSlot === -1) {
                   //SLOT(S) AVAILABLE?
                   if(checkSlotsAvailable(slotNr) === 1) {
                     //SLOT(S) AANDUIDEN
@@ -909,7 +914,7 @@ function addEventlistenerSlots()
                 else {
                   oncoSlotOC = slotNr;
                   //1st time O&C
-                  if(weekNrFirstSelectedSlot == -1) {
+                  if(currentPatientObject.weekNrFirstSelectedSlot == -1) {
                     //SLOT(S) AVAILABLE?
                     if(checkSlotsAvailable(slotNr, cLength) === 1) {
                       //SLOT(S) AANDUIDEN
@@ -1140,6 +1145,7 @@ function resetPatient() {
   {
     currentPatientObject.weekNrFirstSelectedSlot = -1;
     Patient.list[currentPatientObject.patientID -1].weekNrFirstSelectedSlot = -1;
+    weekNrFirstSelectedSlot = -1;
     tableLeft.rows[1].cells[4].innerHTML = tableLeft.rows[1].cells[5].innerHTML
     tableLeft.rows[1].cells[6].innerHTML = tableLeft.rows[1].cells[7].innerHTML
     
@@ -1179,6 +1185,7 @@ function skipPatient() {
     currentPatientObject = Patient.list[currentPatientId -1];
     available = currentPatientObject.availability;
     IdSelectedSlot = -1;
+    weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot;
     goToCurrentWeek();
   }
   else { //addSelectVar  >= 1 
