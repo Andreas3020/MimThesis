@@ -44,8 +44,8 @@ Patient.Easy = function(){
   maxLength = 8;
   oncoProb = 0.7;
   nrOfPersons = 50;
-  minPatDay = 3; //3
-  maxPatDay = 4; //5
+  minPatDay = 1; //3
+  maxPatDay = 1; //5
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
   maxChemoLength = 3;
   nrOfAvailableDays;// = 3;
@@ -122,6 +122,7 @@ Patient.generate = function() {
     else{
       nrOfAvailableDays = 3;
     }
+    nrOfAvailableDays = 3;
     console.log(nrOfAvailableDays);
 
     //GENERATE AVAILABILITY
@@ -149,7 +150,7 @@ Patient.generate = function() {
    // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
 
     tempLastPatientBool = lastPatient();
-    tempProbBloodFail = getRandomFloat(0,0.99).toFixed(3);
+    tempProbBloodFail = getRandomFloat(1,1).toFixed(3);
     
     tempWeekNrFirstSelectedSlot = -1;
     //Create patient/Write to list

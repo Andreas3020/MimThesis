@@ -527,6 +527,7 @@ function checkPatientsPerDay() {
         div.classList.add("greyedOutHeader");
       });
     } 
+    patientListTuto[currentPatientObject.patientID].availability = available;
     return 3;    
   }
   else {

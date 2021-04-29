@@ -465,7 +465,7 @@ function addSelectedSlot() {
   if(currentPatientObject.weekNrFirstSelectedSlot == -1)
   {
      currentPatientObject.weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
-     Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
+     Patient.list[currentPatientObject.patientID - 1].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
      console.log("weekfirstselectedslot2 " + weekNrFirstSelectedSlot);
   }
  
@@ -622,7 +622,7 @@ function fourLogic()
 
   weekNrFirstSelectedSlot = currentPatientObject.weekNrFirstSelectedSlot; 
 
-  Patient.list[currentPatientObject.patientID].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
+  Patient.list[currentPatientObject.patientID - 1].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
 }
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
 function checkPatientsPerDay() {
@@ -664,11 +664,14 @@ function checkPatientsPerDay() {
         div.classList.add("greyedOutHeader");
       });
     } 
+    
+    Patient.list[currentPatientObject.patientID - 1].availability = available;
     return 3;    
   }
   else {
     calculateAppointmentSpeed();
     
+
     Patient.list[currentPatientObject.patientID - 1].availability = available;
     console.log("Updated cpo availability to 1 day (before the next person will be fetched)");
     
