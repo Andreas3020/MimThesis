@@ -18,34 +18,27 @@
   <div class="homeBody">
     <div class="rulesSettings">
       <div class=container>
-        <h2>Instructions</h2>
-        <ul>
-          <li>The purpose of the game is to schedule all the patients. Scheduling a patient happens in 3 steps. 
-            <p class="pictureText" onclick="playVideo('pictures/ijf.mp4')">Click here for a video</p>
-            <ol><br>
-              <li>
-                You first look at patients information. The Onco and Chemo column indicates the number of appointments still to be scheduled and total number of appointments to schedule. Chemo length indicates how many slots each chemo session needs.
-              </li><br>
-              <li>
-                Then you first schedule a Onco appointment (if any), followed by a chemo appointment (if any). In between those has to be 2 hours. (2 slots in the Demo and 4 slots in the normal game). Then you go to the next week to schedule the next appointment
-              </li><br>
-              <li>
-                A patients appointment can be rescheduled as long as the last appointment is not yet scheduled, by clicking ‘Reset’. A patient can be skipped by clicking ‘Skip’.
-              </li><br>
-            </ol>
-          </li>
-
-          <li>
-            Every few patients a new day starts and every patient who has an appointment that day has to take a bloodtest to see of if they are fit enough. In case they fail the bloodtest, they will need a new appointment the week after their last appointment as shown <p class="pictureText" onclick="playVideo('pictures/ijf.mp4')">in this video</p>.
-          </li><br>
-          <li>
-            You can now play the Demo to try it out, or start the game immediately by choosing a difficulty. You will be rated on 5 parameters shown in the table on the right hand side. By hovering over them, a text balloon will show more information.
-          </li>
-        </ul>
-        
-        <p>You can find an extensive English version of the instruction <a href="pictures/HR.pdf" target="_blank">here</a></p>
-        <p>Een uitgebreide Nederlandstalige versie van de instructies vind u <a href="pictures/HR.pdf" target="_blank">hier</a></p><br>
-
+        <h2>Instructions</h2> <br>
+        <p> In this game you play as a planner of patients in an oncology department. Every day, various patients will want to schedule an appointment for chemo therapy and/or with an oncologist. It is for you to decide where to put every patient in an agenda. Pay attention, from the moment you have planned in a patient, no other patient can be scheduled on that same spot. So, you wil have to think clearly about every choice you make. <br>
+          <ul>
+            <li> You start with an empty <p class="pictureText" onclick="showPicture('pictures/InitialAgenda.png')">agenda</p> and with <p class="pictureText" onclick="showPicture('pictures/PatientInformation.png')">information</p> of the patient you have to schedule. This information shows all the data needed to be able to schedule the patient.</li>
+            <ul> <li> The <p class="pictureText" onclick="showPicture('pictures/availibilityInfo.png')">availability column</p> shows the weekdays that the patient is available. You will have to choose one of those days for every appointment the patient has.</li><br>
+            <li>The next <p class="pictureText" onclick="showPicture('pictures/patientAppointmentInfo.png')">part</p> shows the number of appointments you have to schedule for that patient. The first number in the 'onco' and 'chemo' column shows the total number of appointments needed. The second number shows the total amount of appointments you still have to plan. After planning one onco and one chemo appointment the display of the patient will look something like <p class="pictureText" onclick="showPicture('pictures/patientInfoPlannedIn.png')">this</p>. </li><br>
+            <li>The  <p class="pictureText" onclick="showPicture('pictures/chemoLength.png')">last information</p> shown, is the amount of slots one chemo therapy appointment for that patient will take.</li></ul>
+            <li>Now, you can start with scheduling the patients. You can do this by <p class="pictureText" onclick="showPicture('pictures/pressOnSlot.png')">clicking on a slot</p> in the agenda where you want the appointment to go. If you are happy with your choice you can press the <p class="pictureText" onclick="showPicture('pictures/confirm.png')">confirm button</p> or 'enter' on you keyboard. The patient is now planned. If that was the last appointment of that patient the slot becomes <p class="pictureText" onclick="showPicture('pictures/redSlot.png')">red</p> and you will not be able to change that appointment. If it is not the last appointment, it keeps being <p class="pictureText" onclick="showPicture('pictures/yellowSlot.png')">yellow</p> and you will be able to press a reset button to delete every appointment of that patient.</li>  <br>
+            <li>There are different ways to schedule a patient depending on the number of appointments they have.</li><br>
+            <ol>
+              <li>The patients have only one 'onco' appointment. This kind of patients needs a one hour appointment with the oncologist.</li><br>
+              <li>The patients have only 'chemo' appointments. For this patient you will need to schedule a 'chemo' appointment every week for the amount given.</li><br>
+              <li>The patients have both 'onco' and 'chemo' appointments. Here you will have to first plan an 'onco' appointment and then two hours later a 'chemo' appointment which you will have to repeat the next weeks until all the appointments of the patient are scheduled.</li>
+            </ol> <br>
+            <li>Every day a random number of patients will come after which the agenda will go to the next day. It is not possible to schedule on the current and previous days. If, for whatever reason, you are not able to plan the patient in, you can press the <p class="pictureText" onclick="showPicture('pictures/skip.png')">skip</p> button with which you will go to the next patient.</li><br>
+            <li>The game will check every patient ,that has a chemo appointment on that day, with a blood test to check if they are fit enough. If a patient fails their bloodtest, you will have to plan a new appointment the week after his last appointment. The game will let you know if this happens with a popup. </li> <br>
+            <li>Now you know how to play the game! If you want, you can play a demo which is a short simple version of the game with every possible scenario. If not, you can try one of the three difficulties of the game. Each game will be rated using 5 variables seen in the table on the right hand side. You can find more information by hovering over it.</li>
+            
+          </ul>
+          
+        </p>
         <a href="tuto.html"><button class="startButton" id="tutoButton">Demo</button></a>
       </div>
     
@@ -120,11 +113,9 @@
 
   <div id="instructionPopUp" class="popUp">
     <!-- popUp content -->
-        <video id="video" width="40%" height="60%" controls>
-          <source type="video/mp4">
-          Your browser does not support HTML5 video.
-        </video>
+        <img  id="img" src="pictures/PatientInformation.png" alt="Information of patient" style="max-width:800px;max-height: 500px" >
         <a class="close"  onclick="clearPopup()">x</a>  
+      
       </div>
     </div>
    <!-- The core Firebase JS SDK is always required and must be listed first -->
