@@ -67,7 +67,7 @@ function renderAgenda()
   //GENERATE AGENDA BODY (hour column + slots)
   for(let j=0; j<20; j++) { //20x ROWS - HOUR SLOTS
     core += `<tr>`;
-    core += `<th> ${hours[j]} </th>`;   //E.g. <th>8:00</th>
+    core += `<th id = ${j}> ${hours[j]} </th>`;   //E.g. <th>8:00</th>
 
     for (let i=0; i<7; i++) { //7x DAYS
       if ( currentWeek == weekNr)     { greyedOutString = checkDay(i, "greyedOutSlot"); } 
@@ -177,6 +177,7 @@ function renderAgenda()
 
   addEventlistenerSlots()
 }
+
 
 function checkDay(i, greyedOutString)
 {
@@ -852,10 +853,18 @@ function max2WeeksAdvance(dayNr) {
     else { return false; }
 }
 
+
+
 function addEventlistenerSlots() 
 {
   document.querySelectorAll("#agendaBody > tr > td:not(.greyedOutSlotToday):not(.greyedOutSlot)").forEach
   ( slot => {
+    slot.addEventListener("mouseover", event => {
+      document.getElementById(getSlotNrFromId(event.currentTarget.id)[1]).style.backgroundColor = "rgb(0, 64, 122)";
+    })
+    slot.addEventListener("mouseout", event => {
+      document.getElementById(getSlotNrFromId(event.currentTarget.id)[1]).style.backgroundColor = "rgb(29, 141, 176)";
+    })
     slot.addEventListener("click", event => {
       //Need to lookup slotId again, because IdSelectedSlot becomes -1 after clicking "next".
       let dayNr; let hourSlot; let oncoChemoNr; let slotNr;
