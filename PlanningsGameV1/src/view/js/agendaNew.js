@@ -1165,7 +1165,6 @@ function skipPatient() {
   if (addSelectVar === 3)
   {
     threeLogic();
-    console.log(addSelectVar);
     addSelectVar = checkPatientsPerDay();
     
   }

@@ -320,7 +320,7 @@ function addSelectedSlot() {
     tableBody.rows[1].cells[6].innerHTML -=1
     
   } 
-  
+
  if(currentPatientObject.weekNrFirstSelectedSlot == -1)
  {
     currentPatientObject.weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
@@ -986,7 +986,7 @@ function skipPatient() {
   if (addSelectVar == 3)
   {
     threeLogic();
-    addSelectVar = nextPatientEvent();
+    addSelectVar = checkPatientsPerDay();
   }
   if(addSelectVar === 4)
   {
