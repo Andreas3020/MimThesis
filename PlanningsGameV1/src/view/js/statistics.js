@@ -700,7 +700,7 @@ function generateRanking(){
     }
   }
 
-  var rankingList = [];
+  let rankingList = [];
   
   for(let i = 0; i < keys.length; i++){
     var gameList = userList[keys[i]]; 
@@ -714,19 +714,22 @@ function generateRanking(){
     }
 
     diffGameList.sort(function(a,b){
-      return parseFloat(a.avgAppDiff) - parseFloat(b.avgAppDiff);
+      return a[evaluation.value] - b[evaluation.value];
     });
-    rankingList[rankingList.length] = diffGameList[0]; 
+    if(diffGameList.length>0){
+      rankingList[rankingList.length] = diffGameList[0];
+    }
   }
 
   rankingList.sort(function(a,b){
-    return a[evaluation] - b[evaluation];
+    return a[evaluation.value] - b[evaluation.value];
   });
 
   const table = document.getElementById("resultTable");
 
-  for(let i = 1; i < table.rows.length; i++){
-    table.deleteRow(i);
+  let deleteLength = table.rows.length;
+  while(table.rows.length>1){
+    table.deleteRow(table.rows.length -1)
   }
 
   if(rankingList[0]){
