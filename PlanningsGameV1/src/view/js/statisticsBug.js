@@ -348,7 +348,7 @@ function createChart(){
             visible: false,
         }, {
             title: { 
-              text: 'variance (Nr of half hour blocks)' ,
+              text: 'Standard deviaton (Nr of half hour blocks)' ,
               style: {
                 fontWeight: 'bold',
               },
@@ -360,7 +360,7 @@ function createChart(){
             visible: false
         }, {
             title: { 
-              text: 'average difference (Nr of half hour blocks)', 
+              text: 'Average difference (Nr of half hour blocks)', 
               style:{
                 fontWeight: 'bold',
               },
