@@ -74,5 +74,17 @@ pl.view.genPatientTuto = {
     } else {
         lastPatient = 1;
     }
+    updateProgressBar(nrOfPatients);
     return lastPatient;
+  }
+
+  function updateProgressBar(nrOfPatients)
+  {
+        
+        var elem = document.getElementById("myBar");
+        
+        progress = i * 100/nrOfPatients
+       
+        elem.style.width = progress + "%";
+      
   }

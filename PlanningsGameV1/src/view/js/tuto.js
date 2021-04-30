@@ -27,7 +27,7 @@ let todayPatientsArray = [];
 let scenario; 
 
 // variable that remebers the onco slot in order to remove the two hour range
-let oncoSlotTwoHours;
+let oncoSlotTwoHours = "D0_H0_OC0";
 
 let addSelectVar;
 
