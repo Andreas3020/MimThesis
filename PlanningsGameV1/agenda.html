@@ -176,7 +176,7 @@
       <button class="popUpButton" type="button" id="okButton" onclick="hideSelectTimeslot()">OK</button></a>
     </div>
     <div class="popUpContent" id="alreadyEndedPop">
-      <p class="popUpText">You already scheduled this last patient. Game ended.</p>
+      <p class="popUpText">You already scheduled the last patient. Game ended.</p>
       <button class="popUpButton" type="button" id="okButton" onclick="hideAlreadyEndedPop()">OK</button></a>
     </div>
     <div class="popUpContent" id="bloodtestFailPop">
@@ -220,10 +220,9 @@
       <p class="popUpText">Attention! Chemo will fall outside the working hours with this onco slot</p>
       <button class="popUpButton" type="button" id="okButton" onclick="hideUselesSlot()">OK</button></a>
     </div>
-    <div class="popUpContent" id="endGamePop">
-        <p class="popUpText">Last patient has been processed. You finished the game!</p>
-        <p class="popUpText" id="showGameTime"></p>
-        <button class="popUpButton" type="button" id="okButton" onclick="hideEndPopup()">Back to homepage</button></a>
+    <div class="popUpContent" id="2weeksPop">
+        <p class="popUpText">You may only plan maximum 2 weeks in advance.</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hide2weeks()">OK</button>
     </div>
   </div>
   
