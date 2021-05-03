@@ -199,6 +199,59 @@
           <button class="popUpButton" type="button" id="okButton" onclick="skipPatient(); hidePopupSkippatient();">Confirm</button></a>
         </div>
       </div>
+      <div class="popUpContent" id="selectTimeslotPop">
+        <p class="popUpText">Must select a time slot!</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideSelectTimeslot()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="alreadyEndedPop">
+        <p class="popUpText">You already scheduled the last patient. Game ended.</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideAlreadyEndedPop()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="bloodtestFailPop">
+        <p class="popUpText" id="bloodtestFailText"></p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideBloodtestFail()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="notThisWeekdayPop">
+        <p class="popUpText">Patient is not available this weekday.</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideNotThisWeekday()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="oncoNeededPop">
+        <p class="popUpText">The patient needs to be alloted an onco slot!</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideOncoNeeded()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="chemoNeededPop">
+        <p class="popUpText">The patient needs to be alloted a chemo slot!</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideChemoNeeded()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="chemoWrongWeekpop">
+        <p class="popUpText">You are scheduling the next chemo appointment in the wrong week!</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideChemoWrongWeek()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="oncoWrongWeekPop">
+        <p class="popUpText">You are scheduling the next onco appointment in the wrong week!</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideOncoWrongWeek()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="2hoursBetweenPop">
+        <p class="popUpText">There must be at least 2 hours of time between the onco & chemo appointment.</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hide2hoursBetween()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="outsideHoursPop">
+        <p class="popUpText">Appointment would fall outside working hours!</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideOutsideHours()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="wrongRangePop">
+        <p class="popUpText">Selection of slot(s) not available.</p>
+        <p class="popUpText" id="wrongRangeText"></p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideWrongRange()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="uselesSlotPop">
+        <p class="popUpText">Attention! Chemo will fall outside the working hours with this onco slot</p>
+        <button class="popUpButton" type="button" id="okButton" onclick="hideUselesSlot()">OK</button></a>
+      </div>
+      <div class="popUpContent" id="2weeksPop">
+          <p class="popUpText">You may only plan maximum 2 weeks in advance.</p>
+          <button class="popUpButton" type="button" id="okButton" onclick="hide2weeks()">OK</button>
+      </div>
     <!--</div>-->
   </div>
 
