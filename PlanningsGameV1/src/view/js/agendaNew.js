@@ -173,7 +173,7 @@ function renderAgenda()
   tableCore.innerHTML = core;
 
   //DISPLAY WEEK NR
-  document.getElementById('weekNr').innerHTML= "week" + (weekNr+1);
+  document.getElementById('weekNr').innerHTML= "week " + (weekNr+1);
 
   addEventlistenerSlots()
 }
