@@ -1,10 +1,10 @@
 var chart;
 var chartSkipped; 
-var skippedPatientsListE, skippedPatientsListLM, skippedPatientsListH;
-var varianceListE, varianceListM, varianceListH;
-var avgDifferenceListE, avgDifferenceListM, avgDifferenceListH;
-var appointementSpeedListE, appointementSpeedListM, appointementSpeedListH;
-var timeListE, timeListM, timeListH;
+var skippedPatientsListE = [], skippedPatientsListM = [], skippedPatientsListH = [];
+var varianceListE = [], varianceListM = [], varianceListH = [];
+var avgDifferenceListE = [], avgDifferenceListM = [], avgDifferenceListH = [];
+var appointementSpeedListE = [], appointementSpeedListM = [], appointementSpeedListH = [];
+var timeListE = [], timeListM = [], timeListH = [];
 let roomNameJString;
 var roomName;
 var userList;
@@ -22,71 +22,40 @@ if(roomNameJString){
 }
 
 function getStat(){
-  database.once('value', function(snapshot) {
-    let roomList = Object.keys(snapshot.val());
-    let nrOfRooms = roomList.length;
 
-    if(nrOfRooms>0){
-        //skipped patients lists
-        database.child(roomName).child("statistics").child("skippedPatients").child("easy").once('value', function(snapshot){
-          skippedPatientsListE = Object.values(snapshot.val());
-        });
+  database.child(roomName).child("users").once('value', function(snapshot){
+    if(snapshot.exists()){
+      let tempValList = Object.values(snapshot.val());
 
-        database.child(roomName).child("statistics").child("skippedPatients").child("moderate").once('value', function(snapshot){
-          skippedPatientsListM = Object.values(snapshot.val());
-        });
-
-        database.child(roomName).child("statistics").child("skippedPatients").child("hard").once('value', function(snapshot){
-          skippedPatientsListH = Object.values(snapshot.val());
-        });
-
-        //variance lists
-        database.child(roomName).child("statistics").child("variance").child("easy").child("variance").once('value', function(snapshot){
-            varianceListE = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("variance").child("easy").child("avgDifference").once('value', function(snapshot){
-            avgDifferenceListE = Object.values(snapshot.val());
-        });
-
-        database.child(roomName).child("statistics").child("variance").child("moderate").child("variance").once('value', function(snapshot){
-          varianceListM = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("variance").child("moderate").child("avgDifference").once('value', function(snapshot){
-          avgDifferenceListM = Object.values(snapshot.val());
-        });
-
-        database.child(roomName).child("statistics").child("variance").child("hard").child("variance").once('value', function(snapshot){
-          varianceListH = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("variance").child("hard").child("avgDifference").once('value', function(snapshot){
-          avgDifferenceListH = Object.values(snapshot.val());
-        });
-
-        //appointment speed lists
-        database.child(roomName).child("statistics").child("appointmentSpeed").child("easy").once('value', function(snapshot){
-            appointementSpeedListE = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("appointmentSpeed").child("moderate").once('value', function(snapshot){
-          appointementSpeedListM = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("appointmentSpeed").child("hard").once('value', function(snapshot){
-          appointementSpeedListH = Object.values(snapshot.val());
-        });
-
-        //completion time lists
-        database.child(roomName).child("statistics").child("time").child("easy").once('value', function(snapshot){
-          timeListE = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("time").child("moderate").once('value', function(snapshot){
-          timeListM = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("time").child("hard").once('value', function(snapshot){
-          timeListH = Object.values(snapshot.val());
-          createChart();
-        });
-
+      for(let x = 0; x < tempValList.length; x++){
+        for(let y = 0; y < tempValList[x].length; y++){
+          if(tempValList[x][y].difficulty == 'Easy'){
+            skippedPatientsListE[skippedPatientsListE.length] = tempValList[x][y].skippedPatients;
+            varianceListE[varianceListE.length] = tempValList[x][y].avgAppDev;
+            avgDifferenceListE[avgDifferenceListE.length] = tempValList[x][y].avgAppDiff;
+            appointementSpeedListE[appointementSpeedListE.length] = tempValList[x][y].avgAppSpeed;
+            timeListE[timeListE.length] = tempValList[x][y].time;
+          }
+          else if(tempValList[x][y].difficulty == 'Moderate'){
+            skippedPatientsListM[skippedPatientsListM.length] = tempValList[x][y].skippedPatients;
+            varianceListM[varianceListM.length] = tempValList[x][y].avgAppDev;
+            avgDifferenceListM[avgDifferenceListM.length] = tempValList[x][y].avgAppDiff;
+            appointementSpeedListM[appointementSpeedListM.length] = tempValList[x][y].avgAppSpeed;
+            timeListM[timeListM.length] = tempValList[x][y].time;
+          }
+          else if(tempValList[x][y].difficulty == 'Hard'){
+            skippedPatientsListH[skippedPatientsListH.length] = tempValList[x][y].skippedPatients;
+            varianceListH[varianceListH.length] = tempValList[x][y].avgAppDev;
+            avgDifferenceListH[avgDifferenceListH.length] = tempValList[x][y].avgAppDiff;
+            appointementSpeedListH[appointementSpeedListH.length] = tempValList[x][y].avgAppSpeed;
+            timeListH[timeListH.length] = tempValList[x][y].time;
+          }
         }
-    });
+      }
+    }
+  }).then(function onSuccess() {
+      createChart();
+  });
 }
 
 // Create the chart
@@ -110,6 +79,7 @@ function createChart(){
                     text: "Nr of skipped patients"
                   },
                   tickmarkPlacement: 'on',
+                  tickInterval: 1,
                 },
                 yAxis: {
                   title: {
@@ -121,7 +91,6 @@ function createChart(){
                       pointPlacement: 'between',
                       dataLabels: {
                         enabled: true,
-                        format: '{point.y:.1f}%'
                       }
                   },
                   histogram:{
@@ -357,22 +326,20 @@ function createChart(){
                     text: "Players average appointment speed patients (half our blocks)"
                   },
                   tickmarkPlacement: 'on',
+                  tickInterval: 0.1,
                 },
                 yAxis: {
                   title: {
                     text: "Nr of players"
-                  }
+                  },
                 },
                 plotOptions:{
                   series:{
-                      pointPlacement: 'between',
-                      dataLabels: {
-                        enabled: true,
-                        format: '{point.y:.1f}%'
-                      }
+                      pointPlacement: 'on',
                   },
                   histogram:{
-                    binWidth: 0.999
+                    pointPlacement: 'between',
+                    binWidth: 0.2
                   }
                 }
 
@@ -483,7 +450,7 @@ function createChart(){
             },
           },
           histogram: {
-            binWidth: 1
+            binsNumber: "rice"
           }
         },
 
@@ -536,6 +503,7 @@ function createChart(){
                     text: "Completion time (minutes)"
                   },
                   tickmarkPlacement: 'on',
+                  tickInterval: 5,
                 },
                 yAxis: {
                   title: {
@@ -544,14 +512,10 @@ function createChart(){
                 },
                 plotOptions:{
                   series:{
-                      pointPlacement: 'between',
-                      dataLabels: {
-                        enabled: true,
-                        format: '{point.y:.1f}%'
-                      }
+                      pointPlacement: 'off',
                   },
                   histogram:{
-                    binWidth: 0.999
+                    binWidth: 10
                   }
                 }
 
@@ -662,7 +626,7 @@ function createChart(){
             },
           },
           histogram: {
-            binWidth: 1
+            //binWidth: 1
           }
         },
 
@@ -704,65 +668,66 @@ function update(){
   database.child(roomName).child("users").once('value', function(snapshot){
     if(snapshot.val()){
       userList = snapshot.val();
+      generateRanking();
     }
-  }).then(function onSuccess() {
-    generateRanking();
   });
 }
 
 function generateRanking(){
-  let keys = Object.keys(userList);
-  let level = document.getElementById("difficulty").value;
-  let evaluationList = document.getElementsByName("evaluation");
-  let evaluation;
-  for (let i = 0; i < evaluationList.length; i++) {
-    if(evaluationList[i].checked){
-      evaluation = evaluationList[i]
-    }
-  }
-
-  let rankingList = [];
-  
-  for(let i = 0; i < keys.length; i++){
-    var gameList = userList[keys[i]]; 
-    var diffGameList = [];
-
-    for(let j = 0; j < gameList.length; j++){
-      if(gameList[j].difficulty == level){
-        gameList[j].rnumber = keys[i];
-        diffGameList[diffGameList.length] = gameList[j];
+  if(userList){
+    let keys = Object.keys(userList);
+    let level = document.getElementById("difficulty").value;
+    let evaluationList = document.getElementsByName("evaluation");
+    let evaluation;
+    for (let i = 0; i < evaluationList.length; i++) {
+      if(evaluationList[i].checked){
+        evaluation = evaluationList[i]
       }
     }
-
-    diffGameList.sort(function(a,b){
+  
+    let rankingList = [];
+    
+    for(let i = 0; i < keys.length; i++){
+      var gameList = userList[keys[i]]; 
+      var diffGameList = [];
+  
+      for(let j = 0; j < gameList.length; j++){
+        if(gameList[j].difficulty == level){
+          gameList[j].rnumber = keys[i];
+          diffGameList[diffGameList.length] = gameList[j];
+        }
+      }
+  
+      diffGameList.sort(function(a,b){
+        return a[evaluation.value] - b[evaluation.value];
+      });
+      if(diffGameList.length>0){
+        rankingList[rankingList.length] = diffGameList[0];
+      }
+    }
+  
+    rankingList.sort(function(a,b){
       return a[evaluation.value] - b[evaluation.value];
     });
-    if(diffGameList.length>0){
-      rankingList[rankingList.length] = diffGameList[0];
+  
+    const table = document.getElementById("resultTable");
+  
+    let deleteLength = table.rows.length;
+    while(table.rows.length>1){
+      table.deleteRow(table.rows.length -1)
     }
-  }
-
-  rankingList.sort(function(a,b){
-    return a[evaluation.value] - b[evaluation.value];
-  });
-
-  const table = document.getElementById("resultTable");
-
-  let deleteLength = table.rows.length;
-  while(table.rows.length>1){
-    table.deleteRow(table.rows.length -1)
-  }
-
-  if(rankingList[0]){
-    for (let i = 0; i < rankingList.length; i++) {
-      let row = table.insertRow();
-      row.insertCell(0).textContent = i+1;
-      row.insertCell(1).textContent = rankingList[i].rnumber;
-      row.insertCell(2).textContent = rankingList[i].skippedPatients;
-      row.insertCell(3).textContent = rankingList[i].avgAppDev;
-      row.insertCell(4).textContent = rankingList[i].avgAppDiff;
-      row.insertCell(5).textContent = rankingList[i].avgAppSpeed;
-      row.insertCell(6).textContent = rankingList[i].time;
+  
+    if(rankingList[0]){
+      for (let i = 0; i < rankingList.length; i++) {
+        let row = table.insertRow();
+        row.insertCell(0).textContent = i+1;
+        row.insertCell(1).textContent = rankingList[i].rnumber;
+        row.insertCell(2).textContent = rankingList[i].skippedPatients;
+        row.insertCell(3).textContent = rankingList[i].avgAppDev;
+        row.insertCell(4).textContent = rankingList[i].avgAppDiff;
+        row.insertCell(5).textContent = rankingList[i].avgAppSpeed;
+        row.insertCell(6).textContent = rankingList[i].time;
+      }
     }
   }
 }

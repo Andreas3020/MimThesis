@@ -92,7 +92,6 @@ function addRoom(){
             Patient.generate();
             Patient.loadAll();
             database.child(roomName).child("patients").child("Hard").set(Patient.list);
-            generateStats(roomName);
         }        
       });
     }
@@ -215,93 +214,6 @@ function deleteRoom(roomName){
   roomPopUp.style.display ="none";
   let confirmDel = document.getElementById("confirmDel");
   confirmDel.style.display ="none";
-}
-
-function generateStats(roomName){
-  let randomListE = [];
-  let randomListM = [];
-  let randomListH = [];
-  
-  //setting the data for the statistics
-  //setting the skipped patients statistics
-  for(let i =0; i<120; i++){
-    let e = Math.round(Math.random()*10);
-    let m = Math.round(Math.random()*10);
-    let h = Math.round(Math.random()*10);
-    randomListE[i]= e;
-    randomListM[i]= m;
-    randomListH[i]= h;
-  }
-
-  database.child(roomName).child("statistics").child("skippedPatients").child("easy").set(randomListE);
-  
-  database.child(roomName).child("statistics").child("skippedPatients").child("moderate").set(randomListM);
- 
-  database.child(roomName).child("statistics").child("skippedPatients").child("hard").set(randomListH);
-
-  //setting the variance statistics
-  for(let i =0; i<120; i++){
-    let e = Math.round(Math.random()*100)/20;
-    let m = Math.round(Math.random()*100)/10;
-    let h = Math.round(Math.random()*100)/10;
-    randomListE[i]= e;
-    randomListM[i]= m;
-    randomListH[i]= h;
-  }
-
-  database.child(roomName).child("statistics").child("variance").child("easy").child("variance").set(randomListE);
-  
-  database.child(roomName).child("statistics").child("variance").child("moderate").child("variance").set(randomListM);
-  
-  database.child(roomName).child("statistics").child("variance").child("hard").child("variance").set(randomListH);
- 
-  //setting the average difference statistics
-  for(let i =0; i<120; i++){
-    let e = Math.round(Math.random()*100)/10;
-    let m = Math.round(Math.random()*100)/20;
-    let h = Math.round(Math.random()*100)/10;
-    randomListE[i]= e;
-    randomListM[i]= m;
-    randomListH[i]= h;
-  }
-
-  database.child(roomName).child("statistics").child("variance").child("easy").child("avgDifference").set(randomListE);
-  
-  database.child(roomName).child("statistics").child("variance").child("moderate").child("avgDifference").set(randomListM);
- 
-  database.child(roomName).child("statistics").child("variance").child("hard").child("avgDifference").set(randomListH);
-  
-  //setting the appointment speed statistics
-  for(let i =0; i<120; i++){
-    let e = Math.round(Math.random()*10);
-    let m = Math.round(Math.random()*10);
-    let h = Math.round(Math.random()*10);
-    randomListE[i]= e;
-    randomListM[i]= m;
-    randomListH[i]= h;
-  }
-  
-  database.child(roomName).child("statistics").child("appointmentSpeed").child("easy").set(randomListE);
-  
-  database.child(roomName).child("statistics").child("appointmentSpeed").child("moderate").set(randomListM);
-  
-  database.child(roomName).child("statistics").child("appointmentSpeed").child("hard").set(randomListH);
-
-  //setting completion time statistics
-  for(let i =0; i<120; i++){
-    let e = Math.round(Math.random()*10);
-    let m = Math.round(Math.random()*10);
-    let h = Math.round(Math.random()*10);
-    randomListE[i]= e;
-    randomListM[i]= m;
-    randomListH[i]= h;
-  }
-  
-  database.child(roomName).child("statistics").child("time").child("easy").set(randomListE);
-  
-  database.child(roomName).child("statistics").child("time").child("moderate").set(randomListM);
-  
-  database.child(roomName).child("statistics").child("time").child("hard").set(randomListH);
 }
 
 function roomStats(roomName){

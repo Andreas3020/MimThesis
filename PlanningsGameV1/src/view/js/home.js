@@ -5,11 +5,11 @@ let roomNameJString;
 let difficulty; 
 let rnumber;
 let rnumberJString
-var skippedPatientsListE, skippedPatientsListLM, skippedPatientsListH;
-var varianceListE, varianceListM, varianceListH;
-var avgDifferenceListE, avgDifferenceListM, avgDifferenceListH;
-var appointementSpeedListE, appointementSpeedListM, appointementSpeedListH;
-var timeListE, timeListM, timeListH;
+var skippedPatientsListE = [], skippedPatientsListM = [], skippedPatientsListH = [];
+var varianceListE = [], varianceListM = [], varianceListH = [];
+var avgDifferenceListE = [], avgDifferenceListM = [], avgDifferenceListH = [];
+var appointementSpeedListE = [], appointementSpeedListM = [], appointementSpeedListH = [];
+var timeListE = [], timeListM = [], timeListH = [];
 
 try {
   if (localStorage["roomName"]) {
@@ -83,71 +83,39 @@ function startGame(){
 }
 
 function getStat(){
-  database.once('value', function(snapshot) {
-    let roomList = Object.keys(snapshot.val());
-    let nrOfRooms = roomList.length;
+  database.child(roomName).child("users").once('value', function(snapshot){
+    if(snapshot.exists()){
+      let tempValList = Object.values(snapshot.val());
 
-    if(nrOfRooms>0){
-        //skipped patients lists
-        database.child(roomName).child("statistics").child("skippedPatients").child("easy").once('value', function(snapshot){
-          skippedPatientsListE = Object.values(snapshot.val());
-        });
-
-        database.child(roomName).child("statistics").child("skippedPatients").child("moderate").once('value', function(snapshot){
-          skippedPatientsListM = Object.values(snapshot.val());
-        });
-
-        database.child(roomName).child("statistics").child("skippedPatients").child("hard").once('value', function(snapshot){
-          skippedPatientsListH = Object.values(snapshot.val());
-        });
-
-        //variance lists
-        database.child(roomName).child("statistics").child("variance").child("easy").child("variance").once('value', function(snapshot){
-            varianceListE = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("variance").child("easy").child("avgDifference").once('value', function(snapshot){
-            avgDifferenceListE = Object.values(snapshot.val());
-        });
-
-        database.child(roomName).child("statistics").child("variance").child("moderate").child("variance").once('value', function(snapshot){
-          varianceListM = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("variance").child("moderate").child("avgDifference").once('value', function(snapshot){
-          avgDifferenceListM = Object.values(snapshot.val());
-        });
-
-        database.child(roomName).child("statistics").child("variance").child("hard").child("variance").once('value', function(snapshot){
-          varianceListH = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("variance").child("hard").child("avgDifference").once('value', function(snapshot){
-          avgDifferenceListH = Object.values(snapshot.val());
-        });
-
-        //appointment speed lists
-        database.child(roomName).child("statistics").child("appointmentSpeed").child("easy").once('value', function(snapshot){
-            appointementSpeedListE = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("appointmentSpeed").child("moderate").once('value', function(snapshot){
-          appointementSpeedListM = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("appointmentSpeed").child("hard").once('value', function(snapshot){
-          appointementSpeedListH = Object.values(snapshot.val());
-        });
-
-        //completion time lists
-        database.child(roomName).child("statistics").child("time").child("easy").once('value', function(snapshot){
-          timeListE = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("time").child("moderate").once('value', function(snapshot){
-          timeListM = Object.values(snapshot.val());
-        });
-        database.child(roomName).child("statistics").child("time").child("hard").once('value', function(snapshot){
-          timeListH = Object.values(snapshot.val());
-          createAvg();
-        });
-
+      for(let x = 0; x < tempValList.length; x++){
+        for(let y = 0; y < tempValList[x].length; y++){
+          if(tempValList[x][y].difficulty == 'Easy'){
+            skippedPatientsListE[skippedPatientsListE.length] = tempValList[x][y].skippedPatients;
+            varianceListE[varianceListE.length] = tempValList[x][y].avgAppDev;
+            avgDifferenceListE[avgDifferenceListE.length] = tempValList[x][y].avgAppDiff;
+            appointementSpeedListE[appointementSpeedListE.length] = tempValList[x][y].avgAppSpeed;
+            timeListE[timeListE.length] = tempValList[x][y].time;
+          }
+          else if(tempValList[x][y].difficulty == 'Moderate'){
+            skippedPatientsListM[skippedPatientsListM.length] = tempValList[x][y].skippedPatients;
+            varianceListM[varianceListM.length] = tempValList[x][y].avgAppDev;
+            avgDifferenceListM[avgDifferenceListM.length] = tempValList[x][y].avgAppDiff;
+            appointementSpeedListM[appointementSpeedListM.length] = tempValList[x][y].avgAppSpeed;
+            timeListM[timeListM.length] = tempValList[x][y].time;
+          }
+          else if(tempValList[x][y].difficulty == 'Hard'){
+            skippedPatientsListH[skippedPatientsListH.length] = tempValList[x][y].skippedPatients;
+            varianceListH[varianceListH.length] = tempValList[x][y].avgAppDev;
+            avgDifferenceListH[avgDifferenceListH.length] = tempValList[x][y].avgAppDiff;
+            appointementSpeedListH[appointementSpeedListH.length] = tempValList[x][y].avgAppSpeed;
+            timeListH[timeListH.length] = tempValList[x][y].time;
+          }
         }
-    });
+      }
+    }
+  }).then(function onSuccess() {
+    createAvg();
+  });
 }
 
 function createAvg(){
@@ -167,9 +135,9 @@ function createAvg(){
   let avgAppSpeedModerate = Math.round(100*appointementSpeedListM.reduce((a, b) => a + b, 0)/skippedPatientsListM.length)/100;
   let avgAppSpeedHard = Math.round(100*appointementSpeedListH.reduce((a, b) => a + b, 0)/skippedPatientsListH.length)/100;
 
-  let avgTimeEasy = Math.round(100*timeListE.reduce((a, b) => a + b, 0)/skippedPatientsListE.length)/100;
-  let avgTimeModerate = Math.round(100*timeListM.reduce((a, b) => a + b, 0)/skippedPatientsListM.length)/100;
-  let avgTimeHard = Math.round(100*timeListH.reduce((a, b) => a + b, 0)/skippedPatientsListH.length)/100;
+  let avgTimeEasy = Math.round(timeListE.reduce((a, b) => a + b, 0)/skippedPatientsListE.length);
+  let avgTimeModerate = Math.round(timeListM.reduce((a, b) => a + b, 0)/skippedPatientsListM.length);
+  let avgTimeHard = Math.round(timeListH.reduce((a, b) => a + b, 0)/skippedPatientsListH.length);
 
   tableBody = document.getElementById('avgTable');
   
