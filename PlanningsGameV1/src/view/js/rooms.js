@@ -198,6 +198,9 @@ function confirmDel(roomName){
   let confirmDel = document.getElementById("confirmDel");
   confirmDel.style.display ="block";
 
+  let delText = document.getElementById('delText');
+  delText.innerHTML = "Are you sure you want to delete '" + roomName + "'<br> All its user data will be deleted too!";
+
   document.getElementById("confirmDelButton").onclick = function() {deleteRoom(roomName)};
   document.getElementById("cancelDelButton").onclick = function() {
     roomPopUp.style.display = "none";
