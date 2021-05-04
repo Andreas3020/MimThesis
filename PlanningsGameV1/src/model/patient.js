@@ -44,16 +44,14 @@ Patient.Easy = function(){
   maxLength = 8;
   oncoProb = 0.7;
   nrOfPersons = 50;
-  minPatDay = 3; //3
-  maxPatDay = 4; //5
+  minPatDay = 3; 
+  maxPatDay = 4; 
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
   maxChemoLength = 3;
-  nrOfAvailableDays;// = 3;
+  nrOfAvailableDays;
   availableOneProb = 0.2;
   availableTwoProb = 0.6;
-  //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)    
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
-  // hier bloedtest nog toevoegen
 }
 
 Patient.Moderate = function(){
@@ -61,14 +59,13 @@ Patient.Moderate = function(){
   maxLength = 8;
   oncoProb = 0.7;
   nrOfPersons = 60;
-  minPatDay = 3; //3
-  maxPatDay = 5; //5
+  minPatDay = 3; 
+  maxPatDay = 5; 
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
   maxChemoLength = 4;
-  nrOfAvailableDays;// = 3;
+  nrOfAvailableDays;
   availableOneProb = 0.3;
   availableTwoProb = 0.7;
-  // hier bloedtest nog toevoegen
 }
 
 Patient.Hard = function(){
@@ -76,16 +73,14 @@ Patient.Hard = function(){
   maxLength = 8;
   oncoProb = 0.7;
   nrOfPersons = 70;
-  minPatDay = 4; //3
-  maxPatDay = 6; //5
+  minPatDay = 4; 
+  maxPatDay = 6; 
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
   maxChemoLength = 4;
-  nrOfAvailableDays;// = 3;
+  nrOfAvailableDays;
   availableOneProb = 0.4;
   availableTwoProb = 0.8;
-  //AMOUNT PATIENTS TO BE ASSIGNED ON CURRENT DAY (updated per day.)    
   nrPatientsCurrentDay = getRandomInt(minPatDay,maxPatDay);
-  // hier bloedtest vaker laten falen
 }
 
 // PATIENT LIST LOCALSTORAGE (Generate + save)
