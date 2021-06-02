@@ -31,7 +31,7 @@ let oncoSlotTwoHours = "D0_H0_OC0";
 
 let addSelectVar;
 
-let probBloodFailEasy = 0.7; // deze wil ik in patient.js zetten
+let probBloodFailPatient = 0.7; // deze wil ik in patient.js zetten
 
 let available = [];
 let appointmentSpeedArray = [];
@@ -754,7 +754,7 @@ function testBloodPatients()
   for( var i = 0; i < todayPatientsArray.length; i++){ 
     // check and remove patient if bloodtest does not fail
     let probBloodFail = Patient.list[todayPatientsArray[i] - 1].probBloodFail;
-    if ( probBloodFail < probBloodFailEasy){     
+    if ( probBloodFail < probBloodFailPatient){     
         //change propability that bloodtest fails next time
         let num = getRandomFloat(0,1).toFixed(2);   
         Patient.list[todayPatientsArray[i] -1].probBloodFail = num;    

@@ -19,7 +19,7 @@
     <div class="rulesSettings">
       <div class=container>
         <h2>Instructions</h2><br>
-        <p>In this game you play as a planner of patients in an oncology department. Every day, various patients will want to schedule an appointment for chemotherapy and/or with an oncologist. It is for you to decide where to put every patient in an agenda.</p>
+        <p>In this game you play as a planner of patients in an oncologydepartment. Every day, various patients will want to schedule an appointment for chemotherapy and/or with an oncologist. It is for you to decide where to put every patient in an agenda.</p>
         <ul>
           <li>The purpose of the game is to schedule all the patients. Scheduling a patient happens in 3 steps. 
             <p class="pictureText" onclick="playVideo('pictures/videoPlannen.mp4')">Click here for a video</p>
@@ -37,7 +37,7 @@
           </li>
 
           <li>
-            Every few patients a new day starts and every patient who has an appointment that day has to take a bloodtest to see of if they are fit enough. In case they fail the bloodtest, they will need a new appointment the week after their last appointment as shown <p class="pictureText" onclick="playVideo('pictures/videoBloedtest.mp4')">in this video</p>.
+            Every few patients a new day starts. All patients who have an appointment that day have to take a bloodtest to see if they are fit enough. In case they fail the bloodtest, they will need a new appointment the week after their last appointment as shown <p class="pictureText" onclick="playVideo('pictures/videoBloedtest.mp4')">in this video</p>.
           </li><br>
           <li>
             You can now play the Demo to try it out, or start the game immediately by choosing a difficulty. You will be rated on 5 parameters shown in the table on the right hand side. By hovering over them, a text balloon will show more information.
@@ -133,36 +133,38 @@
         <a class="close"  onclick="clearPopup()">x</a>  
       </div>
     </div>
-   <!-- The core Firebase JS SDK is always required and must be listed first -->
-   <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 
-   <!-- TODO: Add SDKs for Firebase products that you want to use
-    https://firebase.google.com/docs/web/setup#available-libraries -->
-   <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+       <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 
-   <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
-  
-   <script>
-   // Your web app's Firebase configuration
-   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-   var firebaseConfig = {
-       apiKey: "AIzaSyC3RuOplNd7JCfHmhp0ybN_IeTUljKrKCA",
-       authDomain: "planningsgame.firebaseapp.com",
-       databaseURL: "https://planningsgame-default-rtdb.europe-west1.firebasedatabase.app",
-       projectId: "planningsgame",
-       storageBucket: "planningsgame.appspot.com",
-       messagingSenderId: "588370794085",
-       appId: "1:588370794085:web:f0f87b5daa9e5b775cd88c",
-       measurementId: "G-70Q9RTPJ00"
-   };
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
 
-   // Initialize Firebase
-   firebase.initializeApp(firebaseConfig);
-   firebase.analytics();   
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
 
-   // Get a reference to the database service
-   var database = firebase.database().ref(); 
-   </script>
+    <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+    apiKey: "AIzaSyCBql_gMctpYJiIgTSSTH0sAdqxiMvCIwc",
+    authDomain: "schedulinggame.firebaseapp.com",
+    databaseURL: "https://schedulinggame-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "schedulinggame",
+    storageBucket: "schedulinggame.appspot.com",
+    messagingSenderId: "975173738386",
+    appId: "1:975173738386:web:f54402c96126a7b6d3ab4b",
+    measurementId: "G-54R1SJLVPR"
+  };
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();   
+
+    // Get a reference to the database service
+    var database = firebase.database().ref(); 
+    </script>
  
   <script src="src/view/js/home.js"></script>
 </body>
