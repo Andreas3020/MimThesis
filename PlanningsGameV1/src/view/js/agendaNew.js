@@ -322,6 +322,7 @@ function addFirstWeeksToArray(firstWeeksNr) {
 
 function endGame() {
 
+  console.log(appointmentSpeedArray);
   let appointmentSpeed =0;
   appointmentSpeedArray.forEach(function(speed) {
     appointmentSpeed += speed;
@@ -350,6 +351,7 @@ function endGame() {
 
   const timeParagraph = document.getElementById("showGameTime");
   timeParagraph.innerHTML = "You completed the game in " + gametimeMinutes + "min " + gameTimeSeconds + " seconds!";
+
 
   const popUp = document.getElementById("roomPopUp");
   popUp.style.display = "block";
@@ -556,7 +558,7 @@ function addSelectedSlot() {
     }
     
    
-    addSelectVar = checkPatientsPerDay();
+    addSelectVar = checkPatientsPerDay(false);
 
     //NEW PATIENT PROCESSING
     if(addSelectVar <= 1) {
@@ -576,6 +578,7 @@ function addSelectedSlot() {
         endGame();
       }
 
+
     }
     else if (addSelectVar === 3)
     {
@@ -587,7 +590,7 @@ function addSelectedSlot() {
       threeLogic();
       
       // Update addSelectVar. If not empty, will return 4 (there are patients where bloodtest failed)
-      addSelectVar = checkPatientsPerDay();
+      addSelectVar = checkPatientsPerDay(false);
 
       let currentPatientId;
       if(addSelectVar === 0) { 
@@ -680,7 +683,7 @@ function fourLogic()
   Patient.list[currentPatientObject.patientID - 1].weekNrFirstSelectedSlot = weekNrFirstSelectedSlot;
 }
 //checks if the currentPatient is the last patient of the day and if so go to the next day (make the current day grey)
-function checkPatientsPerDay() {
+function checkPatientsPerDay(skipped) {
 
   //bloodTest failed patients need to be scheduled
   if(todayPatientsArray.length > 0)
@@ -724,9 +727,11 @@ function checkPatientsPerDay() {
     return 3;    
   }
   else {
-    calculateAppointmentSpeed();
+    if(skipped === false)
+    {
+      calculateAppointmentSpeed();
+    }
     
-
     Patient.list[currentPatientObject.patientID - 1].availability = available;
     console.log("Updated cpo availability to 1 day (before the next person will be fetched)");
     
@@ -737,6 +742,7 @@ function checkPatientsPerDay() {
 //calculates appointmentSpeed (time between today and days first appointment planned)
 function calculateAppointmentSpeed()
 {
+  console.log("skip appointmentspeed");
   let appointmentSpeed = 0;
   appointmentSpeed += 7*(weekNrFirstForCalc - currentWeek);
   appointmentSpeed += dayNrFirstSelectedSlot - (todayNr);
@@ -1225,14 +1231,16 @@ function resetPatient() {
 }
 
 function skipPatient() {
+
+  
   resetPatient();
   
-  addSelectVar = checkPatientsPerDay();
+  addSelectVar = checkPatientsPerDay(true);
 
   if (addSelectVar === 3)
   {
     threeLogic();
-    addSelectVar = checkPatientsPerDay();
+    addSelectVar = checkPatientsPerDay(true);
     
   }
   if(addSelectVar === 4)
@@ -1243,7 +1251,7 @@ function skipPatient() {
 
 
   //NOT LAST PATIENT
-  if(addSelectVar != 2) {
+  if(addSelectVar != 1) {
     skippedPatientsCounter += 1;
 
     //SAVE NEW PATIENT TO CURRENTPATIENTOBJECT
@@ -1255,6 +1263,9 @@ function skipPatient() {
     goToCurrentWeek();
   }
   else { //addSelectVar  >= 1 
+    console.log("endgame in skip")
+    skippedPatientsCounter += 1;
+    
     endGame();
   }
 

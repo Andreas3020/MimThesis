@@ -145,10 +145,8 @@ Patient.generate = function() {
     }
     
 
-   // if( i === nrOfPersons-1) { tempLastPatientBool = false; }
-
     tempLastPatientBool = lastPatient();
-    tempProbBloodFail = getRandomFloat(1,1).toFixed(3);
+    tempProbBloodFail = getRandomFloat(0,1).toFixed(3);
     
     tempWeekNrFirstSelectedSlot = -1;
     //Create patient/Write to list
